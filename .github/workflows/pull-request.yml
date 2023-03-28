@@ -1,0 +1,91 @@
+name: run-test
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+
+  start:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "start test"
+
+  mock-tests:
+    needs: [ start ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test:
+          - "app.service.**"
+          - "app.transaction.**"
+          - "app.controller.**"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK (java18)
+        uses: actions/setup-java@v3
+        with:
+          java-version: 18
+          distribution: corretto
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Run Tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          mvn -f pom.xml
+          -Duser.timezone=UTC
+          -Dtest="com.accelhack.application.api.${{ matrix.test }}"
+          -s settings.xml
+          test
+
+
+  spring-boot-tests:
+    needs: [ start ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        test:
+          - "app.mapper.**"
+          - "app.ltest.**"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Build test database
+        run: |
+          cp env.properties sa-docker/.env
+          cd sa-docker
+          touch .env.terraform
+          docker compose up test-db -d
+
+      - name: Set up JDK (java18)
+        uses: actions/setup-java@v3
+        with:
+          java-version: 18
+          distribution: corretto
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Run Tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: >
+          mvn -f pom.xml
+          -Duser.timezone=UTC
+          -Dtest="com.accelhack.application.api.${{ matrix.test }}"
+          -s settings.xml
+          test

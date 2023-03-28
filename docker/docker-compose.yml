@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  db:
+    container_name: api-application-db
+    build: "./database"
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ./database/conf.d:/etc/mysql/conf.d
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
+      - "MYSQL_USER=${MYSQL_USER}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+
+  test-db:
+    container_name: api-application-test-db
+    image: mysql:8.0
+    ports:
+      - "${MYSQL_TEST_PORT}:3306"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    environment:
+      - "MYSQL_DATABASE=${MYSQL_DATABASE}"
+      - "MYSQL_USER=${MYSQL_USER}"
+      - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+      - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
+
+  # docker compose run terraform bash
+#  terraform:
+#    build: "./terraform"
+#    working_dir: /infra
+#    env_file:
+#      - ./.env.terraform
+#    volumes:
+#      - ./terraform/infra:/infra
+#    command: tail -f /dev/null
+
+

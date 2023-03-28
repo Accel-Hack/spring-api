@@ -1,0 +1,40 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accelhack.application.api.shared.mapper.RoleMapper">
+    <resultMap id="roleDtoResultMap" type="com.accelhack.application.api.shared.dto.RoleDto">
+        <id property="id" column="ID"/>
+        <result property="actor" column="ACTOR"/>
+        <result property="name" column="NAME"/>
+        <result property="total" column="TOTAL"/>
+    </resultMap>
+
+    <sql id="base-cols">
+        SELECT `ID`
+             , `ACTOR`
+             , `NAME`
+             , COUNT(*) OVER () AS TOTAL
+        FROM API_APPLICATION.ROLE
+    </sql>
+
+    <select id="selectById" resultMap="roleDtoResultMap">
+        <include refid="base-cols"/>
+        WHERE `DELETED_AT` IS NULL
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="roleDto.id">
+        INSERT INTO API_APPLICATION.ROLE( `ACTOR`
+                                           , `NAME`
+                                           , `CREATED_BY`)
+        VALUES ( #{roleDto.actor.code}
+               , #{roleDto.name}
+               , #{operator.code})
+    </insert>
+
+    <update id="delete">
+        UPDATE API_APPLICATION.ROLE
+        SET `DELETED_BY` = #{operator.code}
+          , `DELETED_AT` = CURRENT_TIMESTAMP
+        WHERE `ID` = #{roleDto.id}
+    </update>
+</mapper>

@@ -1,0 +1,37 @@
+spring:
+  config:
+    import: file:env.properties
+
+  sql:
+    init:
+      platform: mysql
+      mode: always
+      encoding: utf-8
+
+  datasource:
+    url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}"
+    username: "${SPRING_DB_USER}"
+    password: "${SPRING_DB_PASSWORD}"
+    driverClassName: com.mysql.cj.jdbc.Driver
+
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+
+server:
+  port: "${SERVER_PORT}"
+  servlet:
+    session:
+      timeout: "${SERVER_TIMEOUT}"
+
+mybatis:
+  config-location: classpath:/mybatis-config.xml
+  mapper-locations: # Add path to mappers
+    - classpath:/mybatis/mapper/*.xml
+    - classpath:/mybatis/mapper/shared/*.xml
+  # type-aliases-package: # Add type alias by package name
+  #    - com.accelhack.application.api.auth.entity
+
+api-application:
+  super-user:
+    expireMinutes: 30

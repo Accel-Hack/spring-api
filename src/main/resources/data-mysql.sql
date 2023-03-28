@@ -1,0 +1,4 @@
+INSERT INTO API_APPLICATION.`USER`(`USERNAME`, `PASSWORD`, `ACTOR`, `CREATED_BY`, `UPDATED_BY`)
+VALUES ('system', '$2a$12$9UmVR8I34kgzRl4A2q0sEOsTlyVUlw8TvM9wnfPl9rdwB7Z1aNQhS', 1, 'INIT', 'INIT'),
+       ('manager', '$2a$12$9UmVR8I34kgzRl4A2q0sEOsTlyVUlw8TvM9wnfPl9rdwB7Z1aNQhS', 2, 'INIT', 'INIT'),
+       ('user', '$2a$12$9UmVR8I34kgzRl4A2q0sEOsTlyVUlw8TvM9wnfPl9rdwB7Z1aNQhS', 3, 'INIT', 'INIT');

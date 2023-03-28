@@ -1,0 +1,76 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accelhack.application.api.shared.mapper.SuperuserMapper">
+    <resultMap id="superuserDtoResultMap" type="com.accelhack.application.api.shared.dto.SuperuserDto">
+        <id property="id" column="ID"/>
+        <result property="superuserId" column="SUPER_USER_ID"/>
+        <result property="superuser.id" column="SUPER_USER_ID"/>
+        <result property="superuser.username" column="SUPER_USER_USERNAME"/>
+        <result property="superuser.actor" column="SUPER_USER_ACTOR"/>
+        <result property="targetUserId" column="TARGET_USER_ID"/>
+        <result property="targetUser.id" column="TARGET_USER_ID"/>
+        <result property="targetUser.username" column="TARGET_USER_USERNAME"/>
+        <result property="targetUser.actor" column="TARGET_USER_ACTOR"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="superuserDtoResultMap">
+        <![CDATA[
+        SELECT SU.`ID`
+
+             , SU.`SUPER_USER_ID`
+             , USrc.`USERNAME` AS SUPER_USER_USERNAME
+             , USrc.`ACTOR`    AS SUPER_USER_ACTOR
+
+             , SU.`TARGET_USER_ID`
+             , UTgt.`USERNAME` AS TARGET_USER_USERNAME
+             , UTgt.`ACTOR`    AS TARGET_USER_ACTOR
+
+        FROM API_APPLICATION.SUPER_USER SU
+                 LEFT JOIN API_APPLICATION.USER USrc ON USrc.`ID` = SU.`SUPER_USER_ID`
+                 LEFT JOIN API_APPLICATION.USER UTgt ON UTgt.`ID` = SU.`TARGET_USER_ID`
+
+        WHERE SU.`SUPER_USER_ID` = #{id}
+          AND SU.`DELETED_AT` IS NULL
+          AND SU.`EXPIRES_AT` > CURRENT_TIMESTAMP
+        ]]>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="superuserDto.id">
+        INSERT INTO API_APPLICATION.SUPER_USER( `SUPER_USER_ID`
+                                                 , `TARGET_USER_ID`
+                                                 , `EXPIRES_AT`
+                                                 , `CREATED_BY`
+                                                 , `UPDATED_BY`)
+        VALUES ( #{superuserDto.superuserId}
+               , #{superuserDto.targetUserId}
+               , DATE_ADD(CURRENT_TIMESTAMP, INTERVAL #{expireMinutes} MINUTE)
+               , #{operator.code}
+               , #{operator.code})
+    </insert>
+
+    <update id="update">
+        <![CDATA[
+        UPDATE API_APPLICATION.SUPER_USER
+        SET `EXPIRES_AT` = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL #{expireMinutes} MINUTE)
+          , `UPDATED_BY` = #{operator.code}
+          , `UPDATED_AT` = CURRENT_TIMESTAMP
+        WHERE `ID` = #{superuserDto.id}
+          AND `DELETED_AT` IS NULL
+          AND `EXPIRES_AT` > CURRENT_TIMESTAMP
+        ]]>
+    </update>
+
+    <update id="delete">
+        <![CDATA[
+        UPDATE API_APPLICATION.SUPER_USER
+        SET `DELETED_BY` = #{operator.code}
+          , `DELETED_AT` = CURRENT_TIMESTAMP
+          , `UPDATED_BY` = #{operator.code}
+          , `UPDATED_AT` = CURRENT_TIMESTAMP
+        WHERE `SUPER_USER_ID` = #{superuserDto.superuserId}
+          AND `DELETED_AT` IS NULL
+          AND `EXPIRES_AT` >= CURRENT_TIMESTAMP
+        ]]>
+    </update>
+</mapper>
