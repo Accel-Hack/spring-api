@@ -1,17 +1,19 @@
 package com.accelhack.application.api.shared.security;
 
+import com.accelhack.application.api.shared.filter.HttpServletRequestFilter;
 import com.accelhack.application.api.shared.service.JwtUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import javax.servlet.Filter;
 
 @Configuration
 @EnableWebSecurity
@@ -30,12 +32,29 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     http
       .authorizeRequests()
-      .antMatchers("/api/v1/refreshToken", "/login").permitAll()
+      .antMatchers("/api/v1/refreshToken").permitAll()
       .anyRequest().authenticated();
 
+    addFilters(http);
+  }
+
+  /**
+   * function to add filters
+   * 1. cache filter
+   * 2. validate login filter
+   * 3. validate jwt token filter
+   * @param http HttpSecurity
+   * @throws Exception exception
+   */
+  private void addFilters(HttpSecurity http) throws Exception {
+    final Filter cache = new HttpServletRequestFilter();
+    final Filter authentication = new JwtAuthenticationFilter(authenticationManager(), userDetailsService, objectMapper);
+    final Filter authorization = new JwtAuthorizationFilter(authenticationManager());
+
     http
-      .addFilter(new JwtAuthenticationFilter(authenticationManager(), userDetailsService,objectMapper))
-      .addFilter(new JwtAuthorizationFilter(authenticationManager()))
+      .addFilterBefore(cache, UsernamePasswordAuthenticationFilter.class)
+      .addFilter(authentication)
+      .addFilter(authorization)
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 
