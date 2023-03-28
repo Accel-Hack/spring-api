@@ -9,7 +9,6 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract class BaseSelector {
 
-  @Builder.Default
   private Integer limit = 20;
   private Integer offset = 0;
 }

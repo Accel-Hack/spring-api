@@ -1,9 +1,9 @@
 package com.accelhack.application.api.shared.service;
 
 import com.accelhack.application.api.shared.dto.UserDto;
-import com.accelhack.application.api.shared.dto.UserRoleDto;
+import com.accelhack.application.api.shared.dto.UserTokenDto;
 import com.accelhack.application.api.shared.mapper.UserMapper;
-import com.accelhack.application.api.shared.mapper.UserRoleMapper;
+import com.accelhack.application.api.shared.mapper.UserTokenMapper;
 import com.accelhack.application.api.shared.model.Operator;
 import com.accelhack.application.api.shared.model.UserSelector;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements UserService {
   private final UserMapper userMapper;
-  private final UserRoleMapper userRoleMapper;
+  private final UserTokenMapper userTokenMapper;
 
   @Override
   public UserDto getByUsername(String userName) {
@@ -37,9 +37,17 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserRoleDto addRole(UserRoleDto userRoleDto, Operator operator) {
-    UserRoleDto userRole = userRoleDto.toCreate();
-    userRoleMapper.insert(userRole, operator);
-    return userRole;
+  public UserTokenDto getToken(String userName, String refreshToken) {
+    UserDto userDto = getByUsername(userName);
+    return userTokenMapper.selectBy(userDto.getId(), refreshToken);
+  }
+
+  @Override
+  public UserTokenDto addAuthToken(UserTokenDto userTokenDto, Operator operator) {
+    userTokenMapper.delete(userTokenDto.toDelete(), operator);
+
+    UserTokenDto userToken = userTokenDto.toCreate();
+    userTokenMapper.insert(userToken, operator);
+    return userToken;
   }
 }

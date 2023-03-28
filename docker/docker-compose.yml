@@ -28,13 +28,13 @@ services:
       - "MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
 
   # docker compose run terraform bash
-#  terraform:
-#    build: "./terraform"
-#    working_dir: /infra
-#    env_file:
-#      - ./.env.terraform
-#    volumes:
-#      - ./terraform/infra:/infra
-#    command: tail -f /dev/null
+  terraform:
+    build: "./terraform"
+    working_dir: /infra
+    env_file:
+      - ./.env.terraform
+    volumes:
+      - ./terraform/infra:/infra
+    command: tail -f /dev/null
 
 

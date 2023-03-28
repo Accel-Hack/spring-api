@@ -7,7 +7,7 @@ import org.apache.ibatis.type.*;
 import java.sql.*;
 import java.util.function.Predicate;
 
-@MappedTypes({Actor.class, PolicyService.class})
+@MappedTypes({Actor.class})
 @RequiredArgsConstructor
 public class NumericEnumHandler<E extends Enum<E> & NumericEnum<E>> extends BaseTypeHandler<NumericEnum<E>> {
 

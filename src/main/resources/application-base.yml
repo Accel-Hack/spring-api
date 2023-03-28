@@ -1,7 +1,6 @@
 spring:
   config:
     import: file:env.properties
-
   sql:
     init:
       platform: mysql
@@ -17,6 +16,15 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+
+
+### JWT configuration
+jwt:
+  access-token:
+    secret-key: MY_SECRET_KEY
+    expiration-time: 30
+  refresh-token:
+    expiration-days: 15
 
 server:
   port: "${SERVER_PORT}"
