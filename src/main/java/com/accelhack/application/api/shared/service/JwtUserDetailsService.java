@@ -27,8 +27,8 @@ public class JwtUserDetailsService implements UserDetailsService {
 
   private final PasswordEncoder passwordEncoder;
 
-  @Value("${jwt.access-token.expiration-time}")
-  private long accessTokenExpTime;
+  @Value("${jwt.access-token.expiration-seconds}")
+  private long accessTokenExpSec;
 
   @Value("${jwt.refresh-token.expiration-days}")
   private long refreshTokenExpDays;
@@ -48,13 +48,19 @@ public class JwtUserDetailsService implements UserDetailsService {
       .build();
   }
 
+  public Token reissueToken(String username, String refreshToken) throws UsernameNotFoundException {
+    final UserDto userDto = findByUsername(username);
+    userService.removeAuthToken(username, refreshToken, new Operator(userDto));
+    return issueToken(username);
+  }
+
   public Token issueToken(String username) throws UsernameNotFoundException {
     final UserDto userDto = findByUsername(username);
     final Instant now = Instant.now();
     final String accessToken = JWT.create()
       .withSubject(userDto.getUsername())
       .withIssuedAt(Date.from(now))
-      .withExpiresAt(Date.from(now.plus(accessTokenExpTime, ChronoUnit.SECONDS)))
+      .withExpiresAt(Date.from(now.plus(accessTokenExpSec, ChronoUnit.SECONDS)))
       .sign(Algorithm.HMAC512(accessTokenSecret.getBytes()));
 
     final String refreshToken = RandomUtils.alphaNumeric(REFRESH_TOKEN_LENGTH);
@@ -73,7 +79,7 @@ public class JwtUserDetailsService implements UserDetailsService {
       .build();
   }
 
-  public boolean verifyAccessToken(DecodedJWT jwt) {
+  public boolean isValidAccessToken(DecodedJWT jwt) {
     try {
       JWT.require(Algorithm.HMAC512(accessTokenSecret.getBytes())).build().verify(jwt);
     } catch (TokenExpiredException e) {
@@ -82,10 +88,9 @@ public class JwtUserDetailsService implements UserDetailsService {
     return true;
   }
 
-  public boolean verifyRefreshToken(String username, String refreshToken) throws UsernameNotFoundException {
-    final UserTokenDto userTokenDto = userService.getToken(username, refreshToken);
-    if (Objects.isNull(userTokenDto)) return false;
-    return passwordEncoder.matches(refreshToken, userTokenDto.getRefreshToken());
+  public boolean isValidRefreshToken(String username, String refreshToken) throws UsernameNotFoundException {
+    final List<UserTokenDto> userTokenDtoList = userService.getTokens(username);
+    return userTokenDtoList.stream().anyMatch(userTokenDto-> passwordEncoder.matches(refreshToken, userTokenDto.getRefreshToken()));
   }
 
   private UserDto findByUsername(String username) throws UsernameNotFoundException {

@@ -10,7 +10,7 @@
         <result property="expiresAt" column="EXPIRES_AT"/>
     </resultMap>
 
-    <select id="selectBy" resultMap="userDtoResultMap">
+    <select id="selectByUserId" resultMap="userDtoResultMap">
         <![CDATA[
         SELECT `ID`
              , `USER_ID`
@@ -21,7 +21,7 @@
         WHERE USER_ID = #{userId}
           AND REFRESH_TOKEN = #{refreshToken}
           AND DELETED_AT IS NULL
-          AND EXPIRES_AT < CURRENT_TIMESTAMP
+          AND EXPIRES_AT > CURRENT_TIMESTAMP
         ]]>
     </select>
 

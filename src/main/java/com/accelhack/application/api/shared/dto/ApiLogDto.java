@@ -1,8 +1,8 @@
 package com.accelhack.application.api.shared.dto;
 
 import com.accelhack.application.api.shared.dto.base.BaseDto;
-import com.accelhack.application.api.shared.model.Operator;
 import com.accelhack.application.api.shared.exception.NotImplementedException;
+import com.accelhack.application.api.shared.model.Operator;
 import lombok.*;
 
 import java.time.Instant;

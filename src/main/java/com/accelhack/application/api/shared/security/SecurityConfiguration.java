@@ -1,5 +1,6 @@
 package com.accelhack.application.api.shared.security;
 
+import com.accelhack.application.api.shared.controller.base.ExternalController;
 import com.accelhack.application.api.shared.filter.HttpServletRequestFilter;
 import com.accelhack.application.api.shared.service.JwtUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,18 +25,34 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   private final ObjectMapper objectMapper;
 
   @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.userDetailsService(userDetailsService)
+      .passwordEncoder(passwordEncoder);
+  }
+
+  @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
 //      .headers().frameOptions().sameOrigin()
 //      .and()
       .csrf().disable();
 
+    routePaths(http);
+    addFilters(http);
+  }
+
+  /**
+   * function to routing paths
+   * 1. allow external controller
+   * 2. others require authentication
+   * @param http HttpSecurity
+   * @throws Exception exception
+   */
+  private void routePaths(HttpSecurity http) throws Exception {
     http
       .authorizeRequests()
-      .antMatchers("/api/v1/refreshToken").permitAll()
+      .antMatchers(ExternalController.CONTEXT_PATH + "/**").permitAll()
       .anyRequest().authenticated();
-
-    addFilters(http);
   }
 
   /**
@@ -58,11 +75,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
       .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 
-  @Override
-  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-    auth.userDetailsService(userDetailsService)
-      .passwordEncoder(passwordEncoder);
-  }
 
   //  @Override
 //  protected void configure(HttpSecurity http) throws Exception {

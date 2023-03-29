@@ -36,7 +36,7 @@ public class UserTokenDto implements BaseDto<UserTokenDto> {
   @Override
   public UserTokenDto toDelete() {
     return UserTokenDto.builder()
-      .refreshToken(refreshToken)
+      .id(id)
       .build();
   }
 }

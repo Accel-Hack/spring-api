@@ -22,7 +22,7 @@ spring:
 jwt:
   access-token:
     secret-key: MY_SECRET_KEY
-    expiration-time: 30
+    expiration-seconds: 30
   refresh-token:
     expiration-days: 15
 

@@ -1,9 +1,9 @@
 package com.accelhack.application.api.dataset;
 
 import com.github.springtestdbunit.dataset.AbstractDataSetLoader;
-import org.springframework.core.io.Resource;
 import org.dbunit.dataset.IDataSet;
 import org.dbunit.dataset.csv.CsvDataSet;
+import org.springframework.core.io.Resource;
 
 
 public class CsvDataSetLoader extends AbstractDataSetLoader {

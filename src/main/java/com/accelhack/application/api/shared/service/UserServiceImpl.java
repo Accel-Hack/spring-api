@@ -8,6 +8,7 @@ import com.accelhack.application.api.shared.model.Operator;
 import com.accelhack.application.api.shared.model.UserSelector;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
   private final UserMapper userMapper;
   private final UserTokenMapper userTokenMapper;
-
+  private final PasswordEncoder passwordEncoder;
   @Override
   public UserDto getByUsername(String userName) {
     return userMapper.selectByUsername(userName);
@@ -37,17 +38,23 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public UserTokenDto getToken(String userName, String refreshToken) {
+  public List<UserTokenDto> getTokens(String userName) {
     UserDto userDto = getByUsername(userName);
-    return userTokenMapper.selectBy(userDto.getId(), refreshToken);
+    return userTokenMapper.selectByUserId(userDto.getId());
   }
 
   @Override
-  public UserTokenDto addAuthToken(UserTokenDto userTokenDto, Operator operator) {
-    userTokenMapper.delete(userTokenDto.toDelete(), operator);
-
+  public void addAuthToken(UserTokenDto userTokenDto, Operator operator) {
     UserTokenDto userToken = userTokenDto.toCreate();
     userTokenMapper.insert(userToken, operator);
-    return userToken;
+  }
+
+  @Override
+  public void removeAuthToken(String username, String refreshToken, Operator operator) {
+    final UserDto userDto = getByUsername(username);
+    final List<UserTokenDto> userTokenDtoList = userTokenMapper.selectByUserId(userDto.getId());
+    userTokenDtoList.stream()
+      .filter(token -> passwordEncoder.matches(refreshToken, token.getRefreshToken()))
+      .forEach(token -> userTokenMapper.delete(token.toDelete(), operator));
   }
 }

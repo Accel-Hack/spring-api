@@ -8,8 +8,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -18,17 +17,19 @@ public class AuthController extends ExternalController {
   private final JwtUserDetailsService userDetailsService;
 
   @PostMapping("/refreshToken")
+  @ResponseBody
   public User.Token refreshToken(@RequestBody User.Token token) {
     final DecodedJWT jwt = JWT.decode(token.getAccessToken());
-    if (userDetailsService.verifyAccessToken(jwt)) {
+    if (userDetailsService.isValidAccessToken(jwt)) {
+      // jwt token is still alive
       return token;
     }
 
     final String username = jwt.getSubject();
-    if (!userDetailsService.verifyRefreshToken(username, token.getRefreshToken())) {
-      throw new BadCredentialsException("Invalid refresh token!");
+    if (!userDetailsService.isValidRefreshToken(username, token.getRefreshToken())) {
+      throw new BadCredentialsException("Invalid refresh token");
     }
 
-    return userDetailsService.issueToken(username);
+    return userDetailsService.reissueToken(username, token.getRefreshToken());
   }
 }

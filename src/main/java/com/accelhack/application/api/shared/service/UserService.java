@@ -14,7 +14,9 @@ public interface UserService {
 
   UserDto create(UserDto userDto, Operator operator);
 
-  UserTokenDto getToken(String userName, String refreshToken);
+  List<UserTokenDto> getTokens(String userName);
 
-  UserTokenDto addAuthToken(UserTokenDto userTokenDto, Operator operator);
+  void addAuthToken(UserTokenDto userTokenDto, Operator operator);
+
+  void removeAuthToken(String username, String refreshToken, Operator operator);
 }
