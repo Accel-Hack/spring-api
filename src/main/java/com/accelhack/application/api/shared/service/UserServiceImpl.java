@@ -2,7 +2,7 @@ package com.accelhack.application.api.shared.service;
 
 import com.accelhack.application.api.shared.dto.UserDto;
 import com.accelhack.application.api.shared.dto.UserTokenDto;
-import com.accelhack.application.api.shared.mapper.UserMapper;
+import com.accelhack.application.api.shared.mapper.UserMapper2;
 import com.accelhack.application.api.shared.mapper.UserTokenMapper;
 import com.accelhack.application.api.shared.model.Operator;
 import com.accelhack.application.api.shared.model.UserSelector;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
-  private final UserMapper userMapper;
+  private final UserMapper2 userMapper;
   private final UserTokenMapper userTokenMapper;
   private final PasswordEncoder passwordEncoder;
   @Override

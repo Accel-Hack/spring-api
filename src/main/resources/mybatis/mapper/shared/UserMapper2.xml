@@ -1,0 +1,48 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accelhack.application.api.shared.mapper.UserMapper2">
+    <resultMap id="userDtoResultMap" type="com.accelhack.application.api.shared.dto.UserDto">
+        <id property="id" column="ID"/>
+        <result property="username" column="USERNAME"/>
+        <result property="password" column="PASSWORD"/>
+        <result property="actor" column="ACTOR"/>
+        <result property="resetCode" column="RESET_CODE"/>
+        <result property="resetUntil" column="RESET_UNTIL"/>
+    </resultMap>
+
+    <sql id="base-cols">
+        SELECT `ID`
+             , `USERNAME`
+             , `PASSWORD`
+             , `ACTOR`
+             , `RESET_CODE`
+             , `RESET_UNTIL`
+             , COUNT(*) OVER () AS TOTAL
+        FROM API_APPLICATION.USER
+    </sql>
+
+    <select id="selectByUsername" resultMap="userDtoResultMap">
+        <include refid="base-cols"/>
+        WHERE `USERNAME` = #{username}
+        AND `DELETED_AT` IS NULL
+    </select>
+
+    <select id="selectBy" resultMap="userDtoResultMap">
+        <include refid="base-cols"/>
+        LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="userDto.id">
+        INSERT INTO API_APPLICATION.USER( `USERNAME`
+                                           , `PASSWORD`
+                                           , `ACTOR`
+                                           , `CREATED_BY`
+                                           , `UPDATED_BY`)
+        VALUES ( #{userDto.username}
+               , #{userDto.password}
+               , #{userDto.actor.code}
+               , #{operator.code}
+               , #{operator.code})
+    </insert>
+</mapper>

@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
 import java.util.List;
 
 @Mapper
-public interface DomainUserMapper {
+public interface UserMapper2 {
   UserDto selectByUsername(String userName);
 
   List<UserDto> selectBy(UserSelector selector);

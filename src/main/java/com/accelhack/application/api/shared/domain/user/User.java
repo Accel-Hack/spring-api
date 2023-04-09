@@ -10,15 +10,27 @@ import java.util.List;
 
 public class User {
   private int id;
+
+  /**
+   * sign-in id
+   */
   private String username;
+
+  /**
+   * encrypt password
+   */
   private String password;
+
+  /**
+   * user role
+   */
   private Actor actor;
   private String resetCode;
   private Instant resetUntil;
 
   private List<Token> tokens;
 
-  static class Token {
+  static public class Token {
     private int id;
     private String accessToken;
     private String refreshToken;
@@ -33,7 +45,7 @@ public class User {
 
   @RequiredArgsConstructor
   @Component
-  static class CreateBuilder {
+  static public class CreateBuilder {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public User create(String username, String password, Actor actor) {
