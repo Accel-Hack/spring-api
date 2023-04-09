@@ -65,6 +65,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
    */
   private void addFilters(HttpSecurity http) throws Exception {
     final Filter cache = new HttpServletRequestFilter();
+    // FIXME: bean化を試みる
     final Filter authentication = new JwtAuthenticationFilter(authenticationManager(), userDetailsService, objectMapper);
     final Filter authorization = new JwtAuthorizationFilter(authenticationManager());
 

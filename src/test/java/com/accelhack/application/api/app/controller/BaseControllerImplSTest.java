@@ -14,13 +14,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.concurrent.Callable;
 
 public class BaseControllerImplSTest {
-  protected MockMvc mockMvc;
-
   protected final String responseStr = "ok";
-
   protected final ResponseEntity<?> response = ResponseEntity.ok(responseStr);
-
   protected final ObjectMapper objectMapper = ObjectMapperUtils.getMapper();
+  protected MockMvc mockMvc;
 
   protected <V> boolean execute(Callable<V> callable) {
     try {

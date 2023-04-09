@@ -1,9 +1,7 @@
 package com.accelhack.application.api.shared.service;
 
-import com.accelhack.accelparts.utils.RandomUtils;
-import com.accelhack.application.api.shared.dto.UserDto;
-import com.accelhack.application.api.shared.dto.UserTokenDto;
-import com.accelhack.application.api.shared.entity.User.Token;
+import com.accelhack.application.api.shared.domain.user.User;
+import com.accelhack.application.api.shared.domain.user.UserRepository;
 import com.accelhack.application.api.shared.model.Operator;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -13,70 +11,41 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class JwtUserDetailsService implements UserDetailsService {
 
-  private final PasswordEncoder passwordEncoder;
-
+  public static final int REFRESH_TOKEN_LENGTH = 24;
+  private final UserRepository userRepository;
   @Value("${jwt.access-token.expiration-seconds}")
   private long accessTokenExpSec;
-
   @Value("${jwt.refresh-token.expiration-days}")
   private long refreshTokenExpDays;
-
   @Value("${jwt.access-token.secret-key}")
   private String accessTokenSecret;
-  private static final int REFRESH_TOKEN_LENGTH = 24;
-  private final UserService userService;
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    final UserDto userDto = findByUsername(username);
-    return org.springframework.security.core.userdetails.User.builder()
-      .username(userDto.getUsername())
-      .password(userDto.getPassword())
-      .authorities(List.of(userDto.getActor().toAuthority()))
-      .build();
+    return findByUsername(username).toUserDetails();
   }
 
-  public Token reissueToken(String username, String refreshToken) throws UsernameNotFoundException {
-    final UserDto userDto = findByUsername(username);
-    userService.removeAuthToken(username, refreshToken, new Operator(userDto));
-    return issueToken(username);
+  public User.Token reissueToken(String username, String refreshToken) throws UsernameNotFoundException {
+    final User user = findByUsername(username);
+    final User.Token token = user.reissueToken(refreshToken);
+    userRepository.save(user, new Operator(null));
+    return token;
   }
 
-  public Token issueToken(String username) throws UsernameNotFoundException {
-    final UserDto userDto = findByUsername(username);
-    final Instant now = Instant.now();
-    final String accessToken = JWT.create()
-      .withSubject(userDto.getUsername())
-      .withIssuedAt(Date.from(now))
-      .withExpiresAt(Date.from(now.plus(accessTokenExpSec, ChronoUnit.SECONDS)))
-      .sign(Algorithm.HMAC512(accessTokenSecret.getBytes()));
-
-    final String refreshToken = RandomUtils.alphaNumeric(REFRESH_TOKEN_LENGTH);
-
-    final UserTokenDto userTokenDto = UserTokenDto.builder()
-      .userId(userDto.getId())
-      .accessToken(accessToken)
-      .refreshToken(passwordEncoder.encode(refreshToken))
-      .expiresAt(now.plus(refreshTokenExpDays, ChronoUnit.DAYS))
-      .build();
-    userService.addAuthToken(userTokenDto, new Operator(userDto));
-
-    return Token.builder()
-      .accessToken(accessToken)
-      .refreshToken(refreshToken)
-      .build();
+  public User.Token issueToken(String username) throws UsernameNotFoundException {
+    final User user = findByUsername(username);
+    final User.Token token = user.issueToken();
+    userRepository.save(user, new Operator(null));
+    return token;
   }
 
   public boolean isValidAccessToken(DecodedJWT jwt) {
@@ -88,16 +57,8 @@ public class JwtUserDetailsService implements UserDetailsService {
     return true;
   }
 
-  public boolean isValidRefreshToken(String username, String refreshToken) throws UsernameNotFoundException {
-    final List<UserTokenDto> userTokenDtoList = userService.getTokens(username);
-    return userTokenDtoList.stream().anyMatch(userTokenDto-> passwordEncoder.matches(refreshToken, userTokenDto.getRefreshToken()));
-  }
-
-  private UserDto findByUsername(String username) throws UsernameNotFoundException {
-    final UserDto userDto = userService.getByUsername(username);
-    if (Objects.isNull(userDto)) {
-      throw new UsernameNotFoundException("User not found:[%s]".formatted(username));
-    }
-    return userDto;
+  private User findByUsername(String username) throws UsernameNotFoundException {
+    final Optional<User> optUser = userRepository.findByUsername(username);
+    return optUser.orElseThrow(() -> new UsernameNotFoundException("User not found:[%s]".formatted(username)));
   }
 }

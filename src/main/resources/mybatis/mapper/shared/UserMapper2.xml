@@ -35,10 +35,10 @@
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="userDto.id">
         INSERT INTO API_APPLICATION.USER( `USERNAME`
-                                           , `PASSWORD`
-                                           , `ACTOR`
-                                           , `CREATED_BY`
-                                           , `UPDATED_BY`)
+                                        , `PASSWORD`
+                                        , `ACTOR`
+                                        , `CREATED_BY`
+                                        , `UPDATED_BY`)
         VALUES ( #{userDto.username}
                , #{userDto.password}
                , #{userDto.actor.code}

@@ -22,11 +22,9 @@ import static java.lang.StrictMath.round;
 @Slf4j
 public class LoggerInterceptor implements HandlerInterceptor {
 
-  private Instant begin;
-
   private final AuthRegistry authRegistry;
-
   private final ApiTransaction apiTransaction;
+  private Instant begin;
 
   @Override
   public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull Object handler) throws Exception {

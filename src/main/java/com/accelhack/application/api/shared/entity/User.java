@@ -3,7 +3,7 @@ package com.accelhack.application.api.shared.entity;
 import com.accelhack.accelparts.Operand;
 import lombok.*;
 
-public class User  {
+public class User {
   @NoArgsConstructor
   @AllArgsConstructor
   @Data

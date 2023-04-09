@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
   private final UserMapper2 userMapper;
   private final UserTokenMapper userTokenMapper;
   private final PasswordEncoder passwordEncoder;
+
   @Override
   public UserDto getByUsername(String userName) {
     return userMapper.selectByUsername(userName);

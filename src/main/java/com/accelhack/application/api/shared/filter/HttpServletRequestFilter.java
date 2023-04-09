@@ -9,6 +9,12 @@ import java.io.*;
 
 public class HttpServletRequestFilter implements Filter {
 
+  @Override
+  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    MultiReadHttpServletRequest multiReadRequest = new MultiReadHttpServletRequest((HttpServletRequest) servletRequest);
+    filterChain.doFilter(multiReadRequest, servletResponse);
+  }
+
   static class MultiReadHttpServletRequest extends HttpServletRequestWrapper {
     private ByteArrayOutputStream cachedBytes;
 
@@ -62,12 +68,6 @@ public class HttpServletRequestFilter implements Filter {
         throw new RuntimeException("未実装です");
       }
     }
-  }
-
-  @Override
-  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-    MultiReadHttpServletRequest multiReadRequest = new MultiReadHttpServletRequest((HttpServletRequest) servletRequest);
-    filterChain.doFilter(multiReadRequest, servletResponse);
   }
 }
 

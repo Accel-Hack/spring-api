@@ -17,21 +17,21 @@ public class Sample implements Operand {
   private Instant birthday;
   private Boolean isJapanese;
 
-  public SampleDto toSampleDto() {
-    return SampleDto.builder()
-      .id(id)
-      .name(name)
-      .birthday(birthday)
-      .isJapanese(isJapanese)
-      .build();
-  }
-
   public static Sample from(SampleDto sampleDto) {
     return Sample.builder()
       .id(sampleDto.getId())
       .name(sampleDto.getName())
       .birthday(sampleDto.getBirthday())
       .isJapanese(sampleDto.getIsJapanese())
+      .build();
+  }
+
+  public SampleDto toSampleDto() {
+    return SampleDto.builder()
+      .id(id)
+      .name(name)
+      .birthday(birthday)
+      .isJapanese(isJapanese)
       .build();
   }
 }

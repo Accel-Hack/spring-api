@@ -7,11 +7,13 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface UserMapper {
 
-  User selectById(int id);
+  User selectByUsername(String username);
 
   int add(User user, Operator operator);
 
-//  int addToken(User.Token token, Operator operator);
+  int update(User user, Operator operator);
 
-//  int deleteToken(User.Token token, Operator operator);
+  int addToken(int userId, User.Token token, Operator operator);
+
+  int deleteToken(int userTokenId, Operator operator);
 }

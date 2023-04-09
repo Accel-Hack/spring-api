@@ -5,14 +5,14 @@
     <resultMap id="userResultMap" type="com.accelhack.application.api.shared.domain.user.User">
         <id property="id" column="USER_ID"/>
         <result property="username" column="USERNAME"/>
-        <result property="password" column="PASSWORD"/>
+        <result property="encryptPassword" column="ENCRYPT_PASSWORD"/>
         <result property="actor" column="ACTOR"/>
         <result property="resetCode" column="RESET_CODE"/>
         <result property="resetUntil" column="RESET_UNTIL"/>
         <collection property="tokens" ofType="com.accelhack.application.api.shared.domain.user.User$Token">
             <result property="id" column="USER_TOKEN_ID"/>
             <result property="accessToken" column="ACCESS_TOKEN"/>
-            <result property="refreshToken" column="REFRESH_TOKEN"/>
+            <result property="encryptRefreshToken" column="ENCRYPT_REFRESH_TOKEN"/>
             <result property="expiresAt" column="EXPIRES_AT"/>
         </collection>
     </resultMap>
@@ -20,18 +20,26 @@
     <sql id="select">
         SELECT U.ID             AS USER_ID
              , U.USERNAME       AS USERNAME
-             , U.PASSWORD       AS PASSWORD
+             , U.PASSWORD       AS ENCRYPT_PASSWORD
              , U.ACTOR          AS ACTOR
              , U.RESET_CODE     AS RESET_CODE
              , U.RESET_UNTIL    AS RESET_UNTIL
              , UT.ID            AS USER_TOKEN_ID
              , UT.ACCESS_TOKEN  AS ACCESS_TOKEN
-             , UT.REFRESH_TOKEN AS REFRESH_TOKEN
+             , UT.REFRESH_TOKEN AS ENCRYPT_REFRESH_TOKEN
              , UT.EXPIRES_AT    AS EXPIRES_AT
         FROM API_APPLICATION.USER U
                  LEFT JOIN API_APPLICATION.USER_TOKEN UT
                            ON U.ID = UT.USER_ID
+                               AND UT.DELETED_AT IS NULL
+                               AND UT.EXPIRES_AT > CURRENT_TIMESTAMP
     </sql>
+
+    <select id="selectByUsername" resultMap="userResultMap">
+        <include refid="select"/>
+        WHERE U.USERNAME = #{username}
+        AND U.DELETED_AT IS NULL
+    </select>
 
     <insert id="add" useGeneratedKeys="true" keyProperty="user.id">
         INSERT INTO API_APPLICATION.USER( `USERNAME`
@@ -46,23 +54,30 @@
                , #{operator.code})
     </insert>
 
+    <insert id="update">
+        UPDATE API_APPLICATION.USER
+        SET UPDATED_BY = #{operator.code}
+          , UPDATED_AT = CURRENT_TIMESTAMP
+        WHERE ID = #{user.id}
+    </insert>
+
     <insert id="addToken" useGeneratedKeys="true" keyProperty="token.id">
         INSERT INTO API_APPLICATION.USER_TOKEN( `USER_ID`
                                               , `ACCESS_TOKEN`
                                               , `REFRESH_TOKEN`
                                               , `EXPIRES_AT`
                                               , `CREATED_BY`)
-        VALUES ( #{token.userId}
+        VALUES ( #{userId}
                , #{token.accessToken}
-               , #{token.refreshToken}
+               , #{token.encryptRefreshToken}
                , #{token.expiresAt}
                , #{operator.code})
     </insert>
 
-<!--    <update id="deleteToken">-->
-<!--        UPDATE API_APPLICATION.USER_TOKEN-->
-<!--        SET DELETED_BY = #{operator.code}-->
-<!--          , DELETED_AT = CURRENT_TIMESTAMP-->
-<!--        WHERE REFRESH_TOKEN = #{userTokenDto.refreshToken}-->
-<!--    </update>-->
+    <update id="deleteToken">
+        UPDATE API_APPLICATION.USER_TOKEN
+        SET DELETED_BY = #{operator.code}
+          , DELETED_AT = CURRENT_TIMESTAMP
+        WHERE ID = #{userTokenId}
+    </update>
 </mapper>
