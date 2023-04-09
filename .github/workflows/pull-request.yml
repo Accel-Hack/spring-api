@@ -62,9 +62,7 @@ jobs:
 
       - name: Build test database
         run: |
-          cp env.properties sa-docker/.env
           cd sa-docker
-          touch .env.terraform
           docker compose up test-db -d
 
       - name: Set up JDK (java18)

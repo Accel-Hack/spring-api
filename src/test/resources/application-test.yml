@@ -1,4 +1,8 @@
 spring:
+  config:
+    import:
+      - file:.env.local[.properties]
+      - file:.env.test[.properties]
   datasource:
     url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_TEST_PORT}/${MYSQL_DATABASE}"
     username: "${SPRING_DB_USER}"

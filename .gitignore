@@ -3,7 +3,6 @@
 target/
 
 docker/.env
-docker/.env.terraform
 
 src/main/resources/public/
 src/main/resources/templates/

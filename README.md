@@ -16,9 +16,6 @@ $ pwd
 run docker database image
 
 ```bash
-$ cp env.properties ./aa-docker/.env
-$ cd aa-docker 
-$ touch .env.terraform
 $ docker-compose up db -d
 ```
 
@@ -81,11 +78,7 @@ Replace USERNAME with your github account and GITHUB_TOKEN with the NPM_TOKEN yo
 </settings>
 ```
 
-### open web page
-
-access to http://localhost:8080/signIn
-
-#### login info
+#### user info
 
 | user role     | id      | pass   |
 |---------------|---------|--------|
@@ -111,7 +104,5 @@ $ mvn -D"user.timezone"=UTC -D"test"="${CLASS_PATH}" test
 when running a test witch uses the database. run the following command(be sure to have your .env file copied).
 
 ```bash
-$ cp env.properties ./sa-docker/.env
-$ cd sa-docker 
 $ docker-compose up test-db -d
 ``````

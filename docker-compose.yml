@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  db:
+    container_name: api-app-db
+    image: mysql:8.0
+    env_file:
+      - .env.local
+    ports:
+      - "3566:3306"
+    volumes:
+      - ./database/conf.d:/etc/mysql/conf.d
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+
+  test-db:
+    container_name: api-app-test-db
+    image: mysql:8.0
+    env_file:
+      - .env.local
+      - .env.test
+    ports:
+      - "3567:3306"
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
