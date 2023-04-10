@@ -11,16 +11,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
-  private final UserMapper mapper;
+  private final UserMapper userMapper;
 
   @Override
   public Optional<User> findByUsername(String username) {
-    return Optional.ofNullable(mapper.selectByUsername(username));
+    return Optional.ofNullable(userMapper.selectByUsername(username));
   }
 
   @Override
   public User add(User user, Operator operator) {
-    mapper.add(user, operator);
+    userMapper.add(user, operator);
     return user;
   }
 
@@ -30,21 +30,21 @@ public class UserRepositoryImpl implements UserRepository {
     User prevUser = findByUsername(user.getUsername()).orElseThrow();
 
     // 1. update user info
-    mapper.update(user, operator);
+    userMapper.update(user, operator);
 
     // 2. update user token
     // 2.1. delete old token
     prevUser.getTokens().stream().filter(
       token -> user.getTokens().stream().map(User.Token::getId).noneMatch(id -> id == token.getId())
     ).forEach(
-      token -> mapper.deleteToken(token.getId(), operator)
+      token -> userMapper.deleteToken(token.getId(), operator)
     );
 
     // 2.2. add new token
     user.getTokens().stream().filter(
       token -> prevUser.getTokens().stream().map(User.Token::getId).noneMatch(id -> id == token.getId())
     ).forEach(
-      token -> mapper.addToken(user.getId(), token, operator)
+      token -> userMapper.addToken(user.getId(), token, operator)
     );
 
     // return user

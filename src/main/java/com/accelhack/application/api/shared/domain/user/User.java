@@ -26,7 +26,7 @@ public class User {
   @Getter(lazy = true, value = AccessLevel.PRIVATE)
   private final PasswordEncoder passwordEncoder = SpringContext.getBean(BCryptPasswordEncoder.class);
 
-  private int id;
+  private Integer id;
   private String username;
   @Getter(AccessLevel.NONE)
   private String password;
@@ -35,6 +35,30 @@ public class User {
   private String resetCode;
   private Instant resetUntil;
   private List<Token> tokens;
+  private Sudo sudo;
+
+  @Builder(access = AccessLevel.PRIVATE)
+  @AllArgsConstructor(access = AccessLevel.PRIVATE)
+  @NoArgsConstructor(access = AccessLevel.PRIVATE) // for JPA
+  static public class Token {
+    @Getter
+    @JsonIgnore
+    private int id;
+    @Getter
+    private String accessToken;
+    @Getter
+    private String refreshToken;
+    private String encryptRefreshToken;
+    private Instant expiresAt;
+  }
+
+  @Builder(access = AccessLevel.PRIVATE)
+  @AllArgsConstructor(access = AccessLevel.PRIVATE)
+  @NoArgsConstructor(access = AccessLevel.PRIVATE) // for JPA
+  static public class Sudo {
+    private Integer id;
+    private int targetUserId;
+  }
 
   public User(String username, String password, Actor actor) {
     this.username = username;
@@ -49,6 +73,18 @@ public class User {
       .password(encryptPassword)
       .authorities(List.of(actor.toAuthority()))
       .build();
+  }
+
+  public void startSudo(int targetUserId) {
+    sudo = Sudo.builder().targetUserId(targetUserId).build();
+  }
+
+  public void endSudo() {
+    sudo = null;
+  }
+
+  public boolean isSuperuser() {
+    return Objects.nonNull(sudo);
   }
 
   public Token reissueToken(String refreshToken) {
@@ -109,20 +145,5 @@ public class User {
   private boolean hasValidRefreshToken(String refreshToken) {
     return tokens.stream().anyMatch(token ->
       getPasswordEncoder().matches(refreshToken, token.encryptRefreshToken));
-  }
-
-  @Builder(access = AccessLevel.PRIVATE)
-  @AllArgsConstructor(access = AccessLevel.PRIVATE)
-  @NoArgsConstructor(access = AccessLevel.PRIVATE) // for JPA
-  static public class Token {
-    @Getter
-    @JsonIgnore
-    private int id;
-    @Getter
-    private String accessToken;
-    @Getter
-    private String refreshToken;
-    private String encryptRefreshToken;
-    private Instant expiresAt;
   }
 }

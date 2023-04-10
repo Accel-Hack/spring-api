@@ -1,7 +1,8 @@
 package com.accelhack.application.api.shared.domain.log;
 
 import com.accelhack.application.api.shared.model.Operator;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
