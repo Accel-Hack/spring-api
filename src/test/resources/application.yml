@@ -4,3 +4,7 @@ spring:
       unit:
         - base
         - test
+        - mapper
+      l-test:
+        - base
+        - test
