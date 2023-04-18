@@ -4,16 +4,16 @@ spring:
       - file:.env.local[.properties]
       - file:.env.test[.properties]
   datasource:
-    url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_TEST_PORT}/${MYSQL_DATABASE}"
+    url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}"
     username: "${SPRING_DB_USER}"
     password: "${SPRING_DB_PASSWORD}"
     api-application:
       driverClassName: ${spring.datasource.driverClassName}
-      url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_TEST_PORT}/${MYSQL_DATABASE}"
+      url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}"
       username: ${spring.datasource.username}
       password: ${spring.datasource.password}
     your-application:
       driverClassName: ${spring.datasource.driverClassName}
-      url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_TEST_PORT}/${MYSQL_YOUR_APPLICATION_DATABASE}"
+      url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_YOUR_APPLICATION_DATABASE}"
       username: ${spring.datasource.username}
       password: ${spring.datasource.password}

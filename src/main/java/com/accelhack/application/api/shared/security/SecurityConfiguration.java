@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,7 +25,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfiguration {
   private final JwtUserDetailsService userDetailsService;
-  private final AuthenticationManager authenticationManager;
+  private final AuthenticationConfiguration authenticationConfiguration;
   private final BCryptPasswordEncoder passwordEncoder;
   private final ObjectMapper objectMapper;
 
@@ -47,6 +48,10 @@ public class SecurityConfiguration {
     provider.setUserDetailsService(userDetailsService);
     provider.setPasswordEncoder(passwordEncoder);
     return provider;
+  }
+
+  private AuthenticationManager authenticationManager() throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
   }
 
   /**
@@ -77,8 +82,8 @@ public class SecurityConfiguration {
    */
   private void addFilters(HttpSecurity http) throws Exception {
     final Filter cache = new HttpServletRequestFilter();
-    final Filter authentication = new JwtAuthenticationFilter(authenticationManager, userDetailsService, objectMapper);
-    final Filter authorization = new JwtAuthorizationFilter(authenticationManager);
+    final Filter authentication = new JwtAuthenticationFilter(authenticationManager(), userDetailsService, objectMapper);
+    final Filter authorization = new JwtAuthorizationFilter(authenticationManager());
 
     http
       .addFilterBefore(cache, UsernamePasswordAuthenticationFilter.class)

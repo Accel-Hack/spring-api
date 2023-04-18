@@ -8,6 +8,7 @@ import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilde
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 public class BaseIntControllerLTest extends AbstractControllerLTest {
+
   @Autowired
   UserDetailsService userDetailsService;
 

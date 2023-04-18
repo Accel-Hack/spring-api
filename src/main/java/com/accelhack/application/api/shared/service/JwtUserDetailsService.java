@@ -90,7 +90,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
   public boolean isValidRefreshToken(String username, String refreshToken) throws UsernameNotFoundException {
     final List<UserTokenDto> userTokenDtoList = userService.getTokens(username);
-    return userTokenDtoList.stream().anyMatch(userTokenDto-> passwordEncoder.matches(refreshToken, userTokenDto.getRefreshToken()));
+    return userTokenDtoList.stream().anyMatch(userTokenDto -> passwordEncoder.matches(refreshToken, userTokenDto.getRefreshToken()));
   }
 
   private UserDto findByUsername(String username) throws UsernameNotFoundException {
