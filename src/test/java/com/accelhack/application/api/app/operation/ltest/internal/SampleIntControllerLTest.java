@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Disabled("FIXME: データベースの時間を合わせる")
 public class SampleIntControllerLTest extends BaseIntControllerLTest {
   @BeforeEach
   void setUp() {
