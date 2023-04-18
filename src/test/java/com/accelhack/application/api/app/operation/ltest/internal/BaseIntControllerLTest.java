@@ -1,6 +1,6 @@
-package com.accelhack.application.api.app.ltest.internal;
+package com.accelhack.application.api.app.operation.ltest.internal;
 
-import com.accelhack.application.api.app.ltest.AbstractControllerLTest;
+import com.accelhack.application.api.app.operation.ltest.AbstractControllerLTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;

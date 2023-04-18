@@ -1,4 +1,4 @@
-package com.accelhack.application.api.app.ltest.external;
+package com.accelhack.application.api.app.operation.ltest.external;
 
 import com.accelhack.accelparts.Request;
 import com.accelhack.application.api.app.entity.Sample;

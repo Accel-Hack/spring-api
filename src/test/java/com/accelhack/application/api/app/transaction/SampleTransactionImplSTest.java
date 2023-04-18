@@ -8,12 +8,12 @@ import com.accelhack.application.api.app.dto.SampleDto;
 import com.accelhack.application.api.app.entity.Sample;
 import com.accelhack.application.api.app.entity.SampleSelector;
 import com.accelhack.application.api.app.service.SampleService;
+import jakarta.validation.Validator;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.validation.Validator;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;

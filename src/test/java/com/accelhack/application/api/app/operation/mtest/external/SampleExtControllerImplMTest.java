@@ -1,9 +1,9 @@
-package com.accelhack.application.api.app.controller.external;
+package com.accelhack.application.api.app.operation.mtest.external;
 
 import com.accelhack.accelparts.Request;
 import com.accelhack.accelparts.response.ListResponse;
-import com.accelhack.application.api.app.controller.BaseControllerImplSTest;
-import com.accelhack.application.api.app.controller.SampleExtControllerImpl;
+import com.accelhack.application.api.app.operation.mtest.BaseControllerImplMTest;
+import com.accelhack.application.api.app.mtest.SampleExtControllerImpl;
 import com.accelhack.application.api.app.entity.Sample;
 import com.accelhack.application.api.app.entity.SampleSelector;
 import com.accelhack.application.api.app.transaction.SampleTransaction;
@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @ExtendWith(MockitoExtension.class)
-public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
+public class SampleExtControllerImplMTest extends BaseControllerImplMTest {
   @InjectMocks
   private SampleExtControllerImpl injectedController;
 

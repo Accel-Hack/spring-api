@@ -1,4 +1,4 @@
-package com.accelhack.application.api.app.controller;
+package com.accelhack.application.api.app.mtest;
 
 import com.accelhack.accelparts.Request;
 import com.accelhack.accelparts.ResponseSet;
@@ -6,7 +6,7 @@ import com.accelhack.accelparts.response.ListResponse;
 import com.accelhack.application.api.app.entity.Sample;
 import com.accelhack.application.api.app.entity.SampleSelector;
 import com.accelhack.application.api.app.transaction.SampleTransaction;
-import com.accelhack.application.api.shared.controller.base.InternalController;
+import com.accelhack.application.api.shared.controller.base.ExternalController;
 import com.accelhack.application.api.shared.functional.ParameterizedApi;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +14,8 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 @RequiredArgsConstructor
-public class SampleIntControllerImpl extends InternalController implements SampleController {
+public class SampleExtControllerImpl extends ExternalController implements SampleController {
+
   private final SampleTransaction sampleTransaction;
 
   @Override

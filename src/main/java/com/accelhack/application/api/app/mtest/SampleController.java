@@ -1,4 +1,4 @@
-package com.accelhack.application.api.app.controller;
+package com.accelhack.application.api.app.mtest;
 
 import com.accelhack.accelparts.Request;
 import com.accelhack.accelparts.ResponseSet;
