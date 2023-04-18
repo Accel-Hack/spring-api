@@ -2,9 +2,8 @@ package com.accelhack.application.api.shared.model;
 
 import com.accelhack.accelparts.Operand;
 import com.accelhack.application.api.shared.dto.SuperuserDto;
+import jakarta.validation.constraints.Null;
 import lombok.*;
-
-import javax.validation.constraints.Null;
 
 @NoArgsConstructor
 @AllArgsConstructor

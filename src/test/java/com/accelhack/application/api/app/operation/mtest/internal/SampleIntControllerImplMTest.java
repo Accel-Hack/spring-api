@@ -1,11 +1,11 @@
-package com.accelhack.application.api.app.controller.external;
+package com.accelhack.application.api.app.operation.mtest.internal;
 
 import com.accelhack.accelparts.Request;
 import com.accelhack.accelparts.response.ListResponse;
-import com.accelhack.application.api.app.controller.BaseControllerImplSTest;
-import com.accelhack.application.api.app.controller.SampleExtControllerImpl;
 import com.accelhack.application.api.app.entity.Sample;
 import com.accelhack.application.api.app.entity.SampleSelector;
+import com.accelhack.application.api.app.mtest.SampleIntControllerImpl;
+import com.accelhack.application.api.app.operation.mtest.BaseControllerImplMTest;
 import com.accelhack.application.api.app.transaction.SampleTransaction;
 import com.accelhack.application.api.shared.functional.ParameterizedApi;
 import org.junit.jupiter.api.*;
@@ -23,14 +23,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @ExtendWith(MockitoExtension.class)
-public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
+public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
   @InjectMocks
-  private SampleExtControllerImpl injectedController;
+  private SampleIntControllerImpl injectedController;
 
   @Mock
   private SampleTransaction sampleTransaction;
 
-  private SampleExtControllerImpl spiedController;
+  private SampleIntControllerImpl spiedController;
 
   @BeforeEach
   void setup() {
@@ -43,7 +43,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
   @DisplayName("取得")
   class Get {
     @Test
-    @DisplayName("GET: /api/v1/sample/get")
+    @DisplayName("GET: /api/int/v1/sample/get")
     public void get() throws Exception {
       // data
       Sample sample = Sample.builder().id(10).build();
@@ -62,7 +62,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
       doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
 
       // check result
-      performPost("/api/v1/sample/get", request).andExpect(content().string(responseStr));
+      performPost("/api/int/v1/sample/get", request).andExpect(content().string(responseStr));
     }
   }
 
@@ -70,7 +70,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
   @DisplayName("検索")
   class Search {
     @Test
-    @DisplayName("GET: /api/v1/sample/search")
+    @DisplayName("GET: /api/int/v1/sample/search")
     public void search() throws Exception {
       // data
       SampleSelector sampleSelector = SampleSelector.builder().id(10).build();
@@ -89,7 +89,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
       doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
 
       // check result
-      performPost("/api/v1/sample/search", request).andExpect(content().string(responseStr));
+      performPost("/api/int/v1/sample/search", request).andExpect(content().string(responseStr));
     }
   }
 
@@ -97,7 +97,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
   @DisplayName("追加")
   class Add {
     @Test
-    @DisplayName("POST: /api/v1/sample/add")
+    @DisplayName("POST: /api/int/v1/sample/add")
     public void add() throws Exception {
       // data
       Sample sample = Sample.builder().name("三浦").build();
@@ -116,7 +116,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
       doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
 
       // check result
-      performPost("/api/v1/sample/add", request).andExpect(content().string(responseStr));
+      performPost("/api/int/v1/sample/add", request).andExpect(content().string(responseStr));
     }
   }
 
@@ -124,7 +124,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
   @DisplayName("更新")
   class Edit {
     @Test
-    @DisplayName("POST: /api/v1/sample/edit")
+    @DisplayName("POST: /api/int/v1/sample/edit")
     public void edit() throws Exception {
       // data
       Sample sample = Sample.builder().name("三浦").build();
@@ -143,7 +143,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
       doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
 
       // check result
-      performPost("/api/v1/sample/edit", request).andExpect(content().string(responseStr));
+      performPost("/api/int/v1/sample/edit", request).andExpect(content().string(responseStr));
     }
   }
 
@@ -151,7 +151,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
   @DisplayName("削除")
   class Remove {
     @Test
-    @DisplayName("POST: /api/v1/sample/remove")
+    @DisplayName("POST: /api/int/v1/sample/remove")
     public void remove() throws Exception {
       // data
       Sample sample = Sample.builder().name("三浦").build();
@@ -170,7 +170,7 @@ public class SampleExtControllerImplSTest extends BaseControllerImplSTest {
       doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
 
       // check result
-      performPost("/api/v1/sample/remove", request).andExpect(content().string(responseStr));
+      performPost("/api/int/v1/sample/remove", request).andExpect(content().string(responseStr));
     }
   }
 }

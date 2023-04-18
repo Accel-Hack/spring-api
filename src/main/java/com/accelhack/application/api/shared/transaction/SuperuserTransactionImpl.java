@@ -7,10 +7,10 @@ import com.accelhack.application.api.shared.dto.SuperuserDto;
 import com.accelhack.application.api.shared.model.Superuser;
 import com.accelhack.application.api.shared.registry.AuthRegistry;
 import com.accelhack.application.api.shared.service.SuperuserService;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Validator;
 import java.util.function.Function;
 
 @Component

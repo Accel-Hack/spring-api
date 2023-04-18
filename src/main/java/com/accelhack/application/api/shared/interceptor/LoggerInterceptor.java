@@ -3,14 +3,14 @@ package com.accelhack.application.api.shared.interceptor;
 import com.accelhack.application.api.shared.dto.ApiLogDto;
 import com.accelhack.application.api.shared.registry.AuthRegistry;
 import com.accelhack.application.api.shared.transaction.ApiTransaction;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.stream.Collectors;

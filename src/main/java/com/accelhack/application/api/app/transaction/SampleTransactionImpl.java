@@ -8,10 +8,10 @@ import com.accelhack.application.api.app.dto.SampleDto;
 import com.accelhack.application.api.app.entity.Sample;
 import com.accelhack.application.api.app.entity.SampleSelector;
 import com.accelhack.application.api.app.service.SampleService;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Validator;
 import java.util.Collections;
 import java.util.List;
 

@@ -8,10 +8,10 @@ import com.accelhack.application.api.shared.dto.UserDto;
 import com.accelhack.application.api.shared.model.User;
 import com.accelhack.application.api.shared.model.UserSelector;
 import com.accelhack.application.api.shared.service.UserService;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import javax.validation.Validator;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
