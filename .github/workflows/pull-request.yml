@@ -61,9 +61,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build test database
-        run: |
-          cd sa-docker
-          docker compose up test-db -d
+        run: docker compose up test-db -d
 
       - name: Set up JDK (java18)
         uses: actions/setup-java@v3
