@@ -10,8 +10,10 @@ import java.io.*;
 public class HttpServletRequestFilter implements Filter {
 
   @Override
-  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-    MultiReadHttpServletRequest multiReadRequest = new MultiReadHttpServletRequest((HttpServletRequest) servletRequest);
+  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse,
+      FilterChain filterChain) throws IOException, ServletException {
+    MultiReadHttpServletRequest multiReadRequest =
+        new MultiReadHttpServletRequest((HttpServletRequest) servletRequest);
     filterChain.doFilter(multiReadRequest, servletResponse);
   }
 
@@ -24,7 +26,8 @@ public class HttpServletRequestFilter implements Filter {
 
     @Override
     public ServletInputStream getInputStream() throws IOException {
-      if (cachedBytes == null) cacheInputStream();
+      if (cachedBytes == null)
+        cacheInputStream();
       return new CachedServletInputStream();
     }
 

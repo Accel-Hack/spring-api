@@ -34,16 +34,14 @@ public class AuthController extends ExternalController {
   }
 
   /**
-   * curl -X POST -d '{"username":"manager1", "password": "123456"}' -H "accept: application/json" -H "Content-Type: application/json" "http://localhost:8080/api/v1/user/add"
+   * curl -X POST -d '{"username":"manager1", "password": "123456"}' -H "accept: application/json"
+   * -H "Content-Type: application/json" "http://localhost:8080/api/v1/user/add"
    */
   @PostMapping("/user/add")
   @ResponseBody
   public AuthenticationRequest refreshToken(@RequestBody AuthenticationRequest request) {
-    repository.add(new User(
-        request.getUsername(),
-        request.getPassword(),
-        Actor.USER)
-      , new Operator(null));
+    repository.add(new User(request.getUsername(), request.getPassword(), Actor.USER),
+        new Operator(null));
     return request;
   }
 }

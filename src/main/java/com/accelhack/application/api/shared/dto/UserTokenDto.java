@@ -20,12 +20,8 @@ public class UserTokenDto implements BaseDto<UserTokenDto> {
 
   @Override
   public UserTokenDto toCreate() {
-    return UserTokenDto.builder()
-      .userId(userId)
-      .accessToken(accessToken)
-      .refreshToken(refreshToken)
-      .expiresAt(expiresAt)
-      .build();
+    return UserTokenDto.builder().userId(userId).accessToken(accessToken).refreshToken(refreshToken)
+        .expiresAt(expiresAt).build();
   }
 
   @Override
@@ -35,8 +31,6 @@ public class UserTokenDto implements BaseDto<UserTokenDto> {
 
   @Override
   public UserTokenDto toDelete() {
-    return UserTokenDto.builder()
-      .id(id)
-      .build();
+    return UserTokenDto.builder().id(id).build();
   }
 }

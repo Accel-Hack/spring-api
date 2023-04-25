@@ -18,20 +18,11 @@ public class Sample implements Operand {
   private Boolean isJapanese;
 
   public static Sample from(SampleDto sampleDto) {
-    return Sample.builder()
-      .id(sampleDto.getId())
-      .name(sampleDto.getName())
-      .birthday(sampleDto.getBirthday())
-      .isJapanese(sampleDto.getIsJapanese())
-      .build();
+    return Sample.builder().id(sampleDto.getId()).name(sampleDto.getName())
+        .birthday(sampleDto.getBirthday()).isJapanese(sampleDto.getIsJapanese()).build();
   }
 
   public SampleDto toSampleDto() {
-    return SampleDto.builder()
-      .id(id)
-      .name(name)
-      .birthday(birthday)
-      .isJapanese(isJapanese)
-      .build();
+    return SampleDto.builder().id(id).name(name).birthday(birthday).isJapanese(isJapanese).build();
   }
 }

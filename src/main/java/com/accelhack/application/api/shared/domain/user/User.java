@@ -24,7 +24,8 @@ import static org.springframework.security.core.userdetails.User.builder;
 public class User {
 
   @Getter(lazy = true, value = AccessLevel.PRIVATE)
-  private final PasswordEncoder passwordEncoder = SpringContext.getBean(BCryptPasswordEncoder.class);
+  private final PasswordEncoder passwordEncoder =
+      SpringContext.getBean(BCryptPasswordEncoder.class);
 
   private Integer id;
   private String username;
@@ -68,11 +69,8 @@ public class User {
   }
 
   public UserDetails toUserDetails() {
-    return builder()
-      .username(username)
-      .password(encryptPassword)
-      .authorities(List.of(actor.toAuthority()))
-      .build();
+    return builder().username(username).password(encryptPassword)
+        .authorities(List.of(actor.toAuthority())).build();
   }
 
   public void startSudo(int targetUserId) {
@@ -94,8 +92,7 @@ public class User {
     }
 
     // 2. remove old tokens from list
-    tokens.removeIf(token ->
-      getPasswordEncoder().matches(refreshToken, token.encryptRefreshToken));
+    tokens.removeIf(token -> getPasswordEncoder().matches(refreshToken, token.encryptRefreshToken));
 
     // 3. generate new token
     return issueToken(refreshToken);
@@ -113,11 +110,9 @@ public class User {
 
     // 1. generate new access token
     final Instant now = Instant.now();
-    final String accessToken = JWT.create()
-      .withSubject(username)
-      .withIssuedAt(Date.from(now))
-      .withExpiresAt(Date.from(now.plus(accessTokenExpSec, ChronoUnit.SECONDS)))
-      .sign(Algorithm.HMAC512(accessTokenSecret.getBytes()));
+    final String accessToken = JWT.create().withSubject(username).withIssuedAt(Date.from(now))
+        .withExpiresAt(Date.from(now.plus(accessTokenExpSec, ChronoUnit.SECONDS)))
+        .sign(Algorithm.HMAC512(accessTokenSecret.getBytes()));
 
     // 2. generate new refresh token
     final String _refreshToken;
@@ -128,12 +123,9 @@ public class User {
     }
 
     // 3. instant new token
-    Token token = Token.builder()
-      .accessToken(accessToken)
-      .refreshToken(_refreshToken)
-      .encryptRefreshToken(getPasswordEncoder().encode(_refreshToken))
-      .expiresAt(now.plus(refreshTokenExpDays, ChronoUnit.DAYS))
-      .build();
+    Token token = Token.builder().accessToken(accessToken).refreshToken(_refreshToken)
+        .encryptRefreshToken(getPasswordEncoder().encode(_refreshToken))
+        .expiresAt(now.plus(refreshTokenExpDays, ChronoUnit.DAYS)).build();
 
     // 4. add new token to list
     tokens.add(token);
@@ -143,7 +135,7 @@ public class User {
   }
 
   private boolean hasValidRefreshToken(String refreshToken) {
-    return tokens.stream().anyMatch(token ->
-      getPasswordEncoder().matches(refreshToken, token.encryptRefreshToken));
+    return tokens.stream()
+        .anyMatch(token -> getPasswordEncoder().matches(refreshToken, token.encryptRefreshToken));
   }
 }

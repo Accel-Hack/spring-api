@@ -51,7 +51,8 @@ public class SampleServiceImplSTest {
     public void search() {
       // data
       SampleSelector selector = SampleSelector.builder().build();
-      List<SampleDto> sampleDtos = List.of(SampleDto.builder().id(1).build(), SampleDto.builder().id(2).build());
+      List<SampleDto> sampleDtos =
+          List.of(SampleDto.builder().id(1).build(), SampleDto.builder().id(2).build());
 
       // mock setting
       doReturn(sampleDtos).when(sampleMapper).selectBy(selector);
@@ -72,18 +73,14 @@ public class SampleServiceImplSTest {
     public void success() {
       // data
       int newId = 10;
-      SampleDto sampleDto = SampleDto.builder()
-        .name("miura")
-        .birthday(Instant.parse("2000-06-24T12:34:56Z"))
-        .isJapanese(Boolean.TRUE)
-        .build();
+      SampleDto sampleDto = SampleDto.builder().name("miura")
+          .birthday(Instant.parse("2000-06-24T12:34:56Z")).isJapanese(Boolean.TRUE).build();
 
       ArgumentMatcher<SampleDto> matcher = s -> {
         assertAll("ArgumentMatcher<SampleDto>",
-          () -> assertEquals(sampleDto.getName(), s.getName()),
-          () -> assertEquals(sampleDto.getBirthday(), s.getBirthday()),
-          () -> assertEquals(Boolean.TRUE, s.getIsJapanese())
-        );
+            () -> assertEquals(sampleDto.getName(), s.getName()),
+            () -> assertEquals(sampleDto.getBirthday(), s.getBirthday()),
+            () -> assertEquals(Boolean.TRUE, s.getIsJapanese()));
         return true;
       };
 
@@ -96,12 +93,10 @@ public class SampleServiceImplSTest {
 
       // result
       SampleDto result = sampleServiceImpl.add(sampleDto);
-      assertAll("result(SampleDto)",
-        () -> assertEquals(newId, result.getId()),
-        () -> assertEquals(sampleDto.getName(), result.getName()),
-        () -> assertEquals(sampleDto.getBirthday(), result.getBirthday()),
-        () -> assertEquals(sampleDto.getIsJapanese(), result.getIsJapanese())
-      );
+      assertAll("result(SampleDto)", () -> assertEquals(newId, result.getId()),
+          () -> assertEquals(sampleDto.getName(), result.getName()),
+          () -> assertEquals(sampleDto.getBirthday(), result.getBirthday()),
+          () -> assertEquals(sampleDto.getIsJapanese(), result.getIsJapanese()));
 
       // called functions count
       verify(sampleMapper, times(1)).insert(argThat(matcher));
@@ -111,18 +106,14 @@ public class SampleServiceImplSTest {
     @DisplayName("[失敗系]")
     public void failure() {
       // data
-      SampleDto sampleDto = SampleDto.builder()
-        .name("miura")
-        .birthday(Instant.parse("2000-06-24T12:34:56Z"))
-        .isJapanese(Boolean.TRUE)
-        .build();
+      SampleDto sampleDto = SampleDto.builder().name("miura")
+          .birthday(Instant.parse("2000-06-24T12:34:56Z")).isJapanese(Boolean.TRUE).build();
 
       ArgumentMatcher<SampleDto> matcher = s -> {
         assertAll("ArgumentMatcher<SampleDto>",
-          () -> assertEquals(sampleDto.getName(), s.getName()),
-          () -> assertEquals(sampleDto.getBirthday(), s.getBirthday()),
-          () -> assertEquals(Boolean.TRUE, s.getIsJapanese())
-        );
+            () -> assertEquals(sampleDto.getName(), s.getName()),
+            () -> assertEquals(sampleDto.getBirthday(), s.getBirthday()),
+            () -> assertEquals(Boolean.TRUE, s.getIsJapanese()));
         return true;
       };
 
@@ -144,20 +135,14 @@ public class SampleServiceImplSTest {
     @DisplayName("[正常系]")
     public void success() {
       // data
-      SampleDto sampleDto = SampleDto.builder()
-        .id(10)
-        .name("miura")
-        .birthday(Instant.parse("2000-06-24T12:34:56Z"))
-        .isJapanese(Boolean.TRUE)
-        .build();
+      SampleDto sampleDto = SampleDto.builder().id(10).name("miura")
+          .birthday(Instant.parse("2000-06-24T12:34:56Z")).isJapanese(Boolean.TRUE).build();
 
       ArgumentMatcher<SampleDto> matcher = s -> {
-        assertAll("ArgumentMatcher<SampleDto>",
-          () -> assertEquals(sampleDto.getId(), s.getId()),
-          () -> assertEquals(sampleDto.getName(), s.getName()),
-          () -> assertEquals(sampleDto.getBirthday(), s.getBirthday()),
-          () -> assertEquals(Boolean.TRUE, s.getIsJapanese())
-        );
+        assertAll("ArgumentMatcher<SampleDto>", () -> assertEquals(sampleDto.getId(), s.getId()),
+            () -> assertEquals(sampleDto.getName(), s.getName()),
+            () -> assertEquals(sampleDto.getBirthday(), s.getBirthday()),
+            () -> assertEquals(Boolean.TRUE, s.getIsJapanese()));
         return true;
       };
 
@@ -166,12 +151,10 @@ public class SampleServiceImplSTest {
 
       // result
       SampleDto result = sampleServiceImpl.edit(sampleDto);
-      assertAll("result(SampleDto)",
-        () -> assertEquals(sampleDto.getId(), result.getId()),
-        () -> assertEquals(sampleDto.getName(), result.getName()),
-        () -> assertEquals(sampleDto.getBirthday(), result.getBirthday()),
-        () -> assertEquals(sampleDto.getIsJapanese(), result.getIsJapanese())
-      );
+      assertAll("result(SampleDto)", () -> assertEquals(sampleDto.getId(), result.getId()),
+          () -> assertEquals(sampleDto.getName(), result.getName()),
+          () -> assertEquals(sampleDto.getBirthday(), result.getBirthday()),
+          () -> assertEquals(sampleDto.getIsJapanese(), result.getIsJapanese()));
 
       // called functions count
       verify(sampleMapper, times(1)).update(argThat(matcher));
@@ -181,20 +164,14 @@ public class SampleServiceImplSTest {
     @DisplayName("[失敗系]")
     public void failure() {
       // data
-      SampleDto sampleDto = SampleDto.builder()
-        .id(10)
-        .name("miura")
-        .birthday(Instant.parse("2000-06-24T12:34:56Z"))
-        .isJapanese(Boolean.TRUE)
-        .build();
+      SampleDto sampleDto = SampleDto.builder().id(10).name("miura")
+          .birthday(Instant.parse("2000-06-24T12:34:56Z")).isJapanese(Boolean.TRUE).build();
 
       ArgumentMatcher<SampleDto> matcher = s -> {
-        assertAll("ArgumentMatcher<SampleDto>",
-          () -> assertEquals(sampleDto.getId(), s.getId()),
-          () -> assertEquals(sampleDto.getName(), s.getName()),
-          () -> assertEquals(sampleDto.getBirthday(), s.getBirthday()),
-          () -> assertEquals(Boolean.TRUE, s.getIsJapanese())
-        );
+        assertAll("ArgumentMatcher<SampleDto>", () -> assertEquals(sampleDto.getId(), s.getId()),
+            () -> assertEquals(sampleDto.getName(), s.getName()),
+            () -> assertEquals(sampleDto.getBirthday(), s.getBirthday()),
+            () -> assertEquals(Boolean.TRUE, s.getIsJapanese()));
         return true;
       };
 

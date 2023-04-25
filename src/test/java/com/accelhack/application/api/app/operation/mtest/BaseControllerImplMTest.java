@@ -31,13 +31,14 @@ public class BaseControllerImplMTest {
     return true;
   }
 
-  protected <O extends Operand, R> boolean execute(ParameterizedApi<O, R> callable, Request<O> param) {
+  protected <O extends Operand, R> boolean execute(ParameterizedApi<O, R> callable,
+      Request<O> param) {
     return execute(() -> callable.call(param));
   }
 
-  protected <T extends Operand> ResultActions performPost(String path, Request<T> request) throws Exception {
-    return mockMvc.perform(MockMvcRequestBuilders.post(path)
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(objectMapper.writeValueAsString(request)));
+  protected <T extends Operand> ResultActions performPost(String path, Request<T> request)
+      throws Exception {
+    return mockMvc.perform(MockMvcRequestBuilders.post(path).contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(request)));
   }
 }

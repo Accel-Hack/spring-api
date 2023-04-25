@@ -15,9 +15,7 @@ public class Operator {
   }
 
   public Operator(UserDto userDto) {
-    this.code = Optional.ofNullable(userDto)
-      .map(UserDto::getId)
-      .map(Objects::toString)
-      .orElse("ANONYMOUS");
+    this.code =
+        Optional.ofNullable(userDto).map(UserDto::getId).map(Objects::toString).orElse("ANONYMOUS");
   }
 }

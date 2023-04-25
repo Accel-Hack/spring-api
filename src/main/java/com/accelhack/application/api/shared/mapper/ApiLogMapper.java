@@ -7,5 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface ApiLogMapper {
   int insert(ApiLogDto apiLogDto);
+
   int insert(Log log);
 }

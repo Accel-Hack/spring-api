@@ -16,7 +16,8 @@ public interface SampleController {
   ResponseEntity<ResponseSet<Sample>> get(@RequestBody Request<Sample> sampleRequest);
 
   @PostMapping(CONTEXT_PATH + "/search")
-  ResponseEntity<ResponseSet<ListResponse<Sample>>> search(@RequestBody Request<SampleSelector> sampleRequest);
+  ResponseEntity<ResponseSet<ListResponse<Sample>>> search(
+      @RequestBody Request<SampleSelector> sampleRequest);
 
   @PostMapping(CONTEXT_PATH + "/add")
   ResponseEntity<ResponseSet<Sample>> add(@RequestBody Request<Sample> sampleRequest);

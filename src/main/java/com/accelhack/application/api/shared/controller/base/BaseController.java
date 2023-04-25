@@ -11,7 +11,8 @@ import java.util.concurrent.Callable;
 @Slf4j
 public abstract class BaseController {
 
-  public <O extends Operand, R> ResponseEntity<ResponseSet<R>> execute(Request<O> request, ParameterizedApi<O, R> callable) {
+  public <O extends Operand, R> ResponseEntity<ResponseSet<R>> execute(Request<O> request,
+      ParameterizedApi<O, R> callable) {
     return execute(() -> callable.call(request));
   }
 

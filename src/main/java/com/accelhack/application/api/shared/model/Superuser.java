@@ -16,16 +16,11 @@ public class Superuser implements Operand {
   private int targetUserId;
 
   public static Superuser from(SuperuserDto superuserDto) {
-    return Superuser.builder()
-      .superuserId(superuserDto.getSuperuserId())
-      .targetUserId(superuserDto.getTargetUserId())
-      .build();
+    return Superuser.builder().superuserId(superuserDto.getSuperuserId())
+        .targetUserId(superuserDto.getTargetUserId()).build();
   }
 
   public SuperuserDto toSuperuserDto() {
-    return SuperuserDto.builder()
-      .superuserId(superuserId)
-      .targetUserId(targetUserId)
-      .build();
+    return SuperuserDto.builder().superuserId(superuserId).targetUserId(targetUserId).build();
   }
 }

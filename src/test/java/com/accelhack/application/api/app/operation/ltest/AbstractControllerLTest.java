@@ -22,7 +22,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 
 @ActiveProfiles("l-test")
 @SpringBootTest
-@TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionDbUnitTestExecutionListener.class})
+@TestExecutionListeners({DependencyInjectionTestExecutionListener.class,
+    TransactionDbUnitTestExecutionListener.class})
 public abstract class AbstractControllerLTest {
   @Autowired
   WebApplicationContext context;
@@ -34,10 +35,11 @@ public abstract class AbstractControllerLTest {
 
   protected void setController() {
     mockMvc = MockMvcBuilders.webAppContextSetup(context)
-      .apply(SecurityMockMvcConfigurers.springSecurity()).build();
+        .apply(SecurityMockMvcConfigurers.springSecurity()).build();
   }
 
-  protected <T extends Operand> ResultActions performPost(String path, Request<T> request) throws Exception {
+  protected <T extends Operand> ResultActions performPost(String path, Request<T> request)
+      throws Exception {
     String json = objectMapper.writeValueAsString(request);
     return performPost(path, json);
   }
@@ -47,10 +49,7 @@ public abstract class AbstractControllerLTest {
   }
 
   protected MockHttpServletRequestBuilder builder(String path, String content) {
-    return MockMvcRequestBuilders
-      .post(path)
-      .contentType(MediaType.APPLICATION_JSON)
-      .content(content)
-      .with(csrf());
+    return MockMvcRequestBuilders.post(path).contentType(MediaType.APPLICATION_JSON)
+        .content(content).with(csrf());
   }
 }

@@ -25,7 +25,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   private final ObjectMapper objectMapper;
 
   @Override
-  public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res) throws AuthenticationException {
+  public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
+      throws AuthenticationException {
     final AuthenticationRequest request;
     try {
       request = objectMapper.readValue(req.getInputStream(), AuthenticationRequest.class);
@@ -37,7 +38,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   }
 
   @Override
-  protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res, FilterChain chain, Authentication auth) throws IOException {
+  protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
+      FilterChain chain, Authentication auth) throws IOException {
     final User.Token issueToken = userDetailsService.issueToken(auth.getName());
     final String json = objectMapper.writeValueAsString(issueToken);
 

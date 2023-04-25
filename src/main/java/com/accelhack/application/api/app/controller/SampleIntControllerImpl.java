@@ -24,7 +24,8 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
   }
 
   @Override
-  public ResponseEntity<ResponseSet<ListResponse<Sample>>> search(Request<SampleSelector> sampleRequest) {
+  public ResponseEntity<ResponseSet<ListResponse<Sample>>> search(
+      Request<SampleSelector> sampleRequest) {
     ParameterizedApi<SampleSelector, ListResponse<Sample>> callable = sampleTransaction::search;
     return execute(sampleRequest, callable);
   }

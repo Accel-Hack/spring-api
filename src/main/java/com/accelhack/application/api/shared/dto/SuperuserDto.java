@@ -17,23 +17,16 @@ public class SuperuserDto implements BaseDto<SuperuserDto> {
 
   @Override
   public SuperuserDto toCreate() {
-    return SuperuserDto.builder()
-      .superuserId(superuserId)
-      .targetUserId(targetUserId)
-      .build();
+    return SuperuserDto.builder().superuserId(superuserId).targetUserId(targetUserId).build();
   }
 
   @Override
   public SuperuserDto toUpdate() {
-    return SuperuserDto.builder()
-      .id(id)
-      .build();
+    return SuperuserDto.builder().id(id).build();
   }
 
   @Override
   public SuperuserDto toDelete() {
-    return SuperuserDto.builder()
-      .id(superuserId)
-      .build();
+    return SuperuserDto.builder().id(superuserId).build();
   }
 }

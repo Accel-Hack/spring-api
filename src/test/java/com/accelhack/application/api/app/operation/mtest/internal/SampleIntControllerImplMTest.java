@@ -2,9 +2,9 @@ package com.accelhack.application.api.app.operation.mtest.internal;
 
 import com.accelhack.accelparts.Request;
 import com.accelhack.accelparts.response.ListResponse;
+import com.accelhack.application.api.app.controller.SampleIntControllerImpl;
 import com.accelhack.application.api.app.entity.Sample;
 import com.accelhack.application.api.app.entity.SampleSelector;
-import com.accelhack.application.api.app.controller.SampleIntControllerImpl;
 import com.accelhack.application.api.app.operation.mtest.BaseControllerImplMTest;
 import com.accelhack.application.api.app.transaction.SampleTransaction;
 import com.accelhack.application.api.shared.functional.ParameterizedApi;
@@ -50,7 +50,8 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       Request<Sample> request = new Request<>();
       request.setOperands(List.of(sample));
 
-      ArgumentMatcher<Request<Sample>> requestArgumentMatcher = s -> s.findFirst().getId().equals(sample.getId());
+      ArgumentMatcher<Request<Sample>> requestArgumentMatcher =
+          s -> s.findFirst().getId().equals(sample.getId());
 
       ArgumentMatcher<ParameterizedApi<Sample, Sample>> callableMatcher = callable -> {
         assertTrue(execute(callable, request));
@@ -59,7 +60,8 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       };
 
       // mock setting
-      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
+      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher),
+          argThat(callableMatcher));
 
       // check result
       performPost("/api/int/v1/sample/get", request).andExpect(content().string(responseStr));
@@ -77,16 +79,19 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       Request<SampleSelector> request = new Request<>();
       request.setOperands(List.of(sampleSelector));
 
-      ArgumentMatcher<Request<SampleSelector>> requestArgumentMatcher = s -> s.findFirst().getId().equals(sampleSelector.getId());
+      ArgumentMatcher<Request<SampleSelector>> requestArgumentMatcher =
+          s -> s.findFirst().getId().equals(sampleSelector.getId());
 
-      ArgumentMatcher<ParameterizedApi<SampleSelector, ListResponse<Sample>>> callableMatcher = callable -> {
-        assertTrue(execute(callable, request));
-        verify(sampleTransaction, times(1)).search(argThat(requestArgumentMatcher));
-        return true;
-      };
+      ArgumentMatcher<ParameterizedApi<SampleSelector, ListResponse<Sample>>> callableMatcher =
+          callable -> {
+            assertTrue(execute(callable, request));
+            verify(sampleTransaction, times(1)).search(argThat(requestArgumentMatcher));
+            return true;
+          };
 
       // mock setting
-      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
+      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher),
+          argThat(callableMatcher));
 
       // check result
       performPost("/api/int/v1/sample/search", request).andExpect(content().string(responseStr));
@@ -104,7 +109,8 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       Request<Sample> request = new Request<>();
       request.setOperands(List.of(sample));
 
-      ArgumentMatcher<Request<Sample>> requestArgumentMatcher = s -> s.findFirst().getName().equals(sample.getName());
+      ArgumentMatcher<Request<Sample>> requestArgumentMatcher =
+          s -> s.findFirst().getName().equals(sample.getName());
 
       ArgumentMatcher<ParameterizedApi<Sample, Sample>> callableMatcher = callable -> {
         assertTrue(execute(callable, request));
@@ -113,7 +119,8 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       };
 
       // mock setting
-      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
+      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher),
+          argThat(callableMatcher));
 
       // check result
       performPost("/api/int/v1/sample/add", request).andExpect(content().string(responseStr));
@@ -131,7 +138,8 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       Request<Sample> request = new Request<>();
       request.setOperands(List.of(sample));
 
-      ArgumentMatcher<Request<Sample>> requestArgumentMatcher = s -> s.findFirst().getName().equals(sample.getName());
+      ArgumentMatcher<Request<Sample>> requestArgumentMatcher =
+          s -> s.findFirst().getName().equals(sample.getName());
 
       ArgumentMatcher<ParameterizedApi<Sample, Sample>> callableMatcher = callable -> {
         assertTrue(execute(callable, request));
@@ -140,7 +148,8 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       };
 
       // mock setting
-      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
+      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher),
+          argThat(callableMatcher));
 
       // check result
       performPost("/api/int/v1/sample/edit", request).andExpect(content().string(responseStr));
@@ -158,7 +167,8 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       Request<Sample> request = new Request<>();
       request.setOperands(List.of(sample));
 
-      ArgumentMatcher<Request<Sample>> requestArgumentMatcher = s -> s.findFirst().getName().equals(sample.getName());
+      ArgumentMatcher<Request<Sample>> requestArgumentMatcher =
+          s -> s.findFirst().getName().equals(sample.getName());
 
       ArgumentMatcher<ParameterizedApi<Sample, Sample>> callableMatcher = callable -> {
         assertTrue(execute(callable, request));
@@ -167,7 +177,8 @@ public class SampleIntControllerImplMTest extends BaseControllerImplMTest {
       };
 
       // mock setting
-      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher), argThat(callableMatcher));
+      doReturn(response).when(spiedController).execute(argThat(requestArgumentMatcher),
+          argThat(callableMatcher));
 
       // check result
       performPost("/api/int/v1/sample/remove", request).andExpect(content().string(responseStr));

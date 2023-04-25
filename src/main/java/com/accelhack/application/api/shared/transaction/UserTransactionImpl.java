@@ -26,9 +26,8 @@ public class UserTransactionImpl implements UserTransaction {
   public ResponseSet<ListResponse<User>> search(Request<UserSelector> userRequest) {
     Function<UserSelector, ListResponse<User>> func = selector -> {
       List<UserDto> users = userService.search(selector);
-      return users.isEmpty()
-        ? ListResponse.build(0, 0, Collections.emptyList())
-        : ListResponse.build(users.get(0).getTotal(), 0, users.stream().map(User::from).toList());
+      return users.isEmpty() ? ListResponse.build(0, 0, Collections.emptyList())
+          : ListResponse.build(users.get(0).getTotal(), 0, users.stream().map(User::from).toList());
     };
     return OperandExecutor.build(func).run(userRequest, validator);
   }

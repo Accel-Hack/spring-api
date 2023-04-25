@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     final UserDto userDto = getByUsername(username);
     final List<UserTokenDto> userTokenDtoList = userTokenMapper.selectByUserId(userDto.getId());
     userTokenDtoList.stream()
-      .filter(token -> passwordEncoder.matches(refreshToken, token.getRefreshToken()))
-      .forEach(token -> userTokenMapper.delete(token.toDelete(), operator));
+        .filter(token -> passwordEncoder.matches(refreshToken, token.getRefreshToken()))
+        .forEach(token -> userTokenMapper.delete(token.toDelete(), operator));
   }
 }

@@ -15,6 +15,6 @@ public class BaseIntControllerLTest extends AbstractControllerLTest {
   @Override
   protected MockHttpServletRequestBuilder builder(String path, String content) {
     return super.builder(path, content)
-      .with(user(userDetailsService.loadUserByUsername("manager")));
+        .with(user(userDetailsService.loadUserByUsername("manager")));
   }
 }

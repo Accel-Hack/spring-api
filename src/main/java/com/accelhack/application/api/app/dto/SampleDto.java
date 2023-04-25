@@ -20,27 +20,16 @@ public class SampleDto implements BaseDto<SampleDto> {
 
   @Override
   public SampleDto toCreate() {
-    return SampleDto.builder()
-      .name(name)
-      .birthday(birthday)
-      .isJapanese(isJapanese)
-      .build();
+    return SampleDto.builder().name(name).birthday(birthday).isJapanese(isJapanese).build();
   }
 
   @Override
   public SampleDto toUpdate() {
-    return SampleDto.builder()
-      .id(id)
-      .name(name)
-      .birthday(birthday)
-      .isJapanese(isJapanese)
-      .build();
+    return SampleDto.builder().id(id).name(name).birthday(birthday).isJapanese(isJapanese).build();
   }
 
   @Override
   public SampleDto toDelete() {
-    return SampleDto.builder()
-      .id(id)
-      .build();
+    return SampleDto.builder().id(id).build();
   }
 }

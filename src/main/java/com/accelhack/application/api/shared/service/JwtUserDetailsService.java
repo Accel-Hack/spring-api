@@ -34,7 +34,8 @@ public class JwtUserDetailsService implements UserDetailsService {
     return findByUsername(username).toUserDetails();
   }
 
-  public User.Token reissueToken(String username, String refreshToken) throws UsernameNotFoundException {
+  public User.Token reissueToken(String username, String refreshToken)
+      throws UsernameNotFoundException {
     final User user = findByUsername(username);
     final User.Token token = user.reissueToken(refreshToken);
     userRepository.save(user, new Operator(null));
@@ -59,6 +60,7 @@ public class JwtUserDetailsService implements UserDetailsService {
 
   private User findByUsername(String username) throws UsernameNotFoundException {
     final Optional<User> optUser = userRepository.findByUsername(username);
-    return optUser.orElseThrow(() -> new UsernameNotFoundException("User not found:[%s]".formatted(username)));
+    return optUser.orElseThrow(
+        () -> new UsernameNotFoundException("User not found:[%s]".formatted(username)));
   }
 }

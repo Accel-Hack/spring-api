@@ -28,11 +28,7 @@ public class UserDto implements BaseDto<UserDto> {
 
   @Override
   public UserDto toCreate() {
-    return UserDto.builder()
-      .username(username)
-      .password(password)
-      .actor(actor)
-      .build();
+    return UserDto.builder().username(username).password(password).actor(actor).build();
   }
 
   @Override
@@ -51,10 +47,8 @@ public class UserDto implements BaseDto<UserDto> {
     private final BCryptPasswordEncoder passwordEncoder;
 
     public UserDto build(String username, String password) {
-      return UserDto.builder()
-        .username(username)
-        .password(passwordEncoder.encode(password))
-        .build();
+      return UserDto.builder().username(username).password(passwordEncoder.encode(password))
+          .build();
     }
   }
 }

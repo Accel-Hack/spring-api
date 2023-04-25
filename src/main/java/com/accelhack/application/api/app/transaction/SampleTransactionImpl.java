@@ -33,7 +33,8 @@ public class SampleTransactionImpl implements SampleTransaction {
   protected ListResponse<Sample> searchSample(SampleSelector selector) {
     List<SampleDto> samples = sampleService.search(selector);
     return samples.isEmpty() ? ListResponse.build(0, 0, Collections.emptyList())
-      : ListResponse.build(samples.get(0).getTotal(), 0, samples.stream().map(Sample::from).toList());
+        : ListResponse.build(samples.get(0).getTotal(), 0,
+            samples.stream().map(Sample::from).toList());
   }
 
   @Override

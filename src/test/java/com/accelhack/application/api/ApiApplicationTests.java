@@ -8,6 +8,5 @@ import org.springframework.test.context.ActiveProfiles;
 @SpringBootTest(classes = ApiApplication.class)
 public class ApiApplicationTests {
   @Test
-  public void contextLoads() {
-  }
+  public void contextLoads() {}
 }

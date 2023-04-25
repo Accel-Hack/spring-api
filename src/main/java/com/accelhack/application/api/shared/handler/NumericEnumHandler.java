@@ -10,7 +10,8 @@ import java.util.function.Predicate;
 
 @MappedTypes({Actor.class})
 @RequiredArgsConstructor
-public class NumericEnumHandler<E extends Enum<E> & NumericEnum<E>> extends BaseTypeHandler<NumericEnum<E>> {
+public class NumericEnumHandler<E extends Enum<E> & NumericEnum<E>>
+    extends BaseTypeHandler<NumericEnum<E>> {
 
   private final Class<E> type;
 
@@ -19,7 +20,8 @@ public class NumericEnumHandler<E extends Enum<E> & NumericEnum<E>> extends Base
   }
 
   @Override
-  public void setNonNullParameter(PreparedStatement preparedStatement, int i, NumericEnum<E> eNumericEnum, JdbcType jdbcType) throws SQLException {
+  public void setNonNullParameter(PreparedStatement preparedStatement, int i,
+      NumericEnum<E> eNumericEnum, JdbcType jdbcType) throws SQLException {
     preparedStatement.setInt(i, eNumericEnum.getCode());
   }
 
@@ -38,7 +40,8 @@ public class NumericEnumHandler<E extends Enum<E> & NumericEnum<E>> extends Base
   }
 
   @Override
-  public NumericEnum<E> getNullableResult(CallableStatement callableStatement, int i) throws SQLException {
+  public NumericEnum<E> getNullableResult(CallableStatement callableStatement, int i)
+      throws SQLException {
     final int code = callableStatement.getInt(i);
     Predicate<E> filter = e -> equals(e.getCode(), code);
     return NumericEnum.getByCode(type, filter);

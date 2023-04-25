@@ -34,18 +34,16 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 2. update user token
     // 2.1. delete old token
-    prevUser.getTokens().stream().filter(
-      token -> user.getTokens().stream().map(User.Token::getId).noneMatch(id -> id == token.getId())
-    ).forEach(
-      token -> userMapper.deleteToken(token.getId(), operator)
-    );
+    prevUser.getTokens().stream()
+        .filter(token -> user.getTokens().stream().map(User.Token::getId)
+            .noneMatch(id -> id == token.getId()))
+        .forEach(token -> userMapper.deleteToken(token.getId(), operator));
 
     // 2.2. add new token
-    user.getTokens().stream().filter(
-      token -> prevUser.getTokens().stream().map(User.Token::getId).noneMatch(id -> id == token.getId())
-    ).forEach(
-      token -> userMapper.addToken(user.getId(), token, operator)
-    );
+    user.getTokens().stream()
+        .filter(token -> prevUser.getTokens().stream().map(User.Token::getId)
+            .noneMatch(id -> id == token.getId()))
+        .forEach(token -> userMapper.addToken(user.getId(), token, operator));
 
     // return user
     return user;

@@ -28,7 +28,8 @@ public abstract class AbstractMysqlDatabaseConfig {
     DatabaseConfigBean bean = new DatabaseConfigBean();
     bean.setDatatypeFactory(new MySqlDataTypeFactory());
 
-    DatabaseDataSourceConnectionFactoryBean dbConnectionFactory = new DatabaseDataSourceConnectionFactoryBean(dataSource());
+    DatabaseDataSourceConnectionFactoryBean dbConnectionFactory =
+        new DatabaseDataSourceConnectionFactoryBean(dataSource());
     dbConnectionFactory.setDatabaseConfig(bean);
     return dbConnectionFactory;
   }

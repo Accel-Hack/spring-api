@@ -16,10 +16,7 @@ public class User implements Operand {
   private Actor actor;
 
   public static User from(UserDto userDto) {
-    return User.builder()
-      .id(userDto.getId())
-      .username(userDto.getUsername())
-      .actor(userDto.getActor())
-      .build();
+    return User.builder().id(userDto.getId()).username(userDto.getUsername())
+        .actor(userDto.getActor()).build();
   }
 }

@@ -25,18 +25,9 @@ public class ApiLogDto implements BaseDto<ApiLogDto> {
 
   @Override
   public ApiLogDto toCreate() {
-    return ApiLogDto.builder()
-      .operationTime(operationTime)
-      .operator(operator)
-      .method(method)
-      .path(path)
-      .query(query)
-      .requestBody(requestBody)
-      .remoteIp(remoteIp)
-      .executionTimeMs(executionTimeMs)
-      .status(status)
-      .exception(exception)
-      .build();
+    return ApiLogDto.builder().operationTime(operationTime).operator(operator).method(method)
+        .path(path).query(query).requestBody(requestBody).remoteIp(remoteIp)
+        .executionTimeMs(executionTimeMs).status(status).exception(exception).build();
   }
 
   @Override

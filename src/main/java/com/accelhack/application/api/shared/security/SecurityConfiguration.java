@@ -32,10 +32,9 @@ public class SecurityConfiguration {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-//      .headers().frameOptions().sameOrigin()
-//      .and()
-      .csrf().disable()
-      .authenticationProvider(authProvider());
+        // .headers().frameOptions().sameOrigin()
+        // .and()
+        .csrf().disable().authenticationProvider(authProvider());
 
     routePaths(http);
     addFilters(http);
@@ -55,41 +54,34 @@ public class SecurityConfiguration {
   }
 
   /**
-   * function to routing paths
-   * 1. allow external controller
-   * 2. others require authentication
+   * function to routing paths 1. allow external controller 2. others require authentication
+   * 
    * @param http HttpSecurity
    * @throws Exception exception
    */
   private void routePaths(HttpSecurity http) throws Exception {
-    http
-      .authorizeHttpRequests((auth) ->
-        auth
-          // allow signIn for anonymous users
-          .requestMatchers(ExternalController.CONTEXT_PATH + "/**").permitAll()
-          // all other requests
-          .anyRequest().authenticated()
-      );
+    http.authorizeHttpRequests((auth) -> auth
+        // allow signIn for anonymous users
+        .requestMatchers(ExternalController.CONTEXT_PATH + "/**").permitAll()
+        // all other requests
+        .anyRequest().authenticated());
   }
 
   /**
-   * function to add filters
-   * 1. cache filter
-   * 2. validate login filter
-   * 3. validate jwt token filter
+   * function to add filters 1. cache filter 2. validate login filter 3. validate jwt token filter
+   * 
    * @param http HttpSecurity
    * @throws Exception exception
    */
   private void addFilters(HttpSecurity http) throws Exception {
     final Filter cache = new HttpServletRequestFilter();
     // FIXME: bean化を試みる
-    final Filter authentication = new JwtAuthenticationFilter(authenticationManager(), userDetailsService, objectMapper);
+    final Filter authentication =
+        new JwtAuthenticationFilter(authenticationManager(), userDetailsService, objectMapper);
     final Filter authorization = new JwtAuthorizationFilter(authenticationManager());
 
-    http
-      .addFilterBefore(cache, UsernamePasswordAuthenticationFilter.class)
-      .addFilter(authentication)
-      .addFilter(authorization)
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    http.addFilterBefore(cache, UsernamePasswordAuthenticationFilter.class)
+        .addFilter(authentication).addFilter(authorization).sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 }
