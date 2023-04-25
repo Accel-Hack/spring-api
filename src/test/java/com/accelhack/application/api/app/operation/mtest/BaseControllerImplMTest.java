@@ -1,6 +1,7 @@
-package com.accelhack.application.api.app.controller;
+package com.accelhack.application.api.app.operation.mtest;
 
-import com.accelhack.accelparts.*;
+import com.accelhack.accelparts.Operand;
+import com.accelhack.accelparts.Request;
 import com.accelhack.accelparts.utils.ObjectMapperUtils;
 import com.accelhack.application.api.shared.functional.ParameterizedApi;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,13 +11,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Collections;
 import java.util.concurrent.Callable;
 
-public class BaseControllerImplSTest {
-  protected final ResponseSet<?> responseSet = ResponseSet.ok(0, Collections.emptyList());
-  protected final ObjectMapper objectMapper = ObjectMapperUtils.getMapper();
+public class BaseControllerImplMTest {
   protected MockMvc mockMvc;
+
+  protected final String responseStr = "ok";
+
+  protected final ResponseEntity<?> response = ResponseEntity.ok(responseStr);
+
+  protected final ObjectMapper objectMapper = ObjectMapperUtils.getMapper();
 
   protected <V> boolean execute(Callable<V> callable) {
     try {

@@ -1,10 +1,10 @@
 package com.accelhack.application.api.shared.filter;
 
+import jakarta.servlet.*;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequestWrapper;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
 
 public class HttpServletRequestFilter implements Filter {

@@ -1,4 +1,4 @@
-package com.accelhack.application.api.app.ltest;
+package com.accelhack.application.api.app.operation.ltest;
 
 import com.accelhack.accelparts.Operand;
 import com.accelhack.accelparts.Request;
@@ -20,7 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
-@ActiveProfiles("unit")
+@ActiveProfiles("l-test")
 @SpringBootTest
 @TestExecutionListeners({DependencyInjectionTestExecutionListener.class, TransactionDbUnitTestExecutionListener.class})
 public abstract class AbstractControllerLTest {

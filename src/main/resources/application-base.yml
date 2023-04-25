@@ -3,9 +3,13 @@ spring:
     import: file:.env.local[.properties]
   sql:
     init:
-      platform: mysql
       mode: always
       encoding: utf-8
+      schema-locations:
+        - classpath:/sql/schema.sql
+        - classpath:/sql/constraints.sql
+      data-locations:
+        - classpath:/sql/data.sql
 
   datasource:
     url: "jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${MYSQL_DATABASE}"
