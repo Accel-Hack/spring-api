@@ -86,6 +86,33 @@ Replace USERNAME with your github account and GITHUB_TOKEN with the NPM_TOKEN yo
 | manager       | manager | 123456 |
 | user          | user    | 123456 |
 
+## Code formatting
+
+```bash
+# formatの実行
+$ mvn formatter:format
+# チェック
+$ mvn formatter:validate
+```
+
+### configure
+
+```xml
+<!--pom.xml-->
+<project>
+    <plugins>
+        <plugin>
+            <groupId>net.revelc.code.formatter</groupId>
+            <artifactId>formatter-maven-plugin</artifactId>
+            <version>2.11.0</version>
+        </plugin>
+        <configuration>
+            <configFile>${project.basedir}/eclipse-java-google-style.xml</configFile>
+        </configuration>
+    </plugins>
+</project>
+```
+
 ## How to run tests.
 
 ```bash
