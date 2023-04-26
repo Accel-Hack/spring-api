@@ -1,12 +1,13 @@
 package com.accelhack.application.api.shared.model;
 
-import com.accelhack.accelparts.Operand;
+import com.accelhack.application.api.http.Operand;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
-@SuperBuilder
-@EqualsAndHashCode(callSuper = true)
-public class UserSelector extends BaseSelector implements Operand {
+@Builder
+public class UserSelector implements Operand {
+  private Integer limit = 20;
+  private Integer offset = 0;
 }

@@ -1,14 +1,9 @@
 package com.accelhack.application.api.shared.model;
 
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import lombok.Getter;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
-@SuperBuilder
+@Getter
 public abstract class BaseSelector {
 
-  private Integer limit = 20;
-  private Integer offset = 0;
+
 }

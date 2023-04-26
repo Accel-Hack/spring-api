@@ -1,6 +1,6 @@
 package com.accelhack.application.api.shared.entity;
 
-import com.accelhack.accelparts.Operand;
+import com.accelhack.application.api.http.Operand;
 import lombok.*;
 
 public class User {

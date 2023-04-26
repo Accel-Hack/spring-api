@@ -1,20 +1,18 @@
 package com.accelhack.application.api.app.mapper;
 
+import com.accelhack.application.api.app.dto.SampleQuery;
 import com.accelhack.application.api.app.dto.SampleDto;
-import com.accelhack.application.api.app.entity.SampleSelector;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
 @Mapper
 public interface SampleMapper {
-  SampleDto select(int id);
+  SampleDto select(String id);
 
-  List<SampleDto> selectBy(SampleSelector sampleSelector);
+  List<SampleDto> searchBy(SampleQuery query);
 
-  int insert(SampleDto sampleDto);
+  int save(SampleDto sampleDto);
 
-  int update(SampleDto sampleDto);
-
-  int delete(SampleDto sampleDto);
+  int delete(String id);
 }

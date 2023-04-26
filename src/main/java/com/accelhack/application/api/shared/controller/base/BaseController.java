@@ -1,6 +1,6 @@
 package com.accelhack.application.api.shared.controller.base;
 
-import com.accelhack.accelparts.*;
+import com.accelhack.application.api.http.*;
 import com.accelhack.application.api.shared.exception.NotImplementedException;
 import com.accelhack.application.api.shared.functional.ParameterizedApi;
 import lombok.extern.slf4j.Slf4j;

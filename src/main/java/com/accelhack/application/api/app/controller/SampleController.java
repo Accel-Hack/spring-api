@@ -1,30 +1,32 @@
 package com.accelhack.application.api.app.controller;
 
-import com.accelhack.accelparts.Request;
-import com.accelhack.accelparts.ResponseSet;
-import com.accelhack.accelparts.response.ListResponse;
-import com.accelhack.application.api.app.entity.Sample;
-import com.accelhack.application.api.app.entity.SampleSelector;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import com.accelhack.application.api.app.model.SampleModel;
+import com.accelhack.application.api.http.*;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 public interface SampleController {
-  String CONTEXT_PATH = "sample";
+  @GetMapping("sample")
+  @ResponseBody
+  AHResponseSet<SampleModel.Entity> get(@RequestParam UUID id);
 
-  @PostMapping(CONTEXT_PATH + "/get")
-  ResponseEntity<ResponseSet<Sample>> get(@RequestBody Request<Sample> sampleRequest);
+  @GetMapping("samples")
+  @ResponseBody
+  AHResponseSet<SampleModel.ListEntity> search(@RequestParam(required = false) String name,
+      @RequestParam(required = false) Integer limit,
+      @RequestParam(required = false) Integer offset);
 
-  @PostMapping(CONTEXT_PATH + "/search")
-  ResponseEntity<ResponseSet<ListResponse<Sample>>> search(
-      @RequestBody Request<SampleSelector> sampleRequest);
+  @PutMapping("sample")
+  @ResponseBody
+  AHResponseSet<SampleModel.Entity> add(@RequestBody AHRequest<SampleModel.Create> sampleRequest);
 
-  @PostMapping(CONTEXT_PATH + "/add")
-  ResponseEntity<ResponseSet<Sample>> add(@RequestBody Request<Sample> sampleRequest);
+  @PostMapping("sample")
+  @ResponseBody
+  AHResponseSet<SampleModel.Entity> edit(@RequestBody AHRequest<SampleModel.Update> sampleRequest);
 
-  @PostMapping(CONTEXT_PATH + "/edit")
-  ResponseEntity<ResponseSet<Sample>> edit(@RequestBody Request<Sample> sampleRequest);
-
-  @PostMapping(CONTEXT_PATH + "/remove")
-  ResponseEntity<ResponseSet<Sample>> remove(@RequestBody Request<Sample> sampleRequest);
+  @DeleteMapping("sample")
+  @ResponseBody
+  AHResponseSet<SampleModel.Entity> remove(
+      @RequestBody AHRequest<SampleModel.Delete> sampleRequest);
 }

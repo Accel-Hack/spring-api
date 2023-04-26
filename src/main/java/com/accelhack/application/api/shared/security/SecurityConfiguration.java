@@ -60,11 +60,11 @@ public class SecurityConfiguration {
    * @throws Exception exception
    */
   private void routePaths(HttpSecurity http) throws Exception {
-    http.authorizeHttpRequests((auth) -> auth
-        // allow signIn for anonymous users
-        .requestMatchers(ExternalController.CONTEXT_PATH + "/**").permitAll()
-        // all other requests
-        .anyRequest().authenticated());
+    // http.authorizeHttpRequests((auth) -> auth
+    // // allow signIn for anonymous users
+    // .requestMatchers(ExternalController.CONTEXT_PATH + "/**").permitAll()
+    // // all other requests
+    // .anyRequest().authenticated());
   }
 
   /**

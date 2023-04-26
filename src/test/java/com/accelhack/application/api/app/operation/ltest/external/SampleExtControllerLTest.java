@@ -1,8 +1,8 @@
 package com.accelhack.application.api.app.operation.ltest.external;
 
 import com.accelhack.accelparts.Request;
-import com.accelhack.application.api.app.entity.Sample;
-import com.accelhack.application.api.app.entity.SampleSelector;
+import com.accelhack.application.api.app.model.Sample2;
+import com.accelhack.application.api.app.model.SampleSelector;
 import com.accelhack.application.api.config.DataSourceKeys;
 import com.accelhack.application.api.dataset.CsvDataSetLoader;
 import com.github.springtestdbunit.annotation.*;
@@ -39,8 +39,8 @@ public class SampleExtControllerLTest extends ExtControllerLTest {
             connection = DataSourceKeys.API_APPLICATION)})
     public void get() throws Exception {
       // data
-      Sample sample = Sample.builder().id(1).build();
-      Request<Sample> request = new Request<>();
+      Sample2 sample = Sample2.builder().id(1).build();
+      Request<Sample2> request = new Request<>();
       request.setOperands(List.of(sample));
 
       // result
@@ -118,9 +118,9 @@ public class SampleExtControllerLTest extends ExtControllerLTest {
         assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
     public void add() throws Exception {
       // data
-      Sample sample = Sample.builder().name("takahashi")
+      Sample2 sample = Sample2.builder().name("takahashi")
           .birthday(Instant.parse("2000-09-05T00:00:00Z")).isJapanese(Boolean.TRUE).build();
-      Request<Sample> request = new Request<>();
+      Request<Sample2> request = new Request<>();
       request.setOperands(List.of(sample));
 
       // result
@@ -156,9 +156,9 @@ public class SampleExtControllerLTest extends ExtControllerLTest {
         assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
     public void edit() throws Exception {
       // data
-      Sample sample = Sample.builder().id(2).name("takahashi")
+      Sample2 sample = Sample2.builder().id(2).name("takahashi")
           .birthday(Instant.parse("2000-09-05T00:00:00Z")).isJapanese(Boolean.TRUE).build();
-      Request<Sample> request = new Request<>();
+      Request<Sample2> request = new Request<>();
       request.setOperands(List.of(sample));
 
       // result
@@ -194,9 +194,9 @@ public class SampleExtControllerLTest extends ExtControllerLTest {
         assertionMode = DatabaseAssertionMode.NON_STRICT_UNORDERED)
     public void remove() throws Exception {
       // data
-      Sample sample = Sample.builder().id(2).name("tanaka")
+      Sample2 sample = Sample2.builder().id(2).name("tanaka")
           .birthday(Instant.parse("2001-09-21T00:00:00Z")).isJapanese(Boolean.TRUE).build();
-      Request<Sample> request = new Request<>();
+      Request<Sample2> request = new Request<>();
       request.setOperands(List.of(sample));
 
       // result

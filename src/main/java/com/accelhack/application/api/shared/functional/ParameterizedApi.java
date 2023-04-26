@@ -1,6 +1,6 @@
 package com.accelhack.application.api.shared.functional;
 
-import com.accelhack.accelparts.*;
+import com.accelhack.application.api.http.*;
 
 @FunctionalInterface
 public interface ParameterizedApi<O extends Operand, R> {

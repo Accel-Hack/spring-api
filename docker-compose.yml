@@ -10,7 +10,7 @@ services:
       - "3566:3306"
     volumes:
       - ./database/conf.d:/etc/mysql/conf.d
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
 
   test-db:
     container_name: api-app-test-db
@@ -20,4 +20,4 @@ services:
       - .env.test
     ports:
       - "3567:3306"
-    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin

@@ -1,6 +1,6 @@
 package com.accelhack.application.api.shared.model;
 
-import com.accelhack.accelparts.Operand;
+import com.accelhack.application.api.http.Operand;
 import com.accelhack.application.api.shared.dto.UserDto;
 import com.accelhack.application.api.shared.enums.Actor;
 import lombok.*;

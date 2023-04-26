@@ -3,8 +3,8 @@ package com.accelhack.application.api.app.operation.mtest.external;
 import com.accelhack.accelparts.Request;
 import com.accelhack.accelparts.response.ListResponse;
 import com.accelhack.application.api.app.controller.SampleExtControllerImpl;
-import com.accelhack.application.api.app.entity.Sample;
-import com.accelhack.application.api.app.entity.SampleSelector;
+import com.accelhack.application.api.app.model.Sample2;
+import com.accelhack.application.api.app.model.SampleSelector;
 import com.accelhack.application.api.app.operation.mtest.BaseControllerImplMTest;
 import com.accelhack.application.api.app.transaction.SampleTransaction;
 import com.accelhack.application.api.shared.functional.ParameterizedApi;
@@ -46,14 +46,14 @@ public class SampleExtControllerImplMTest extends BaseControllerImplMTest {
     @DisplayName("GET: /api/v1/sample/get")
     public void get() throws Exception {
       // data
-      Sample sample = Sample.builder().id(10).build();
-      Request<Sample> request = new Request<>();
+      Sample2 sample = Sample2.builder().id(10).build();
+      Request<Sample2> request = new Request<>();
       request.setOperands(List.of(sample));
 
-      ArgumentMatcher<Request<Sample>> requestArgumentMatcher =
+      ArgumentMatcher<Request<Sample2>> requestArgumentMatcher =
           s -> s.findFirst().getId().equals(sample.getId());
 
-      ArgumentMatcher<ParameterizedApi<Sample, Sample>> callableMatcher = callable -> {
+      ArgumentMatcher<ParameterizedApi<Sample2, Sample2>> callableMatcher = callable -> {
         assertTrue(execute(callable, request));
         verify(sampleTransaction, times(1)).get(argThat(requestArgumentMatcher));
         return true;
@@ -82,7 +82,7 @@ public class SampleExtControllerImplMTest extends BaseControllerImplMTest {
       ArgumentMatcher<Request<SampleSelector>> requestArgumentMatcher =
           s -> s.findFirst().getId().equals(sampleSelector.getId());
 
-      ArgumentMatcher<ParameterizedApi<SampleSelector, ListResponse<Sample>>> callableMatcher =
+      ArgumentMatcher<ParameterizedApi<SampleSelector, ListResponse<Sample2>>> callableMatcher =
           callable -> {
             assertTrue(execute(callable, request));
             verify(sampleTransaction, times(1)).search(argThat(requestArgumentMatcher));
@@ -105,14 +105,14 @@ public class SampleExtControllerImplMTest extends BaseControllerImplMTest {
     @DisplayName("POST: /api/v1/sample/add")
     public void add() throws Exception {
       // data
-      Sample sample = Sample.builder().name("三浦").build();
-      Request<Sample> request = new Request<>();
+      Sample2 sample = Sample2.builder().name("三浦").build();
+      Request<Sample2> request = new Request<>();
       request.setOperands(List.of(sample));
 
-      ArgumentMatcher<Request<Sample>> requestArgumentMatcher =
+      ArgumentMatcher<Request<Sample2>> requestArgumentMatcher =
           s -> s.findFirst().getName().equals(sample.getName());
 
-      ArgumentMatcher<ParameterizedApi<Sample, Sample>> callableMatcher = callable -> {
+      ArgumentMatcher<ParameterizedApi<Sample2, Sample2>> callableMatcher = callable -> {
         assertTrue(execute(callable, request));
         verify(sampleTransaction, times(1)).add(argThat(requestArgumentMatcher));
         return true;
@@ -134,14 +134,14 @@ public class SampleExtControllerImplMTest extends BaseControllerImplMTest {
     @DisplayName("POST: /api/v1/sample/edit")
     public void edit() throws Exception {
       // data
-      Sample sample = Sample.builder().name("三浦").build();
-      Request<Sample> request = new Request<>();
+      Sample2 sample = Sample2.builder().name("三浦").build();
+      Request<Sample2> request = new Request<>();
       request.setOperands(List.of(sample));
 
-      ArgumentMatcher<Request<Sample>> requestArgumentMatcher =
+      ArgumentMatcher<Request<Sample2>> requestArgumentMatcher =
           s -> s.findFirst().getName().equals(sample.getName());
 
-      ArgumentMatcher<ParameterizedApi<Sample, Sample>> callableMatcher = callable -> {
+      ArgumentMatcher<ParameterizedApi<Sample2, Sample2>> callableMatcher = callable -> {
         assertTrue(execute(callable, request));
         verify(sampleTransaction, times(1)).edit(argThat(requestArgumentMatcher));
         return true;
@@ -163,14 +163,14 @@ public class SampleExtControllerImplMTest extends BaseControllerImplMTest {
     @DisplayName("POST: /api/v1/sample/remove")
     public void remove() throws Exception {
       // data
-      Sample sample = Sample.builder().name("三浦").build();
-      Request<Sample> request = new Request<>();
+      Sample2 sample = Sample2.builder().name("三浦").build();
+      Request<Sample2> request = new Request<>();
       request.setOperands(List.of(sample));
 
-      ArgumentMatcher<Request<Sample>> requestArgumentMatcher =
+      ArgumentMatcher<Request<Sample2>> requestArgumentMatcher =
           s -> s.findFirst().getName().equals(sample.getName());
 
-      ArgumentMatcher<ParameterizedApi<Sample, Sample>> callableMatcher = callable -> {
+      ArgumentMatcher<ParameterizedApi<Sample2, Sample2>> callableMatcher = callable -> {
         assertTrue(execute(callable, request));
         verify(sampleTransaction, times(1)).remove(argThat(requestArgumentMatcher));
         return true;
