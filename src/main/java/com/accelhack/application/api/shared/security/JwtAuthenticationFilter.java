@@ -1,8 +1,8 @@
 package com.accelhack.application.api.shared.security;
 
-import com.accelhack.application.api.shared.domain.user.User;
-import com.accelhack.application.api.shared.model.AuthenticationRequest;
-import com.accelhack.application.api.shared.service.JwtUserDetailsService;
+import com.accelhack.application.api.base.model.AuthenticationModel;
+import com.accelhack.application.api.base.model.AuthorizationModel;
+import com.accelhack.application.api.base.usecase.UserUsecase;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,15 +21,15 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   private final AuthenticationManager authenticationManager;
-  private final JwtUserDetailsService userDetailsService;
+  private final UserUsecase userUsecase;
   private final ObjectMapper objectMapper;
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest req, HttpServletResponse res)
       throws AuthenticationException {
-    final AuthenticationRequest request;
+    final AuthenticationModel.Request request;
     try {
-      request = objectMapper.readValue(req.getInputStream(), AuthenticationRequest.class);
+      request = objectMapper.readValue(req.getInputStream(), AuthenticationModel.Request.class);
     } catch (IOException e) {
       // unacceptable json request
       throw new BadCredentialsException("Invalid credentials", e);
@@ -40,8 +40,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   @Override
   protected void successfulAuthentication(HttpServletRequest req, HttpServletResponse res,
       FilterChain chain, Authentication auth) throws IOException {
-    final User.Token issueToken = userDetailsService.issueToken(auth.getName());
-    final String json = objectMapper.writeValueAsString(issueToken);
+    final AuthorizationModel.Response response = userUsecase.login(auth.getName());
+    final String json = objectMapper.writeValueAsString(response);
 
     res.setContentType(MediaType.APPLICATION_JSON_VALUE);
     res.getWriter().write(json);

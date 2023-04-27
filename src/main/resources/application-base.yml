@@ -24,11 +24,13 @@ spring:
 
 ### JWT configuration
 jwt:
-  access-token:
-    secret-key: MY_SECRET_KEY
-    expiration-seconds: 30
-  refresh-token:
-    expiration-days: 15
+  authorization:
+    access-token:
+      secret: MY_SECRET_KEY
+      expire-seconds: 30
+    refresh-token:
+      length: 24
+      expire-days: 30
 
 server:
   port: "${SERVER_PORT}"

@@ -1,6 +1,6 @@
 package com.accelhack.application.api.shared.handler;
 
-import com.accelhack.application.api.shared.enums.Actor;
+import com.accelhack.application.api.base.enums.Actor;
 import com.accelhack.application.api.shared.enums.NumericEnum;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.type.*;

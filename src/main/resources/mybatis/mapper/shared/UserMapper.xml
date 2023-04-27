@@ -1,8 +1,8 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.accelhack.application.api.shared.mapper.UserMapper">
-    <resultMap id="userResultMap" type="com.accelhack.application.api.shared.domain.user.User">
+<mapper namespace="com.accelhack.application.api.base.mapper.UserMapper">
+    <resultMap id="userResultMap" type="com.accelhack.application.api.base.domain.User">
         <!--values from user table-->
         <id property="id" column="USER_ID"/>
         <result property="username" column="USERNAME"/>
@@ -10,11 +10,8 @@
         <result property="actor" column="ACTOR"/>
         <result property="resetCode" column="RESET_CODE"/>
         <result property="resetUntil" column="RESET_UNTIL"/>
-        <!--values from super_user table-->
-        <result property="sudo.id" column="SUPER_USER_TABLE_ID"/>
-        <result property="sudo.targetUserId" column="TARGET_USER_ID"/>
         <!--values from user_token table-->
-        <collection property="tokens" ofType="com.accelhack.application.api.shared.domain.user.User$Token">
+        <collection property="tokens" ofType="com.accelhack.application.api.base.domain.User$Token">
             <result property="id" column="USER_TOKEN_ID"/>
             <result property="accessToken" column="ACCESS_TOKEN"/>
             <result property="encryptRefreshToken" column="ENCRYPT_REFRESH_TOKEN"/>
@@ -23,23 +20,17 @@
     </resultMap>
 
     <sql id="select">
-        SELECT U.ID              AS USER_ID
-             , U.USERNAME        AS USERNAME
-             , U.PASSWORD        AS ENCRYPT_PASSWORD
-             , U.ACTOR           AS ACTOR
-             , U.RESET_CODE      AS RESET_CODE
-             , U.RESET_UNTIL     AS RESET_UNTIL
-             , SU.ID             AS SUPER_USER_TABLE_ID
-             , SU.TARGET_USER_ID AS TARGET_USER_ID
-             , UT.ID             AS USER_TOKEN_ID
-             , UT.ACCESS_TOKEN   AS ACCESS_TOKEN
-             , UT.REFRESH_TOKEN  AS ENCRYPT_REFRESH_TOKEN
-             , UT.EXPIRES_AT     AS EXPIRES_AT
+        SELECT U.ID             AS USER_ID
+             , U.USERNAME       AS USERNAME
+             , U.PASSWORD       AS ENCRYPT_PASSWORD
+             , U.ACTOR          AS ACTOR
+             , U.RESET_CODE     AS RESET_CODE
+             , U.RESET_UNTIL    AS RESET_UNTIL
+             , UT.ID            AS USER_TOKEN_ID
+             , UT.ACCESS_TOKEN  AS ACCESS_TOKEN
+             , UT.REFRESH_TOKEN AS ENCRYPT_REFRESH_TOKEN
+             , UT.EXPIRES_AT    AS EXPIRES_AT
         FROM API_APPLICATION.USER U
-                 LEFT JOIN API_APPLICATION.SUPER_USER SU
-                           ON U.ID = SU.SUPER_USER_ID
-                               AND SU.DELETED_AT IS NULL
-                               AND SU.EXPIRES_AT > CURRENT_TIMESTAMP
                  LEFT JOIN API_APPLICATION.USER_TOKEN UT
                            ON U.ID = UT.USER_ID
                                AND UT.DELETED_AT IS NULL
@@ -52,80 +43,40 @@
         AND U.DELETED_AT IS NULL
     </select>
 
-    <insert id="add" useGeneratedKeys="true" keyProperty="user.id">
-        INSERT INTO API_APPLICATION.USER( `USERNAME`
+    <insert id="save" useGeneratedKeys="true" keyProperty="user.id">
+        INSERT INTO API_APPLICATION.USER( `ID`
+                                        , `USERNAME`
                                         , `PASSWORD`
                                         , `ACTOR`
                                         , `CREATED_BY`
                                         , `UPDATED_BY`)
-        VALUES ( #{user.username}
-               , #{user.password}
-               , #{user.actor.code}
-               , #{operator.code}
-               , #{operator.code})
-    </insert>
-
-    <insert id="update">
-        UPDATE API_APPLICATION.USER
-        SET UPDATED_BY = #{operator.code}
-          , UPDATED_AT = CURRENT_TIMESTAMP
-        WHERE ID = #{user.id}
-    </insert>
-
-    <insert id="addSudo" useGeneratedKeys="true" keyProperty="sudo.id">
-        INSERT INTO API_APPLICATION.SUPER_USER( `SUPER_USER_ID`
-                                              , `TARGET_USER_ID`
-                                              , `EXPIRES_AT`
-                                              , `CREATED_BY`
-                                              , `UPDATED_BY`)
         VALUES ( #{user.id}
-               , #{sudo.targetUserId}
-               , DATE_ADD(CURRENT_TIMESTAMP, INTERVAL #{expireMinutes} MINUTE)
-               , #{operator.code}
-               , #{operator.code})
+               , #{user.username}
+               , #{user.encryptPassword}
+               , #{user.actor.code}
+               , #{operator}
+               , #{operator})
+        ON DUPLICATE KEY UPDATE `UPDATED_BY` = #{operator}
     </insert>
-
-    <update id="updateSudo">
-        <![CDATA[
-        UPDATE API_APPLICATION.SUPER_USER SU
-        SET SU.EXPIRES_AT = DATE_ADD(CURRENT_TIMESTAMP, INTERVAL #{expireMinutes} MINUTE)
-          , SU.UPDATED_BY = #{operator.code}
-          , SU.UPDATED_AT = CURRENT_TIMESTAMP
-        WHERE SU.ID = #{sudo.id}
-          AND SU.DELETED_AT IS NULL
-          AND SU.EXPIRES_AT > CURRENT_TIMESTAMP
-        ]]>
-    </update>
-
-    <update id="deleteSudo">
-        <![CDATA[
-        UPDATE API_APPLICATION.SUPER_USER SU
-        SET SU.DELETED_BY = #{operator.code}
-          , SU.DELETED_AT = CURRENT_TIMESTAMP
-          , SU.UPDATED_BY = #{operator.code}
-          , SU.UPDATED_AT = CURRENT_TIMESTAMP
-        WHERE SU.SUPER_USER_ID = #{user.id}
-          AND SU.DELETED_AT IS NULL
-          AND SU.EXPIRES_AT >= CURRENT_TIMESTAMP
-        ]]>
-    </update>
 
     <insert id="addToken" useGeneratedKeys="true" keyProperty="token.id">
-        INSERT INTO API_APPLICATION.USER_TOKEN( `USER_ID`
+        INSERT INTO API_APPLICATION.USER_TOKEN( `ID`
+                                              , `USER_ID`
                                               , `ACCESS_TOKEN`
                                               , `REFRESH_TOKEN`
                                               , `EXPIRES_AT`
                                               , `CREATED_BY`)
-        VALUES ( #{userId}
+        VALUES ( #{token.id}
+               , #{userId}
                , #{token.accessToken}
                , #{token.encryptRefreshToken}
                , #{token.expiresAt}
-               , #{operator.code})
+               , #{operator})
     </insert>
 
     <update id="deleteToken">
         UPDATE API_APPLICATION.USER_TOKEN
-        SET DELETED_BY = #{operator.code}
+        SET DELETED_BY = #{operator}
           , DELETED_AT = CURRENT_TIMESTAMP
         WHERE ID = #{userTokenId}
     </update>
