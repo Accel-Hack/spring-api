@@ -8,8 +8,6 @@ services:
       - .env.local
     ports:
       - "3566:3306"
-    volumes:
-      - ./database/conf.d:/etc/mysql/conf.d
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
 
   test-db:
