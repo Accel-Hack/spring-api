@@ -36,14 +36,14 @@ public class AuthControllerImpl extends ExternalController implements AuthContro
   }
 
   @Override
-  public AHResponseSet<AuthorizationModel.Response> token(
+  public AHResponseSet<AuthorizationModel.AccessToken> token(
       AHRequest<AuthorizationModel.Request> request) {
     // validation
-    AHResponseSet<AuthorizationModel.Response> error = validatorUtils.validate(request);
+    AHResponseSet<AuthorizationModel.AccessToken> error = validatorUtils.validate(request);
     if (Objects.nonNull(error))
       return error;
 
-    AuthorizationModel.Response response = userUsecase.getAccessToken(request.getOperand());
+    AuthorizationModel.AccessToken response = userUsecase.getAccessToken(request.getOperand());
 
     return AHResponseSet.ok(response);
   }

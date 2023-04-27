@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface UserUsecase {
 
   @Transactional(rollbackFor = Throwable.class)
-  AuthorizationModel.Response getAccessToken(AuthorizationModel.Request request);
+  AuthorizationModel.AccessToken getAccessToken(AuthorizationModel.Request request);
 
   @Transactional(rollbackFor = Throwable.class)
   AuthenticationModel.Response addUser(AuthenticationModel.Request request);

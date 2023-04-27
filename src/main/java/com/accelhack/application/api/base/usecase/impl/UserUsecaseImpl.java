@@ -1,5 +1,6 @@
 package com.accelhack.application.api.base.usecase.impl;
 
+import com.accelhack.accelparts.utils.RandomUtils;
 import com.accelhack.application.api.base.domain.User;
 import com.accelhack.application.api.base.domain.user.UserFactory;
 import com.accelhack.application.api.base.domain.user.UserRepository;
@@ -27,11 +28,11 @@ public class UserUsecaseImpl implements UserUsecase {
   private final UserFactory userFactory;
 
   @Override
-  public AuthorizationModel.Response getAccessToken(AuthorizationModel.Request request) {
+  public AuthorizationModel.AccessToken getAccessToken(AuthorizationModel.Request request) {
     final DecodedJWT jwt = JWT.decode(request.getAccessToken());
     if (isValidAccessToken(jwt)) {
       // jwt token is still alive
-      return new AuthorizationModel.Response(request);
+      return new AuthorizationModel.AccessToken(request.getAccessToken());
     }
 
     final String username = jwt.getSubject();
@@ -39,11 +40,10 @@ public class UserUsecaseImpl implements UserUsecase {
     if (Objects.isNull(user))
       throw new UsernameNotFoundException("User not found:[%s]".formatted(username));
 
-    // FIXME: only reissue access token
-    final User.Token token = user.reissueToken(config, request.getRefreshToken());
-    userRepository.save(user, new Operator(user));
+    final User.Token token = user.reissueAccessToken(config, request.getRefreshToken());
 
-    return new AuthorizationModel.Response(token);
+    userRepository.save(user, new Operator(user));
+    return new AuthorizationModel.AccessToken(token.getAccessToken());
   }
 
   @Override
@@ -59,10 +59,11 @@ public class UserUsecaseImpl implements UserUsecase {
     if (Objects.isNull(user))
       throw new UsernameNotFoundException("User not found:[%s]".formatted(username));
 
-    final User.Token token = user.issueToken(config);
+    final String refreshToken = RandomUtils.alphaNumeric(config.getRefreshTokenLength());
+    final User.Token token = user.issueToken(config, refreshToken);
     userRepository.save(user, Operator.ANONYMOUS);
 
-    return new AuthorizationModel.Response(token);
+    return new AuthorizationModel.Response(token.getAccessToken(), refreshToken);
   }
 
   private boolean isValidAccessToken(DecodedJWT jwt) {

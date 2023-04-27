@@ -15,6 +15,6 @@ public interface AuthController {
 
   @PostMapping("/auth/token")
   @ResponseBody
-  AHResponseSet<AuthorizationModel.Response> token(
+  AHResponseSet<AuthorizationModel.AccessToken> token(
       @RequestBody AHRequest<AuthorizationModel.Request> request);
 }

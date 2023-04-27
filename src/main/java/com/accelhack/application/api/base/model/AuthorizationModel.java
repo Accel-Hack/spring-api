@@ -1,6 +1,5 @@
 package com.accelhack.application.api.base.model;
 
-import com.accelhack.application.api.base.domain.User;
 import com.accelhack.application.api.http.AHOperand;
 import lombok.Getter;
 
@@ -14,16 +13,17 @@ public class AuthorizationModel {
   @Getter
   public static class Response {
     private final String accessToken;
-    private final String refreshToken;
+    private String refreshToken;
 
-    public Response(Request request) {
-      this.accessToken = request.getAccessToken();
-      this.refreshToken = request.getRefreshToken();
+    public Response(String accessToken, String refreshToken) {
+      this.accessToken = accessToken;
+      this.refreshToken = refreshToken;
     }
 
-    public Response(User.Token token) {
-      this.accessToken = token.getAccessToken();
-      this.refreshToken = token.getRefreshToken();
+    public Response(String accessToken) {
+      this.accessToken = accessToken;
     }
   }
+
+  public record AccessToken(String token) {}
 }
