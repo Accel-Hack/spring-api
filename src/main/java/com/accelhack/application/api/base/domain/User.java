@@ -60,7 +60,7 @@ public class User {
 
   public Token reissueAccessToken(AuthorizationConfiguration config, String refreshToken) {
     // 1. check refresh token
-    Token token = tokens.stream()
+    Token token = tokens.stream().sorted(Comparator.comparing(Token::getExpiresAt).reversed())
         .filter(t -> config.getEncoder().matches(refreshToken, t.encryptRefreshToken)).findFirst()
         .orElseThrow(() -> new BadCredentialsException("Invalid refresh token"));
 
@@ -69,7 +69,7 @@ public class User {
       throw new BadCredentialsException("Refresh token has expired");
 
     // 3. remove old access token
-    tokens.remove(token);
+    tokens.removeIf(t -> config.getEncoder().matches(refreshToken, t.encryptRefreshToken));
 
     // 4. generate new access token
     Token newToken = token.issueAccessToken(config, username);
