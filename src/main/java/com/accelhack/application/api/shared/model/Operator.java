@@ -1,23 +1,18 @@
 package com.accelhack.application.api.shared.model;
 
-import com.accelhack.application.api.shared.dto.UserDto;
+import com.accelhack.application.api.base.domain.User;
 import lombok.Getter;
 
-import java.util.Objects;
-import java.util.Optional;
-
 public class Operator {
+  public static final Operator ANONYMOUS = new Operator("ANONYMOUS");
   @Getter
   private final String code;
 
-  private Operator(String code) {
+  public Operator(String code) {
     this.code = code;
   }
 
-  public Operator(UserDto userDto) {
-    this.code = Optional.ofNullable(userDto)
-      .map(UserDto::getId)
-      .map(Objects::toString)
-      .orElse("ANONYMOUS");
+  public Operator(User user) {
+    this.code = user.getId().toString();
   }
 }

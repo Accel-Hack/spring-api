@@ -1,12 +1,12 @@
 package com.accelhack.application.api.shared.security;
 
+import com.accelhack.application.api.shared.config.AuthorizationConfiguration;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,15 +19,17 @@ import java.util.Collections;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
   private static final String TOKEN_PREFIX = "Bearer ";
-  @Value("${jwt.access-token.secret-key}")
-  private String accessTokenSecretKey;
+  private final AuthorizationConfiguration config;
 
-  public JwtAuthorizationFilter(AuthenticationManager authenticationManager) {
+  public JwtAuthorizationFilter(AuthenticationManager authenticationManager,
+      AuthorizationConfiguration config) {
     super(authenticationManager);
+    this.config = config;
   }
 
   @Override
-  protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+  protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
+      FilterChain chain) throws IOException, ServletException {
     final String header = req.getHeader(HttpHeaders.AUTHORIZATION);
 
     if (header == null || !header.startsWith(TOKEN_PREFIX)) {
@@ -45,10 +47,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     final String token = request.getHeader(HttpHeaders.AUTHORIZATION);
 
     if (token != null) {
-      final String user = JWT.require(Algorithm.HMAC512(accessTokenSecretKey.getBytes()))
-        .build()
-        .verify(StringUtils.replace(token, TOKEN_PREFIX, ""))
-        .getSubject();
+      final String user = JWT.require(Algorithm.HMAC512(config.getAccessTokenSecret().getBytes()))
+          .build().verify(StringUtils.replace(token, TOKEN_PREFIX, "")).getSubject();
 
       if (user != null) {
         return new UsernamePasswordAuthenticationToken(user, null, Collections.emptyList());

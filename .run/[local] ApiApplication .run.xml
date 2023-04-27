@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="[local] ApiApplication " type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <option name="ACTIVE_PROFILES" value="local" />
-    <option name="ALTERNATIVE_JRE_PATH" value="corretto-18" />
+    <option name="ALTERNATIVE_JRE_PATH" value="corretto-20" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <module name="ApiApplication" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="com.accelhack.application.api.ApiApplication" />

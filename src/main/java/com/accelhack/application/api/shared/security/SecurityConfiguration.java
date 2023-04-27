@@ -1,8 +1,9 @@
 package com.accelhack.application.api.shared.security;
 
-import com.accelhack.application.api.shared.controller.base.ExternalController;
+import com.accelhack.application.api.base.controller.base.ExternalController;
+import com.accelhack.application.api.base.usecase.UserUsecase;
+import com.accelhack.application.api.shared.config.AuthorizationConfiguration;
 import com.accelhack.application.api.shared.filter.HttpServletRequestFilter;
-import com.accelhack.application.api.shared.service.JwtUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
@@ -15,27 +16,26 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
-  private final JwtUserDetailsService userDetailsService;
   private final AuthenticationConfiguration authenticationConfiguration;
-  private final BCryptPasswordEncoder passwordEncoder;
+  private final AuthorizationConfiguration authorizationConfiguration;
+  private final UserDetailsService userDetailsService;
+  private final UserUsecase userUsecase;
   private final ObjectMapper objectMapper;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-//      .headers().frameOptions().sameOrigin()
-//      .and()
-      .csrf().disable()
-      .authenticationProvider(authProvider());
+        // .headers().frameOptions().sameOrigin()
+        // .and()
+        .csrf().disable().authenticationProvider(authProvider());
 
     routePaths(http);
     addFilters(http);
@@ -46,7 +46,7 @@ public class SecurityConfiguration {
   private AuthenticationProvider authProvider() {
     DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
     provider.setUserDetailsService(userDetailsService);
-    provider.setPasswordEncoder(passwordEncoder);
+    provider.setPasswordEncoder(authorizationConfiguration.getEncoder());
     return provider;
   }
 
@@ -55,40 +55,36 @@ public class SecurityConfiguration {
   }
 
   /**
-   * function to routing paths
-   * 1. allow external controller
-   * 2. others require authentication
+   * function to routing paths 1. allow external controller 2. others require authentication
+   * 
    * @param http HttpSecurity
    * @throws Exception exception
    */
   private void routePaths(HttpSecurity http) throws Exception {
-    http
-      .authorizeHttpRequests((auth) ->
-        auth
-          // allow signIn for anonymous users
-          .requestMatchers(ExternalController.CONTEXT_PATH + "/**").permitAll()
-          // all other requests
-          .anyRequest().authenticated()
-      );
+    http.authorizeHttpRequests((auth) -> auth
+        // allow signIn for anonymous users
+        .requestMatchers("/login").permitAll()
+        // allow signIn for anonymous users
+        .requestMatchers(ExternalController.CONTEXT_PATH + "/**").permitAll()
+        // all other requests
+        .anyRequest().authenticated());
   }
 
   /**
-   * function to add filters
-   * 1. cache filter
-   * 2. validate login filter
-   * 3. validate jwt token filter
+   * function to add filters 1. cache filter 2. validate login filter 3. validate jwt token filter
+   * 
    * @param http HttpSecurity
    * @throws Exception exception
    */
   private void addFilters(HttpSecurity http) throws Exception {
     final Filter cache = new HttpServletRequestFilter();
-    final Filter authentication = new JwtAuthenticationFilter(authenticationManager(), userDetailsService, objectMapper);
-    final Filter authorization = new JwtAuthorizationFilter(authenticationManager());
+    final Filter authentication =
+        new JwtAuthenticationFilter(authenticationManager(), userUsecase, objectMapper);
+    final Filter authorization =
+        new JwtAuthorizationFilter(authenticationManager(), authorizationConfiguration);
 
-    http
-      .addFilterBefore(cache, UsernamePasswordAuthenticationFilter.class)
-      .addFilter(authentication)
-      .addFilter(authorization)
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+    http.addFilterBefore(cache, UsernamePasswordAuthenticationFilter.class)
+        .addFilter(authentication).addFilter(authorization).sessionManagement()
+        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
   }
 }

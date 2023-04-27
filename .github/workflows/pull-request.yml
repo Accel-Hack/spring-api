@@ -11,6 +11,31 @@ jobs:
     steps:
       - run: echo "start test"
 
+  code-validation:
+    needs: [ start ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up JDK (java18)
+        uses: actions/setup-java@v3
+        with:
+          java-version: 18
+          distribution: corretto
+
+      - name: Cache local Maven repository
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Run Tests
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run:  mvn -f pom.xml formatter:validate
+
   mock-tests:
     needs: [ start ]
     runs-on: ubuntu-latest

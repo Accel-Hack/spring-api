@@ -1,0 +1,64 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.accelhack.application.api.sample.mapper.SampleMapper">
+    <resultMap id="sampleDtoResultMap" type="com.accelhack.application.api.sample.dto.SampleDto">
+        <id property="id" column="ID"/>
+        <result property="name" column="NAME"/>
+        <result property="birthday" column="BIRTHDAY"/>
+        <result property="isJapanese" column="IS_JAPANESE"/>
+    </resultMap>
+
+    <resultMap id="sampleQueryDtoResultMap" type="com.accelhack.application.api.sample.dto.SampleQueryDto">
+        <id property="total" column="TOTAL"/>
+        <collection property="sampleDtos" ofType="com.accelhack.application.api.sample.dto.SampleDto">
+            <id property="id" column="ID"/>
+            <result property="name" column="NAME"/>
+            <result property="birthday" column="BIRTHDAY"/>
+            <result property="isJapanese" column="IS_JAPANESE"/>
+        </collection>
+    </resultMap>
+
+    <sql id="base-cols">
+        SELECT `ID`
+             , `NAME`
+             , `BIRTHDAY`
+             , `IS_JAPANESE`
+             , COUNT(*) OVER () AS TOTAL
+        FROM YOUR_APPLICATION.`SAMPLE`
+        WHERE `IS_DELETED` IS FALSE
+    </sql>
+
+    <select id="select" resultMap="sampleDtoResultMap">
+        <include refid="base-cols"/>
+        AND `ID` = #{id}
+    </select>
+
+    <select id="searchBy" resultMap="sampleQueryDtoResultMap">
+        <include refid="base-cols"/>
+        <if test="name != null and name != ''">
+            <bind name="name_pattern" value="'%' + name + '%'"/>
+            AND `NAME` like #{name_pattern}
+        </if>
+    </select>
+
+    <insert id="save">
+        INSERT INTO YOUR_APPLICATION.`SAMPLE` (`ID`,
+                                               `NAME`,
+                                               `BIRTHDAY`,
+                                               `IS_JAPANESE`)
+        VALUES (#{id},
+                #{name},
+                #{birthday},
+                #{isJapanese})
+        ON DUPLICATE KEY UPDATE `NAME`        = #{name},
+                                `BIRTHDAY`    = #{birthday},
+                                `IS_JAPANESE` = #{isJapanese}
+    </insert>
+
+    <update id="delete">
+        UPDATE YOUR_APPLICATION.`SAMPLE`
+        SET `IS_DELETED` = true,
+            `DELETED_AT` = CURRENT_TIMESTAMP
+        WHERE `ID` = #{id}
+    </update>
+</mapper>
