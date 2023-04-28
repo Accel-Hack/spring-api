@@ -3,14 +3,13 @@ package com.accelhack.application.api.sample.usecase.impl;
 import com.accelhack.application.api.sample.domain.PageableSample;
 import com.accelhack.application.api.sample.domain.Sample;
 import com.accelhack.application.api.sample.domain.sample.*;
-import com.accelhack.application.api.sample.dto.SampleQuery;
+import com.accelhack.application.api.sample.domain.SampleQuery;
 import com.accelhack.application.api.sample.model.SampleModel;
 import com.accelhack.application.api.sample.usecase.SampleUsecase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -45,15 +44,11 @@ public class SampleUsecaseImpl implements SampleUsecase {
 
   @Override
   public SampleModel.Entity edit(SampleModel.Update sampleRequest) {
-    Sample sample = sampleRepository.findByPk(sampleRequest.getId());
-    if (Objects.isNull(sample)) {
-      // FIXME: not found
-      return null;
-    }
-
-    sample.changeName(sampleRequest.getName());
-    sample.changeBirthday(sampleRequest.getBirthday());
-    sample.changeIsJapanese(sampleRequest.getIsJapanese());
+    final Sample sample =
+        Optional.ofNullable(sampleRepository.findByPk(sampleRequest.getId())).orElseThrow() // FIXME:
+                                                                                            // 存在しない時の処理を書く
+            .toBuilder().name(sampleRequest.getName()).birthday(sampleRequest.getBirthday())
+            .isJapanese(sampleRequest.getIsJapanese()).build();
 
     sampleRepository.save(sample);
     return SampleModel.Entity.from(sample);

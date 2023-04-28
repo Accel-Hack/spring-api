@@ -1,26 +1,24 @@
 package com.accelhack.application.api.sample.controller.impl;
 
-import com.accelhack.application.api.sample.controller.SampleController;
-import com.accelhack.application.api.sample.model.SampleModel;
-import com.accelhack.application.api.sample.usecase.SampleUsecase;
 import com.accelhack.application.api.base.controller.base.InternalController;
 import com.accelhack.application.api.http.AHRequest;
 import com.accelhack.application.api.http.AHResponseSet;
+import com.accelhack.application.api.sample.controller.SampleController;
+import com.accelhack.application.api.sample.model.SampleModel;
+import com.accelhack.application.api.sample.usecase.SampleUsecase;
 import com.accelhack.application.api.shared.utils.ValidatorUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
 public class SampleIntControllerImpl extends InternalController implements SampleController {
 
+  private final ValidatorUtils validatorUtils;
   private final SampleUsecase sampleUsecase;
-
-  public SampleIntControllerImpl(ValidatorUtils validatorUtils, SampleUsecase sampleUsecase) {
-    super(validatorUtils);
-    this.sampleUsecase = sampleUsecase;
-  }
 
   /**
    * curl "http://localhost:8080/api/v1/sample?id="

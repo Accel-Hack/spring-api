@@ -1,21 +1,36 @@
 package com.accelhack.application.api.sample.domain;
 
-import lombok.Getter;
+import com.accelhack.application.api.shared.config.MyContext;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
 public class PageableSample {
+  @NotNull
   private final int total;
+  @NotNull
   private final List<Sample> samples;
 
-  public PageableSample(int total, List<Sample> samples, int limit, int offset) {
-    this.total = total;
-    if (offset >= samples.size()) {
-      this.samples = Collections.emptyList();
-      return;
+  public static class PageableSampleBuilder {
+
+    public PageableSample build() {
+      return validate(new PageableSample(total, samples));
     }
-    this.samples = samples.subList(offset, Math.min(offset + limit, samples.size()));
+
+    public PageableSample validate(final PageableSample pageableSample) {
+      final Validator validator = MyContext.getBean(Validator.class);
+      final Set<ConstraintViolation<PageableSample>> errors = validator.validate(pageableSample);
+      if (!errors.isEmpty()) {
+        throw new IllegalArgumentException(errors.toString());
+      }
+      return pageableSample;
+    }
   }
 }

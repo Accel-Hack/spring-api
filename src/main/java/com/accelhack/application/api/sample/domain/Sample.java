@@ -1,28 +1,42 @@
 package com.accelhack.application.api.sample.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import com.accelhack.application.api.shared.config.MyContext;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.Instant;
-import java.util.UUID;
+import java.util.*;
 
 @Getter
-@Setter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
 public class Sample {
-  private UUID id;
-  private String name;
-  private Instant birthday;
-  private Boolean isJapanese;
+  @NotNull
+  private final UUID id;
+  @NotNull
+  private final String name;
+  @NotNull
+  private final Instant birthday;
+  @NotNull
+  private final Boolean isJapanese;
 
-  public void changeName(String name) {
-    this.name = name;
-  }
+  public static class SampleBuilder {
+    public Sample build() {
+      if (Objects.isNull(id)) {
+        id = UUID.randomUUID();
+      }
+      return validate(new Sample(id, name, birthday, isJapanese));
+    }
 
-  public void changeBirthday(Instant birthday) {
-    this.birthday = birthday;
-  }
-
-  public void changeIsJapanese(Boolean isJapanese) {
-    this.isJapanese = isJapanese;
+    public Sample validate(final Sample sample) {
+      final Validator validator = MyContext.getBean(Validator.class);
+      final Set<ConstraintViolation<Sample>> errors = validator.validate(sample);
+      if (!errors.isEmpty()) {
+        throw new IllegalArgumentException(errors.toString());
+      }
+      return sample;
+    }
   }
 }

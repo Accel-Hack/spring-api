@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class SampleQueryDto {
-  private int total;
+  private Integer total;
   private List<SampleDto> sampleDtos;
 
   public List<Sample> getSamples() {

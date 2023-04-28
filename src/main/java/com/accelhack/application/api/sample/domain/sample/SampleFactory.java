@@ -1,7 +1,7 @@
 package com.accelhack.application.api.sample.domain.sample;
 
 import com.accelhack.application.api.sample.domain.Sample;
-import com.accelhack.application.api.sample.dto.SampleQuery;
+import com.accelhack.application.api.sample.domain.SampleQuery;
 
 import java.time.Instant;
 

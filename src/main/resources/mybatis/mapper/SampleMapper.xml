@@ -39,6 +39,7 @@
             <bind name="name_pattern" value="'%' + name + '%'"/>
             AND `NAME` like #{name_pattern}
         </if>
+        LIMIT #{limit} OFFSET #{offset}
     </select>
 
     <insert id="save">

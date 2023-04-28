@@ -8,19 +8,17 @@ import com.accelhack.application.api.base.usecase.UserUsecase;
 import com.accelhack.application.api.http.AHRequest;
 import com.accelhack.application.api.http.AHResponseSet;
 import com.accelhack.application.api.shared.utils.ValidatorUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.util.Objects;
 
 @Controller
+@RequiredArgsConstructor
 public class AuthControllerImpl extends ExternalController implements AuthController {
 
+  private final ValidatorUtils validatorUtils;
   private final UserUsecase userUsecase;
-
-  public AuthControllerImpl(ValidatorUtils validatorUtils, UserUsecase userUsecase) {
-    super(validatorUtils);
-    this.userUsecase = userUsecase;
-  }
 
   @Override
   public AHResponseSet<AuthenticationModel.Response> user(

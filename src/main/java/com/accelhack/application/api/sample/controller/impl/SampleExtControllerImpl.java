@@ -1,26 +1,25 @@
 package com.accelhack.application.api.sample.controller.impl;
 
+import com.accelhack.application.api.base.controller.base.ExternalController;
+import com.accelhack.application.api.http.AHRequest;
+import com.accelhack.application.api.http.AHResponseSet;
 import com.accelhack.application.api.sample.controller.SampleController;
 import com.accelhack.application.api.sample.model.SampleModel;
 import com.accelhack.application.api.sample.usecase.SampleUsecase;
-import com.accelhack.application.api.http.AHRequest;
-import com.accelhack.application.api.http.AHResponseSet;
-import com.accelhack.application.api.base.controller.base.ExternalController;
 import com.accelhack.application.api.shared.utils.ValidatorUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Controller
+@RequiredArgsConstructor
 public class SampleExtControllerImpl extends ExternalController implements SampleController {
 
+  private final ValidatorUtils validatorUtils;
   private final SampleUsecase sampleUsecase;
 
-  public SampleExtControllerImpl(ValidatorUtils validatorUtils, SampleUsecase sampleUsecase) {
-    super(validatorUtils);
-    this.sampleUsecase = sampleUsecase;
-  }
 
   /**
    * curl "http://localhost:8080/api/v1/sample?id=ee4d8f69-7b37-45b2-ba55-08a23e429ec3"
@@ -36,7 +35,7 @@ public class SampleExtControllerImpl extends ExternalController implements Sampl
 
   /**
    * curl 'http://localhost:8080/api/v1/samples?' curl
-   * "http://localhost:8080/api/v1/samples?name=k&limit=1&offset=3"
+   * "http://localhost:8080/api/v1/samples?name=k&limit=1&offset=10"
    */
   @Override
   public AHResponseSet<SampleModel.ListEntity> search(String name, Integer limit, Integer offset) {
@@ -56,8 +55,8 @@ public class SampleExtControllerImpl extends ExternalController implements Sampl
   }
 
   /**
-   * curl -X PUT -H 'Content-Type: application/json' -d '{"operand": {"name":
-   * "kengo","birthday":"1993-02-23T00:00:00Z","isJapanese": true}}'
+   * curl -X PUT -H 'Content-Type: application/json' -d '{"operand":
+   * {"name":"kengo","birthday":"1993-02-23T00:00:00Z","isJapanese": true}}'
    * http://localhost:8080/api/v1/sample
    */
   @Override
@@ -75,9 +74,9 @@ public class SampleExtControllerImpl extends ExternalController implements Sampl
   }
 
   /**
-   * curl -X POST -H 'Content-Type: application/json' -d '{"operand":
-   * {"id":"ee4d8f69-7b37-45b2-ba55-08a23e429ec3", "name": "kengo", "birthday":
-   * "1993-02-23T00:00:00Z","isJapanese": true}}' http://localhost:8080/api/v1/sample
+   * curl -X POST -H 'Content-Type: application/json' -d
+   * '{"operand":{"id":"ee4d8f69-7b37-45b2-ba55-08a23e429ec3", "name": "kengo",
+   * "birthday":"1993-02-23T00:00:00Z","isJapanese": true}}' http://localhost:8080/api/v1/sample
    */
   @Override
   public AHResponseSet<SampleModel.Entity> edit(AHRequest<SampleModel.Update> sampleRequest) {
@@ -94,8 +93,8 @@ public class SampleExtControllerImpl extends ExternalController implements Sampl
   }
 
   /**
-   * curl -X DELETE -H 'Content-Type: application/json' -d '{"operand": {"id":
-   * "f32b76d3-6972-4b62-b19c-1d31bfc88e54"}}' http://localhost:8080/api/v1/sample
+   * curl -X DELETE -H 'Content-Type: application/json' -d '{"operand":
+   * {"id":"f32b76d3-6972-4b62-b19c-1d31bfc88e54"}}' http://localhost:8080/api/v1/sample
    */
   @Override
   public AHResponseSet<SampleModel.Entity> remove(AHRequest<SampleModel.Delete> sampleRequest) {

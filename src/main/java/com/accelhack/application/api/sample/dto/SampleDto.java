@@ -23,11 +23,7 @@ public class SampleDto {
   }
 
   public Sample toSampleDomain() {
-    Sample sample = new Sample();
-    sample.setId(id);
-    sample.setName(name);
-    sample.setBirthday(birthday);
-    sample.setIsJapanese(isJapanese);
-    return sample;
+    // make sample entity from builder
+    return Sample.builder().id(id).name(name).birthday(birthday).isJapanese(isJapanese).build();
   }
 }
