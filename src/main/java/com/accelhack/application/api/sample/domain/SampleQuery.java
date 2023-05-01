@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -15,23 +15,18 @@ import java.util.Set;
 public class SampleQuery {
   private final String name;
   @Positive
-  private final int limit;
+  private final Integer limit;
   @NotNull
-  private final int offset;
+  private final Integer offset;
 
   public static class SampleQueryBuilder {
-
-    public SampleQueryBuilder limit(final Integer limit) {
-      this.limit = Optional.ofNullable(limit).orElse(20);
-      return this;
-    }
-
-    public SampleQueryBuilder offset(final Integer offset) {
-      this.offset = Optional.ofNullable(offset).orElse(0);
-      return this;
-    }
-
     public SampleQuery build() {
+      // set default values
+      if (Objects.isNull(limit))
+        limit = 20;
+      if (Objects.isNull(offset))
+        offset = 0;
+      // return domain via validation
       return validate(new SampleQuery(name, limit, offset));
     }
 

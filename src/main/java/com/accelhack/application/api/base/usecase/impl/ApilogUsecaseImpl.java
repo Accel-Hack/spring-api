@@ -10,9 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -26,17 +25,10 @@ public class ApilogUsecaseImpl implements ApilogUsecase {
   public UUID addLog(HttpServletRequest request) {
     UUID apilogId = null;
     try {
-      String sessionId = request.getSession().getId();
-      String remoteAddress = getRemoteAddr(request);
-      String path = request.getRequestURI();
-      String method = request.getMethod();
-      String query = request.getQueryString();
+      log.info(String.format("[BEGIN(session-%s)] %-4s %s", request.getSession().getId(),
+          request.getMethod(), request.getRequestURI() + request.getQueryString()));
 
-      log.info(String.format("[BEGIN(session-%s)] %-4s %s ip:%s", sessionId, method, path,
-          remoteAddress));
-
-      String body = request.getReader().lines().collect(Collectors.joining());
-      Apilog apilog = apilogFactory.create(sessionId, remoteAddress, path, method, query, body);
+      Apilog apilog = apilogFactory.create(request);
       apilogRepository.save(apilog);
 
       apilogId = apilog.getId();
@@ -49,11 +41,8 @@ public class ApilogUsecaseImpl implements ApilogUsecase {
   @Override
   public void updateResult(UUID apilogId, HttpServletResponse response, Exception exception) {
     try {
-      Apilog apilog = apilogRepository.findById(apilogId);
-      if (Objects.isNull(apilog))
-        return;
-
-      apilog.finished(response, exception);
+      Apilog apilog = Optional.ofNullable(apilogRepository.findById(apilogId)).orElseThrow()
+          .finished(response, exception);
       apilogRepository.save(apilog);
 
       log.info(String.format("[END  (session-%s)] took %sms.", apilog.getSessionId(),
@@ -63,11 +52,5 @@ public class ApilogUsecaseImpl implements ApilogUsecase {
     }
   }
 
-  private String getRemoteAddr(HttpServletRequest request) {
-    String xForwardedFor = request.getHeader("X-Forwarded-For");
-    // ELB等を経由していたらxForwardedForを返す
-    if (xForwardedFor != null)
-      return xForwardedFor;
-    return request.getRemoteAddr();
-  }
+
 }

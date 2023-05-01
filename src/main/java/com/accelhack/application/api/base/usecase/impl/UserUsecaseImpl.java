@@ -14,6 +14,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
@@ -60,10 +61,10 @@ public class UserUsecaseImpl implements UserUsecase {
       throw new UsernameNotFoundException("User not found:[%s]".formatted(username));
 
     final String refreshToken = RandomUtils.alphaNumeric(config.getRefreshTokenLength());
-    final User.Token token = user.issueToken(config, refreshToken);
-    userRepository.save(user, Operator.ANONYMOUS);
+    final Pair<User, User.Token> pair = user.issueToken(config, refreshToken);
+    userRepository.save(pair.getLeft(), Operator.ANONYMOUS);
 
-    return new AuthorizationModel.Response(token.getAccessToken(), refreshToken);
+    return new AuthorizationModel.Response(pair.getRight().getAccessToken(), refreshToken);
   }
 
   private boolean isValidAccessToken(DecodedJWT jwt) {

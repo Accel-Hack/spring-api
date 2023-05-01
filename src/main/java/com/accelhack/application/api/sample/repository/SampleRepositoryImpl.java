@@ -23,7 +23,7 @@ public class SampleRepositoryImpl implements SampleRepository {
 
   @Override
   public void save(Sample sample) {
-    sampleMapper.save(SampleDto.toSave(sample));
+    sampleMapper.save(SampleDto.from(sample));
   }
 
   @Override

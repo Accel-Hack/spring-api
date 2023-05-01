@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.accelhack.application.api.base.mapper.UserMapper">
-    <resultMap id="userResultMap" type="com.accelhack.application.api.base.domain.User">
+    <resultMap id="userDtoResultMap" type="com.accelhack.application.api.base.dto.UserDto">
         <!--values from user table-->
         <id property="id" column="USER_ID"/>
         <result property="username" column="USERNAME"/>
@@ -11,7 +11,7 @@
         <result property="resetCode" column="RESET_CODE"/>
         <result property="resetUntil" column="RESET_UNTIL"/>
         <!--values from user_token table-->
-        <collection property="tokens" ofType="com.accelhack.application.api.base.domain.User$Token">
+        <collection property="tokens" ofType="com.accelhack.application.api.base.dto.UserDto$TokenDto">
             <result property="id" column="USER_TOKEN_ID"/>
             <result property="accessToken" column="ACCESS_TOKEN"/>
             <result property="encryptRefreshToken" column="ENCRYPT_REFRESH_TOKEN"/>
@@ -37,40 +37,40 @@
                                AND UT.EXPIRES_AT > CURRENT_TIMESTAMP
     </sql>
 
-    <select id="selectByUsername" resultMap="userResultMap">
+    <select id="selectByUsername" resultMap="userDtoResultMap">
         <include refid="select"/>
         WHERE U.USERNAME = #{username}
         AND U.DELETED_AT IS NULL
     </select>
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="user.id">
+    <insert id="save">
         INSERT INTO API_APPLICATION.USER( `ID`
                                         , `USERNAME`
                                         , `PASSWORD`
                                         , `ACTOR`
                                         , `CREATED_BY`
                                         , `UPDATED_BY`)
-        VALUES ( #{user.id}
-               , #{user.username}
-               , #{user.encryptPassword}
-               , #{user.actor.code}
+        VALUES ( #{userDto.id}
+               , #{userDto.username}
+               , #{userDto.encryptPassword}
+               , #{userDto.actor.code}
                , #{operator}
                , #{operator})
         ON DUPLICATE KEY UPDATE `UPDATED_BY` = #{operator}
     </insert>
 
-    <insert id="addToken" useGeneratedKeys="true" keyProperty="token.id">
+    <insert id="addToken">
         INSERT INTO API_APPLICATION.USER_TOKEN( `ID`
                                               , `USER_ID`
                                               , `ACCESS_TOKEN`
                                               , `REFRESH_TOKEN`
                                               , `EXPIRES_AT`
                                               , `CREATED_BY`)
-        VALUES ( #{token.id}
+        VALUES ( #{tokenDto.id}
                , #{userId}
-               , #{token.accessToken}
-               , #{token.encryptRefreshToken}
-               , #{token.expiresAt}
+               , #{tokenDto.accessToken}
+               , #{tokenDto.encryptRefreshToken}
+               , #{tokenDto.expiresAt}
                , #{operator})
     </insert>
 

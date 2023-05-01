@@ -13,7 +13,7 @@ public class SampleDto {
   private Instant birthday;
   private Boolean isJapanese;
 
-  public static SampleDto toSave(Sample sample) {
+  public static SampleDto from(Sample sample) {
     SampleDto sampleDto = new SampleDto();
     sampleDto.id = sample.getId();
     sampleDto.name = sample.getName();

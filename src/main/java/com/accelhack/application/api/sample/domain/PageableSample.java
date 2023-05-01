@@ -4,6 +4,7 @@ import com.accelhack.application.api.shared.config.MyContext;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.Set;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true)
 public class PageableSample {
-  @NotNull
+  @PositiveOrZero
   private final int total;
   @NotNull
   private final List<Sample> samples;

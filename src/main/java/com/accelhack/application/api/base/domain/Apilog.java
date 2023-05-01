@@ -1,38 +1,72 @@
 package com.accelhack.application.api.base.domain;
 
+import com.accelhack.application.api.shared.config.MyContext;
 import com.accelhack.application.api.shared.model.Operator;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.Getter;
-import lombok.Setter;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
 
 import java.time.Instant;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 import static java.lang.Math.round;
 
 @Getter
-@Setter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
 public class Apilog {
-  private UUID id;
-  private Operator operator;
-  private String sessionId;
-  private String remoteAddress;
-  private Instant operationTime;
-  private double executionDurationMs;
-  private String method;
-  private String path;
-  private String query;
-  private String body;
-  private String response;
-  private Integer status;
-  private String exception;
+  @NotNull
+  private final UUID id;
+  @NotNull
+  private final Operator operator;
+  @NotBlank
+  private final String sessionId;
+  @NotBlank
+  private final String remoteAddress;
+  @NotNull
+  private final Instant operationTime;
+  private final double executionDurationMs;
+  @NotBlank
+  private final String method;
+  @NotBlank
+  private final String path;
+  private final String query;
+  private final String body;
+  private final String response;
+  private final Integer status;
+  private final String exception;
 
-  public void finished(HttpServletResponse response, Exception exception) {
-    this.executionDurationMs =
-        round((Instant.now().getNano() - operationTime.getNano()) / 1000.0) / 1000.0;
-    this.status = response.getStatus();
-    // FIXME: set response body
-    Optional.ofNullable(exception).ifPresent(e -> this.exception = e.getLocalizedMessage());
+  public Apilog finished(HttpServletResponse response, Exception exception) {
+    return toBuilder()
+        .executionDurationMs(round(Instant.now().getNano() - operationTime.getNano() / 1_000_000.0))
+        .status(response.getStatus())
+        // FIXME: set response body
+        .exception(Optional.ofNullable(exception).map(Throwable::getLocalizedMessage).orElse(null))
+        .build();
+  }
+
+  public static class ApilogBuilder {
+    public Apilog build() {
+      // set default values
+      if (Objects.isNull(id))
+        id = UUID.randomUUID();
+      if (Objects.isNull(operationTime))
+        operationTime = Instant.now();
+      // return domain via validation
+      return validate(new Apilog(id, operator, sessionId, remoteAddress, operationTime,
+          executionDurationMs, method, path, query, body, response, status, exception));
+    }
+
+    public Apilog validate(final Apilog apilog) {
+      final Validator validator = MyContext.getBean(Validator.class);
+      final Set<ConstraintViolation<Apilog>> errors = validator.validate(apilog);
+      if (!errors.isEmpty()) {
+        throw new IllegalArgumentException(errors.toString());
+      }
+      return apilog;
+    }
   }
 }

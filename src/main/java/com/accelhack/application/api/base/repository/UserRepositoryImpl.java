@@ -2,11 +2,13 @@ package com.accelhack.application.api.base.repository;
 
 import com.accelhack.application.api.base.domain.User;
 import com.accelhack.application.api.base.domain.user.UserRepository;
+import com.accelhack.application.api.base.dto.UserDto;
 import com.accelhack.application.api.base.mapper.UserMapper;
 import com.accelhack.application.api.shared.model.Operator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -17,12 +19,16 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public User findByUsername(String username) {
-    return userMapper.selectByUsername(username);
+    final UserDto userDto = userMapper.selectByUsername(username);
+    if (Objects.isNull(userDto))
+      return null;
+
+    return userDto.toUserDomain();
   }
 
   @Override
   public void add(User user, Operator operator) {
-    userMapper.save(user, operator);
+    userMapper.save(UserDto.from(user), operator);
   }
 
   @Override
@@ -31,7 +37,7 @@ public class UserRepositoryImpl implements UserRepository {
     User prevUser = Optional.ofNullable(findByUsername(user.getUsername())).orElseThrow();
 
     // 1. update user info
-    userMapper.save(user, operator);
+    userMapper.save(UserDto.from(user), operator);
 
     // 2. update user token
     // 2.1. delete old token
@@ -44,7 +50,8 @@ public class UserRepositoryImpl implements UserRepository {
     user.getTokens().stream()
         .filter(token -> prevUser.getTokens().stream().map(User.Token::getId)
             .noneMatch(id -> id.equals(token.getId())))
-        .forEach(token -> userMapper.addToken(user.getId(), token, operator));
+        .forEach(
+            token -> userMapper.addToken(user.getId(), UserDto.TokenDto.from(token), operator));
 
     // return user
     return user;

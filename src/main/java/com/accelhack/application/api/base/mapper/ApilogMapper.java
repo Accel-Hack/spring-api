@@ -1,11 +1,13 @@
 package com.accelhack.application.api.base.mapper;
 
-import com.accelhack.application.api.base.domain.Apilog;
+import com.accelhack.application.api.base.dto.ApilogDto;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.UUID;
 
 @Mapper
 public interface ApilogMapper {
-  Apilog select(String id);
+  ApilogDto select(UUID id);
 
-  int save(Apilog apiLogDto);
+  int save(ApilogDto apiLogDto);
 }

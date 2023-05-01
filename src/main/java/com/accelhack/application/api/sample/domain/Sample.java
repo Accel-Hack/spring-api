@@ -24,9 +24,10 @@ public class Sample {
 
   public static class SampleBuilder {
     public Sample build() {
-      if (Objects.isNull(id)) {
+      // set default values
+      if (Objects.isNull(id))
         id = UUID.randomUUID();
-      }
+      // return domain via validation
       return validate(new Sample(id, name, birthday, isJapanese));
     }
 

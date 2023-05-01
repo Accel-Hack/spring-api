@@ -3,11 +3,12 @@ package com.accelhack.application.api.base.factory;
 import com.accelhack.application.api.base.domain.Apilog;
 import com.accelhack.application.api.base.domain.apilog.ApilogFactory;
 import com.accelhack.application.api.shared.service.AuthService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
-import java.util.UUID;
+import java.io.IOException;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -16,18 +17,18 @@ public class ApilogFactoryImpl implements ApilogFactory {
   private final AuthService service;
 
   @Override
-  public Apilog create(String sessionId, String remoteAddress, String path, String method,
-      String query, String body) {
-    Apilog apilog = new Apilog();
-    apilog.setId(UUID.randomUUID());
-    apilog.setOperator(service.getOperator());
-    apilog.setSessionId(sessionId);
-    apilog.setRemoteAddress(remoteAddress);
-    apilog.setOperationTime(Instant.now());
-    apilog.setPath(path);
-    apilog.setMethod(method);
-    apilog.setQuery(query);
-    apilog.setBody(body);
-    return apilog;
+  public Apilog create(HttpServletRequest request) throws IOException {
+    return Apilog.builder().operator(service.getOperator()).sessionId(request.getSession().getId())
+        .remoteAddress(getRemoteAddr(request)).method(request.getMethod())
+        .path(request.getRequestURI()).query(request.getQueryString())
+        .body(request.getReader().lines().collect(Collectors.joining())).build();
+  }
+
+  private String getRemoteAddr(HttpServletRequest request) {
+    String xForwardedFor = request.getHeader("X-Forwarded-For");
+    // ELB等を経由していたらxForwardedForを返す
+    if (xForwardedFor != null)
+      return xForwardedFor;
+    return request.getRemoteAddr();
   }
 }

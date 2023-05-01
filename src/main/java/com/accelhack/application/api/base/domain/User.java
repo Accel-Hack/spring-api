@@ -2,65 +2,127 @@ package com.accelhack.application.api.base.domain;
 
 import com.accelhack.application.api.base.enums.Actor;
 import com.accelhack.application.api.shared.config.AuthorizationConfiguration;
+import com.accelhack.application.api.shared.config.MyContext;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-
-import static org.springframework.security.core.userdetails.User.builder;
+import java.util.stream.Stream;
 
 @Getter
-@Setter
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@Builder(toBuilder = true)
 public class User {
 
-  private UUID id;
-  private String username;
-  private String encryptPassword;
-  private Actor actor;
-  private String resetCode;
-  private Instant resetUntil;
-  private List<Token> tokens;
+  @NotNull
+  private final UUID id;
+  @NotBlank
+  private final String username;
+  @NotBlank
+  private final String encryptPassword;
+  @NotNull
+  private final Actor actor;
+  private final String resetCode;
+  private final Instant resetUntil;
+  @NotNull
+  private final List<Token> tokens;
 
-  @Getter
-  @NoArgsConstructor
-  static public class Token {
-    @JsonIgnore
-    private UUID id;
-    private String accessToken;
-    private String encryptRefreshToken;
-    private Instant expiresAt;
-
-    private Token(AuthorizationConfiguration config, String username, String encryptRefreshToken) {
-      final Instant now = Instant.now();
-      this.id = UUID.randomUUID();
-      this.accessToken = JWT.create().withSubject(username).withIssuedAt(Date.from(now))
-          .withExpiresAt(
-              Date.from(now.plus(config.getAccessTokenExpireSeconds(), ChronoUnit.SECONDS)))
-          .sign(Algorithm.HMAC512(config.getAccessTokenSecret().getBytes()));
-      this.encryptRefreshToken = encryptRefreshToken;
-      this.expiresAt = Instant.now().plus(config.getRefreshTokenExpireDays(), ChronoUnit.DAYS);
+  public static class UserBuilder {
+    public User build() {
+      // set default values
+      if (Objects.isNull(id))
+        id = UUID.randomUUID();
+      if (Objects.isNull(tokens))
+        tokens = Collections.emptyList();
+      // return domain via validation
+      return validate(
+          new User(id, username, encryptPassword, actor, resetCode, resetUntil, tokens));
     }
 
-    public Token issueAccessToken(AuthorizationConfiguration config, String username) {
-      return new Token(config, username, encryptRefreshToken);
+    public User validate(final User user) {
+      final Validator validator = MyContext.getBean(Validator.class);
+      final Set<ConstraintViolation<User>> errors = validator.validate(user);
+      if (!errors.isEmpty()) {
+        throw new IllegalArgumentException(errors.toString());
+      }
+      return user;
+    }
+  }
+
+  @Getter
+  @AllArgsConstructor(access = AccessLevel.PRIVATE)
+  @Builder(toBuilder = true)
+  static public class Token {
+    @NotNull
+    @JsonIgnore
+    private final UUID id;
+    @NotBlank
+    private final String accessToken;
+    @NotBlank
+    private final String encryptRefreshToken;
+    @NotNull
+    private final Instant expiresAt;
+
+    public static class TokenBuilder {
+      private TokenBuilder accessTokenWithExpires(AuthorizationConfiguration config,
+          String username) {
+        final Instant now = Instant.now();
+        this.accessToken = JWT.create().withSubject(username).withIssuedAt(Date.from(now))
+            .withExpiresAt(
+                Date.from(now.plus(config.getAccessTokenExpireSeconds(), ChronoUnit.SECONDS)))
+            .sign(Algorithm.HMAC512(config.getAccessTokenSecret().getBytes()));
+        this.expiresAt = now.plus(config.getRefreshTokenExpireDays(), ChronoUnit.DAYS);
+        return this;
+      }
+
+      public Token build() {
+        // set default values
+        if (Objects.isNull(id))
+          id = UUID.randomUUID();
+        // return domain via validation
+        return validate(new Token(id, accessToken, encryptRefreshToken, expiresAt));
+      }
+
+      public Token validate(final Token token) {
+        final Validator validator = MyContext.getBean(Validator.class);
+        final Set<ConstraintViolation<Token>> errors = validator.validate(token);
+        if (!errors.isEmpty()) {
+          throw new IllegalArgumentException(errors.toString());
+        }
+        return token;
+      }
+    }
+
+    public static Token issue(AuthorizationConfiguration config, String username,
+        String encryptRefreshToken) {
+      return User.Token.builder().accessTokenWithExpires(config, username)
+          .encryptRefreshToken(encryptRefreshToken).build();
+    }
+
+    public Token reissue(AuthorizationConfiguration config, String username) {
+      return toBuilder().accessTokenWithExpires(config, username).build();
     }
   }
 
   public UserDetails toUserDetails() {
-    return builder().username(username).password(encryptPassword)
-        .authorities(List.of(actor.toAuthority())).build();
+    return org.springframework.security.core.userdetails.User.builder().username(username)
+        .password(encryptPassword).authorities(List.of(actor.toAuthority())).build();
   }
 
   public Token reissueAccessToken(AuthorizationConfiguration config, String refreshToken) {
     // 1. check refresh token
-    Token token = tokens.stream().sorted(Comparator.comparing(Token::getExpiresAt).reversed())
+    final Token token = tokens.stream().sorted(Comparator.comparing(Token::getExpiresAt).reversed())
         .filter(t -> config.getEncoder().matches(refreshToken, t.encryptRefreshToken)).findFirst()
         .orElseThrow(() -> new BadCredentialsException("Invalid refresh token"));
 
@@ -72,7 +134,7 @@ public class User {
     tokens.removeIf(t -> config.getEncoder().matches(refreshToken, t.encryptRefreshToken));
 
     // 4. generate new access token
-    Token newToken = token.issueAccessToken(config, username);
+    final Token newToken = token.reissue(config, username);
 
     // 5. add new access token
     tokens.add(newToken);
@@ -80,14 +142,15 @@ public class User {
     return newToken;
   }
 
-  public Token issueToken(AuthorizationConfiguration config, String refreshToken) {
+  public Pair<User, Token> issueToken(AuthorizationConfiguration config, String refreshToken) {
     // 1. instant new token
-    Token token = new Token(config, username, config.getEncoder().encode(refreshToken));
+    final Token token = Token.issue(config, username, config.getEncoder().encode(refreshToken));
 
     // 2. add new token to list
-    tokens.add(token);
+    final User user =
+        toBuilder().tokens(Stream.concat(tokens.stream(), Stream.of(token)).toList()).build();
 
     // 3. return new token
-    return token;
+    return Pair.of(user, token);
   }
 }
