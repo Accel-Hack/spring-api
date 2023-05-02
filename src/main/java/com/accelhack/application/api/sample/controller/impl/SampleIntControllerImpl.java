@@ -1,12 +1,13 @@
 package com.accelhack.application.api.sample.controller.impl;
 
 import com.accelhack.application.api.base.controller.base.InternalController;
-import com.accelhack.application.api.http.AHRequest;
-import com.accelhack.application.api.http.AHResponseSet;
 import com.accelhack.application.api.sample.controller.SampleController;
 import com.accelhack.application.api.sample.model.SampleModel;
 import com.accelhack.application.api.sample.usecase.SampleUsecase;
-import com.accelhack.application.api.shared.utils.ValidatorUtils;
+import com.accelhack.commons.model.Request;
+import com.accelhack.commons.model.ResponseSet;
+import com.accelhack.commons.model.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
@@ -17,19 +18,19 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class SampleIntControllerImpl extends InternalController implements SampleController {
 
-  private final ValidatorUtils validatorUtils;
+  private final Validator validator;
   private final SampleUsecase sampleUsecase;
 
   /**
    * curl "http://localhost:8080/api/v1/sample?id="
    */
   @Override
-  public AHResponseSet<SampleModel.Entity> get(UUID id) {
+  public ResponseSet<SampleModel.Entity> get(UUID id) {
     // use case
     SampleModel.Entity entity = sampleUsecase.get(id);
 
     // response
-    return AHResponseSet.ok(entity);
+    return ResponseSet.ok(entity);
   }
 
   /**
@@ -37,12 +38,12 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
    * "http://localhost:8080/api/v1/samples?name=k&limit=10&offset=3"
    */
   @Override
-  public AHResponseSet<SampleModel.ListEntity> search(String name, Integer limit, Integer offset) {
+  public ResponseSet<SampleModel.ListEntity> search(String name, Integer limit, Integer offset) {
     // create object
     SampleModel.Selector selector = new SampleModel.Selector(name, limit, offset);
 
     // validation
-    AHResponseSet<SampleModel.ListEntity> error = validatorUtils.validate(selector);
+    ResponseSet<SampleModel.ListEntity> error = ValidatorUtils.validate(validator, selector);
     if (Objects.nonNull(error))
       return error;
 
@@ -50,7 +51,7 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
     SampleModel.ListEntity entity = sampleUsecase.search(selector);
 
     // response
-    return AHResponseSet.ok(entity);
+    return ResponseSet.ok(entity);
   }
 
   /**
@@ -58,9 +59,9 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
    * "1993-02-23T00:00:00Z","isJapanese": true}}' http://localhost:8080/api/v1/sample
    */
   @Override
-  public AHResponseSet<SampleModel.Entity> add(AHRequest<SampleModel.Create> sampleRequest) {
+  public ResponseSet<SampleModel.Entity> add(Request<SampleModel.Create> sampleRequest) {
     // validation
-    AHResponseSet<SampleModel.Entity> error = validatorUtils.validate(sampleRequest);
+    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator,sampleRequest);
     if (Objects.nonNull(error))
       return error;
 
@@ -68,7 +69,7 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
     SampleModel.Entity entity = sampleUsecase.add(sampleRequest.getOperand());
 
     // response
-    return AHResponseSet.ok(entity);
+    return ResponseSet.ok(entity);
   }
 
   /**
@@ -77,9 +78,9 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
    * "isJapanese": true}}' \ http://localhost:8080/api/v1/sample
    */
   @Override
-  public AHResponseSet<SampleModel.Entity> edit(AHRequest<SampleModel.Update> sampleRequest) {
+  public ResponseSet<SampleModel.Entity> edit(Request<SampleModel.Update> sampleRequest) {
     // validation
-    AHResponseSet<SampleModel.Entity> error = validatorUtils.validate(sampleRequest);
+    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator,sampleRequest);
     if (Objects.nonNull(error))
       return error;
 
@@ -87,7 +88,7 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
     SampleModel.Entity entity = sampleUsecase.edit(sampleRequest.getOperand());
 
     // response
-    return AHResponseSet.ok(entity);
+    return ResponseSet.ok(entity);
   }
 
   /**
@@ -95,9 +96,9 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
    * "f32b76d3-6972-4b62-b19c-1d31bfc88e54"}}' \ http://localhost:8080/api/v1/sample
    */
   @Override
-  public AHResponseSet<SampleModel.Entity> remove(AHRequest<SampleModel.Delete> sampleRequest) {
+  public ResponseSet<SampleModel.Entity> remove(Request<SampleModel.Delete> sampleRequest) {
     // validation
-    AHResponseSet<SampleModel.Entity> error = validatorUtils.validate(sampleRequest);
+    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator,sampleRequest);
     if (Objects.nonNull(error))
       return error;
 
@@ -105,6 +106,6 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
     SampleModel.Entity entity = sampleUsecase.remove(sampleRequest.getOperand());
 
     // response
-    return AHResponseSet.ok(entity);
+    return ResponseSet.ok(entity);
   }
 }

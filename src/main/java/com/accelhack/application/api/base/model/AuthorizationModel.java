@@ -1,11 +1,11 @@
 package com.accelhack.application.api.base.model;
 
-import com.accelhack.application.api.http.AHOperand;
+import com.accelhack.commons.model.Operand;
 import lombok.Getter;
 
 public class AuthorizationModel {
   @Getter
-  public static class Request implements AHOperand {
+  public static class Request implements Operand {
     private String accessToken;
     private String refreshToken;
   }

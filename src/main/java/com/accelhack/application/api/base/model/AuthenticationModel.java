@@ -1,16 +1,15 @@
 package com.accelhack.application.api.base.model;
 
-import com.accelhack.application.api.http.AHOperand;
+import com.accelhack.commons.model.Operand;
 import lombok.Getter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 
 public class AuthenticationModel {
 
   @Getter
-  public static class Request implements AHOperand {
+  public static class Request implements Operand {
     private String username;
     private String password;
 

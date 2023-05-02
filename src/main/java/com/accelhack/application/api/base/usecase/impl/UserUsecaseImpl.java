@@ -1,6 +1,5 @@
 package com.accelhack.application.api.base.usecase.impl;
 
-import com.accelhack.accelparts.utils.RandomUtils;
 import com.accelhack.application.api.base.domain.User;
 import com.accelhack.application.api.base.domain.user.UserFactory;
 import com.accelhack.application.api.base.domain.user.UserRepository;
@@ -9,6 +8,7 @@ import com.accelhack.application.api.base.model.AuthorizationModel;
 import com.accelhack.application.api.base.usecase.UserUsecase;
 import com.accelhack.application.api.shared.config.AuthorizationConfiguration;
 import com.accelhack.application.api.shared.model.Operator;
+import com.accelhack.commons.utils.RandomUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.TokenExpiredException;

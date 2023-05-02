@@ -5,9 +5,10 @@ import com.accelhack.application.api.base.controller.base.ExternalController;
 import com.accelhack.application.api.base.model.AuthenticationModel;
 import com.accelhack.application.api.base.model.AuthorizationModel;
 import com.accelhack.application.api.base.usecase.UserUsecase;
-import com.accelhack.application.api.http.AHRequest;
-import com.accelhack.application.api.http.AHResponseSet;
-import com.accelhack.application.api.shared.utils.ValidatorUtils;
+import com.accelhack.commons.model.Request;
+import com.accelhack.commons.model.ResponseSet;
+import com.accelhack.commons.model.utils.ValidatorUtils;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 
@@ -17,32 +18,32 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class AuthControllerImpl extends ExternalController implements AuthController {
 
-  private final ValidatorUtils validatorUtils;
+  private final Validator validator;
   private final UserUsecase userUsecase;
 
   @Override
-  public AHResponseSet<AuthenticationModel.Response> user(
-      AHRequest<AuthenticationModel.Request> request) {
+  public ResponseSet<AuthenticationModel.Response> user(
+    Request<AuthenticationModel.Request> request) {
     // validation
-    AHResponseSet<AuthenticationModel.Response> error = validatorUtils.validate(request);
+    ResponseSet<AuthenticationModel.Response> error = ValidatorUtils.validate(validator, request);
     if (Objects.nonNull(error))
       return error;
 
     AuthenticationModel.Response response = userUsecase.addUser(request.getOperand());
 
-    return AHResponseSet.ok(response);
+    return ResponseSet.ok(response);
   }
 
   @Override
-  public AHResponseSet<AuthorizationModel.AccessToken> token(
-      AHRequest<AuthorizationModel.Request> request) {
+  public ResponseSet<AuthorizationModel.AccessToken> token(
+    Request<AuthorizationModel.Request> request) {
     // validation
-    AHResponseSet<AuthorizationModel.AccessToken> error = validatorUtils.validate(request);
+    ResponseSet<AuthorizationModel.AccessToken> error = ValidatorUtils.validate(validator, request);
     if (Objects.nonNull(error))
       return error;
 
     AuthorizationModel.AccessToken response = userUsecase.getAccessToken(request.getOperand());
 
-    return AHResponseSet.ok(response);
+    return ResponseSet.ok(response);
   }
 }

@@ -1,7 +1,8 @@
 package com.accelhack.application.api.sample.controller;
 
 import com.accelhack.application.api.sample.model.SampleModel;
-import com.accelhack.application.api.http.*;
+import com.accelhack.commons.model.Request;
+import com.accelhack.commons.model.ResponseSet;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -9,24 +10,24 @@ import java.util.UUID;
 public interface SampleController {
   @GetMapping("sample")
   @ResponseBody
-  AHResponseSet<SampleModel.Entity> get(@RequestParam UUID id);
+  ResponseSet<SampleModel.Entity> get(@RequestParam UUID id);
 
   @GetMapping("samples")
   @ResponseBody
-  AHResponseSet<SampleModel.ListEntity> search(@RequestParam(required = false) String name,
-      @RequestParam(required = false) Integer limit,
-      @RequestParam(required = false) Integer offset);
+  ResponseSet<SampleModel.ListEntity> search(@RequestParam(required = false) String name,
+                                             @RequestParam(required = false) Integer limit,
+                                             @RequestParam(required = false) Integer offset);
 
   @PutMapping("sample")
   @ResponseBody
-  AHResponseSet<SampleModel.Entity> add(@RequestBody AHRequest<SampleModel.Create> sampleRequest);
+  ResponseSet<SampleModel.Entity> add(@RequestBody Request<SampleModel.Create> sampleRequest);
 
   @PostMapping("sample")
   @ResponseBody
-  AHResponseSet<SampleModel.Entity> edit(@RequestBody AHRequest<SampleModel.Update> sampleRequest);
+  ResponseSet<SampleModel.Entity> edit(@RequestBody Request<SampleModel.Update> sampleRequest);
 
   @DeleteMapping("sample")
   @ResponseBody
-  AHResponseSet<SampleModel.Entity> remove(
-      @RequestBody AHRequest<SampleModel.Delete> sampleRequest);
+  ResponseSet<SampleModel.Entity> remove(
+    @RequestBody Request<SampleModel.Delete> sampleRequest);
 }

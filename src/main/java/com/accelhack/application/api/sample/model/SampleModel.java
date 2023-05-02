@@ -1,7 +1,8 @@
 package com.accelhack.application.api.sample.model;
 
 import com.accelhack.application.api.sample.domain.Sample;
-import com.accelhack.application.api.http.*;
+import com.accelhack.commons.model.Operand;
+import com.accelhack.commons.model.Paging;
 import jakarta.validation.constraints.Min;
 import lombok.Getter;
 
@@ -29,12 +30,12 @@ public class SampleModel {
 
   @Getter
   public static class ListEntity {
-    private AHPaging paging;
+    private Paging paging;
     private List<Entity> items;
 
     public static ListEntity from(Selector selector, int total, List<Sample> samples) {
       ListEntity entity = new ListEntity();
-      entity.paging = new AHPaging(total, selector.getLimit(), selector.getOffset());
+      entity.paging = new Paging(total, selector.getLimit(), selector.getOffset());
       entity.items = samples.stream().map(Entity::from).toList();
       return entity;
     }
@@ -58,14 +59,14 @@ public class SampleModel {
   }
 
   @Getter
-  public static class Create implements AHOperand {
+  public static class Create implements Operand {
     private String name;
     private Instant birthday;
     private Boolean isJapanese;
   }
 
   @Getter
-  public static class Update implements AHOperand {
+  public static class Update implements Operand {
     private UUID id;
     private String name;
     private Instant birthday;
@@ -73,7 +74,7 @@ public class SampleModel {
   }
 
   @Getter
-  public static class Delete implements AHOperand {
+  public static class Delete implements Operand {
     private UUID id;
   }
 }
