@@ -18,14 +18,12 @@ public class SampleQuery {
   private final Integer offset = 0;
 
   public static SampleQueryBuilder builder() {
-    return new CustomSampleQueryBuilder();
-  }
-
-  public static class CustomSampleQueryBuilder extends SampleQueryBuilder {
-    @Override
-    public SampleQuery build() {
-      // return domain via validation
-      return BuilderUtils.validate(super.build());
-    }
+    return new SampleQueryBuilder() {
+      @Override
+      public SampleQuery build() {
+        // return domain via validation
+        return BuilderUtils.validate(super.build());
+      }
+    };
   }
 }

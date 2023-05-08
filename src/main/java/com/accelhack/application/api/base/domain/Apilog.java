@@ -40,22 +40,20 @@ public class Apilog {
 
   public Apilog finished(HttpServletResponse response, Exception exception) {
     return toBuilder()
-      .executionDurationMs(round(Instant.now().getNano() - operationTime.getNano() / 1_000_000.0))
-      .status(response.getStatus())
-      // FIXME: set response body
-      .exception(Optional.ofNullable(exception).map(Throwable::getLocalizedMessage).orElse(null))
-      .build();
+        .executionDurationMs(round(Instant.now().getNano() - operationTime.getNano() / 1_000_000.0))
+        .status(response.getStatus())
+        // FIXME: set response body
+        .exception(Optional.ofNullable(exception).map(Throwable::getLocalizedMessage).orElse(null))
+        .build();
   }
 
   public static ApilogBuilder builder() {
-    return new CustomApilogBuilder();
-  }
-
-  public static class CustomApilogBuilder extends ApilogBuilder {
-    @Override
-    public Apilog build() {
-      // return domain via validation
-      return BuilderUtils.validate(super.build());
-    }
+    return new ApilogBuilder() {
+      @Override
+      public Apilog build() {
+        // return domain via validation
+        return BuilderUtils.validate(super.build());
+      }
+    };
   }
 }

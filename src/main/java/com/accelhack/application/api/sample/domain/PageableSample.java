@@ -17,14 +17,12 @@ public class PageableSample {
   private final List<Sample> samples;
 
   public static PageableSampleBuilder builder() {
-    return new CustomPageableSampleBuilder();
-  }
-
-  public static class CustomPageableSampleBuilder extends PageableSampleBuilder {
-    @Override
-    public PageableSample build() {
-      // return domain via validation
-      return BuilderUtils.validate(super.build());
-    }
+    return new PageableSampleBuilder() {
+      @Override
+      public PageableSample build() {
+        // return domain via validation
+        return BuilderUtils.validate(super.build());
+      }
+    };
   }
 }

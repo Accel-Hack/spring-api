@@ -61,7 +61,7 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
   @Override
   public ResponseSet<SampleModel.Entity> add(Request<SampleModel.Create> sampleRequest) {
     // validation
-    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator,sampleRequest);
+    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator, sampleRequest);
     if (Objects.nonNull(error))
       return error;
 
@@ -80,7 +80,7 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
   @Override
   public ResponseSet<SampleModel.Entity> edit(Request<SampleModel.Update> sampleRequest) {
     // validation
-    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator,sampleRequest);
+    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator, sampleRequest);
     if (Objects.nonNull(error))
       return error;
 
@@ -98,7 +98,7 @@ public class SampleIntControllerImpl extends InternalController implements Sampl
   @Override
   public ResponseSet<SampleModel.Entity> remove(Request<SampleModel.Delete> sampleRequest) {
     // validation
-    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator,sampleRequest);
+    ResponseSet<SampleModel.Entity> error = ValidatorUtils.validate(validator, sampleRequest);
     if (Objects.nonNull(error))
       return error;
 

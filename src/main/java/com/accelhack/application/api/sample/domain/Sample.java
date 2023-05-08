@@ -21,14 +21,12 @@ public class Sample {
   private final Boolean isJapanese;
 
   public static SampleBuilder builder() {
-    return new CustomSampleBuilder();
-  }
-
-  public static class CustomSampleBuilder extends SampleBuilder {
-    @Override
-    public Sample build() {
-      // return domain via validation
-      return BuilderUtils.validate(super.build());
-    }
+    return new SampleBuilder() {
+      @Override
+      public Sample build() {
+        // return domain via validation
+        return BuilderUtils.validate(super.build());
+      }
+    };
   }
 }

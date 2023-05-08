@@ -20,10 +20,11 @@ public class ApilogFactoryImpl implements ApilogFactory {
 
   @Override
   public Apilog create(HttpServletRequest request) throws IOException {
-    return Apilog.builder().id(UUID.randomUUID()).operator(service.getOperator()).sessionId(request.getSession().getId())
-      .remoteAddress(getRemoteAddr(request)).operationTime(Instant.now()).method(request.getMethod())
-      .path(request.getRequestURI()).query(request.getQueryString())
-      .body(request.getReader().lines().collect(Collectors.joining())).build();
+    return Apilog.builder().id(UUID.randomUUID()).operator(service.getOperator())
+        .sessionId(request.getSession().getId()).remoteAddress(getRemoteAddr(request))
+        .operationTime(Instant.now()).method(request.getMethod()).path(request.getRequestURI())
+        .query(request.getQueryString())
+        .body(request.getReader().lines().collect(Collectors.joining())).build();
   }
 
   private String getRemoteAddr(HttpServletRequest request) {

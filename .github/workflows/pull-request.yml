@@ -34,7 +34,7 @@ jobs:
       - name: Run Tests
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run:  mvn -f pom.xml formatter:validate
+        run: ./mvnw -f pom.xml formatter:validate
 
   mock-tests:
     needs: [ start ]
@@ -66,7 +66,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >
-          mvn -f pom.xml
+          ./mvnw -f pom.xml
           -Duser.timezone=UTC
           -Dtest="com.accelhack.application.api.${{ matrix.test }}"
           -s settings.xml
@@ -105,7 +105,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: >
-          mvn -f pom.xml
+          ./mvnw -f pom.xml
           -Duser.timezone=UTC
           -Dtest="com.accelhack.application.api.${{ matrix.test }}"
           -s settings.xml

@@ -23,7 +23,7 @@ public class AuthControllerImpl extends ExternalController implements AuthContro
 
   @Override
   public ResponseSet<AuthenticationModel.Response> user(
-    Request<AuthenticationModel.Request> request) {
+      Request<AuthenticationModel.Request> request) {
     // validation
     ResponseSet<AuthenticationModel.Response> error = ValidatorUtils.validate(validator, request);
     if (Objects.nonNull(error))
@@ -36,7 +36,7 @@ public class AuthControllerImpl extends ExternalController implements AuthContro
 
   @Override
   public ResponseSet<AuthorizationModel.AccessToken> token(
-    Request<AuthorizationModel.Request> request) {
+      Request<AuthorizationModel.Request> request) {
     // validation
     ResponseSet<AuthorizationModel.AccessToken> error = ValidatorUtils.validate(validator, request);
     if (Objects.nonNull(error))

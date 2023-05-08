@@ -16,7 +16,7 @@ public class UserFactoryImpl implements UserFactory {
 
   @Override
   public User create(String username, String password) {
-    return User.builder().id(UUID.randomUUID()).username(username).encryptPassword(passwordEncoder.encode(password))
-      .actor(Actor.USER).build();
+    return User.builder().id(UUID.randomUUID()).username(username)
+        .encryptPassword(passwordEncoder.encode(password)).actor(Actor.USER).build();
   }
 }

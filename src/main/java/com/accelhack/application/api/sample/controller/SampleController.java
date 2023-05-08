@@ -15,8 +15,8 @@ public interface SampleController {
   @GetMapping("samples")
   @ResponseBody
   ResponseSet<SampleModel.ListEntity> search(@RequestParam(required = false) String name,
-                                             @RequestParam(required = false) Integer limit,
-                                             @RequestParam(required = false) Integer offset);
+      @RequestParam(required = false) Integer limit,
+      @RequestParam(required = false) Integer offset);
 
   @PutMapping("sample")
   @ResponseBody
@@ -28,6 +28,5 @@ public interface SampleController {
 
   @DeleteMapping("sample")
   @ResponseBody
-  ResponseSet<SampleModel.Entity> remove(
-    @RequestBody Request<SampleModel.Delete> sampleRequest);
+  ResponseSet<SampleModel.Entity> remove(@RequestBody Request<SampleModel.Delete> sampleRequest);
 }

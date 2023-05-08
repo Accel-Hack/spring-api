@@ -14,7 +14,8 @@ import java.util.UUID;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SampleFactoryImpl implements SampleFactory {
   public Sample createFrom(String name, Instant birthday, Boolean isJapanese) {
-    return Sample.builder().id(UUID.randomUUID()).name(name).birthday(birthday).isJapanese(isJapanese).build();
+    return Sample.builder().id(UUID.randomUUID()).name(name).birthday(birthday)
+        .isJapanese(isJapanese).build();
   }
 
   @Override

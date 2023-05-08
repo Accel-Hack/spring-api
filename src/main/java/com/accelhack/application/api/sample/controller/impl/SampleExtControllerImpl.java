@@ -93,7 +93,8 @@ public class SampleExtControllerImpl extends ExternalController implements Sampl
     return ResponseSet.ok(entity);
   }
 
-// curl -X DELETE -H 'Content-Type: application/json' -d '{"operand":{"id":"f32b76d3-6972-4b62-b19c-1d31bfc88e54"}}' http://localhost:8080/api/v1/sample
+  // curl -X DELETE -H 'Content-Type: application/json' -d
+  // '{"operand":{"id":"f32b76d3-6972-4b62-b19c-1d31bfc88e54"}}' http://localhost:8080/api/v1/sample
   @Override
   public ResponseSet<SampleModel.Entity> remove(Request<SampleModel.Delete> sampleRequest) {
     // validation

@@ -34,7 +34,8 @@ public class User {
   private final String resetCode;
   private final Instant resetUntil;
   @NotNull
-  private final List<Token> tokens;
+  @Builder.Default
+  private final List<Token> tokens = Collections.emptyList();
 
   public static UserBuilder builder() {
     return new UserBuilder() {
@@ -61,34 +62,32 @@ public class User {
     private final Instant expiresAt;
 
     public static TokenBuilder builder() {
-      return new CustomTokenBuilder();
+      return new TokenBuilder() {
+        @Override
+        public Token build() {
+          // return domain via validation
+          return BuilderUtils.validate(super.build());
+        }
+      };
     }
 
     public static class TokenBuilder {
       private TokenBuilder accessTokenWithExpires(AuthorizationConfiguration config,
-                                                  String username) {
+          String username) {
         final Instant now = Instant.now();
         this.accessToken = JWT.create().withSubject(username).withIssuedAt(Date.from(now))
-          .withExpiresAt(
-            Date.from(now.plus(config.getAccessTokenExpireSeconds(), ChronoUnit.SECONDS)))
-          .sign(Algorithm.HMAC512(config.getAccessTokenSecret().getBytes()));
+            .withExpiresAt(
+                Date.from(now.plus(config.getAccessTokenExpireSeconds(), ChronoUnit.SECONDS)))
+            .sign(Algorithm.HMAC512(config.getAccessTokenSecret().getBytes()));
         this.expiresAt = now.plus(config.getRefreshTokenExpireDays(), ChronoUnit.DAYS);
         return this;
       }
     }
 
-    public static class CustomTokenBuilder extends TokenBuilder {
-      @Override
-      public Token build() {
-        // return domain via validation
-        return BuilderUtils.validate(super.build());
-      }
-    }
-
     public static Token issue(AuthorizationConfiguration config, String username,
-                              String encryptRefreshToken) {
-      return User.Token.builder().accessTokenWithExpires(config, username)
-        .encryptRefreshToken(encryptRefreshToken).build();
+        String encryptRefreshToken) {
+      return User.Token.builder().id(UUID.randomUUID()).accessTokenWithExpires(config, username)
+          .encryptRefreshToken(encryptRefreshToken).build();
     }
 
     public Token reissue(AuthorizationConfiguration config, String username) {
@@ -98,14 +97,14 @@ public class User {
 
   public UserDetails toUserDetails() {
     return org.springframework.security.core.userdetails.User.builder().username(username)
-      .password(encryptPassword).authorities(List.of(actor.toAuthority())).build();
+        .password(encryptPassword).authorities(List.of(actor.toAuthority())).build();
   }
 
   public Token reissueAccessToken(AuthorizationConfiguration config, String refreshToken) {
     // 1. check refresh token
     final Token token = tokens.stream().sorted(Comparator.comparing(Token::getExpiresAt).reversed())
-      .filter(t -> config.getEncoder().matches(refreshToken, t.encryptRefreshToken)).findFirst()
-      .orElseThrow(() -> new BadCredentialsException("Invalid refresh token"));
+        .filter(t -> config.getEncoder().matches(refreshToken, t.encryptRefreshToken)).findFirst()
+        .orElseThrow(() -> new BadCredentialsException("Invalid refresh token"));
 
     // 2. return expired message
     if (token.getExpiresAt().isBefore(Instant.now()))
@@ -129,7 +128,7 @@ public class User {
 
     // 2. add new token to list
     final User user =
-      toBuilder().tokens(Stream.concat(tokens.stream(), Stream.of(token)).toList()).build();
+        toBuilder().tokens(Stream.concat(tokens.stream(), Stream.of(token)).toList()).build();
 
     // 3. return new token
     return Pair.of(user, token);
