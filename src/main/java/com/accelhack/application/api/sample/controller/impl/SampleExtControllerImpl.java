@@ -35,8 +35,8 @@ public class SampleExtControllerImpl extends ExternalController implements Sampl
   }
 
   /**
-   * curl 'http://localhost:8080/api/v1/samples?' curl
-   * "http://localhost:8080/api/v1/samples?name=k&limit=1&offset=10"
+   * curl 'http://localhost:8080/api/v1/samples?'
+   * curl "http://localhost:8080/api/v1/samples?name=k&limit=1&offset=10"
    */
   @Override
   public ResponseSet<SampleModel.ListEntity> search(String name, Integer limit, Integer offset) {
@@ -93,10 +93,7 @@ public class SampleExtControllerImpl extends ExternalController implements Sampl
     return ResponseSet.ok(entity);
   }
 
-  /**
-   * curl -X DELETE -H 'Content-Type: application/json' -d '{"operand":
-   * {"id":"f32b76d3-6972-4b62-b19c-1d31bfc88e54"}}' http://localhost:8080/api/v1/sample
-   */
+// curl -X DELETE -H 'Content-Type: application/json' -d '{"operand":{"id":"f32b76d3-6972-4b62-b19c-1d31bfc88e54"}}' http://localhost:8080/api/v1/sample
   @Override
   public ResponseSet<SampleModel.Entity> remove(Request<SampleModel.Delete> sampleRequest) {
     // validation
