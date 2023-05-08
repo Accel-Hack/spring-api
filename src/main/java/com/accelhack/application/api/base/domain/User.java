@@ -2,12 +2,10 @@ package com.accelhack.application.api.base.domain;
 
 import com.accelhack.application.api.base.enums.Actor;
 import com.accelhack.application.api.shared.config.AuthorizationConfiguration;
-import com.accelhack.application.api.shared.config.MyContext;
+import com.accelhack.application.api.shared.utils.BuilderUtils;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -36,28 +34,17 @@ public class User {
   private final String resetCode;
   private final Instant resetUntil;
   @NotNull
-  private final List<Token> tokens;
+  @Builder.Default
+  private final List<Token> tokens = Collections.emptyList();
 
-  public static class UserBuilder {
-    public User build() {
-      // set default values
-      if (Objects.isNull(id))
-        id = UUID.randomUUID();
-      if (Objects.isNull(tokens))
-        tokens = Collections.emptyList();
-      // return domain via validation
-      return validate(
-          new User(id, username, encryptPassword, actor, resetCode, resetUntil, tokens));
-    }
-
-    public User validate(final User user) {
-      final Validator validator = MyContext.getBean(Validator.class);
-      final Set<ConstraintViolation<User>> errors = validator.validate(user);
-      if (!errors.isEmpty()) {
-        throw new IllegalArgumentException(errors.toString());
+  public static UserBuilder builder() {
+    return new UserBuilder() {
+      @Override
+      public User build() {
+        // return domain via validation
+        return BuilderUtils.validate(super.build());
       }
-      return user;
-    }
+    };
   }
 
   @Getter
@@ -74,6 +61,16 @@ public class User {
     @NotNull
     private final Instant expiresAt;
 
+    public static TokenBuilder builder() {
+      return new TokenBuilder() {
+        @Override
+        public Token build() {
+          // return domain via validation
+          return BuilderUtils.validate(super.build());
+        }
+      };
+    }
+
     public static class TokenBuilder {
       private TokenBuilder accessTokenWithExpires(AuthorizationConfiguration config,
           String username) {
@@ -85,28 +82,11 @@ public class User {
         this.expiresAt = now.plus(config.getRefreshTokenExpireDays(), ChronoUnit.DAYS);
         return this;
       }
-
-      public Token build() {
-        // set default values
-        if (Objects.isNull(id))
-          id = UUID.randomUUID();
-        // return domain via validation
-        return validate(new Token(id, accessToken, encryptRefreshToken, expiresAt));
-      }
-
-      public Token validate(final Token token) {
-        final Validator validator = MyContext.getBean(Validator.class);
-        final Set<ConstraintViolation<Token>> errors = validator.validate(token);
-        if (!errors.isEmpty()) {
-          throw new IllegalArgumentException(errors.toString());
-        }
-        return token;
-      }
     }
 
     public static Token issue(AuthorizationConfiguration config, String username,
         String encryptRefreshToken) {
-      return User.Token.builder().accessTokenWithExpires(config, username)
+      return User.Token.builder().id(UUID.randomUUID()).accessTokenWithExpires(config, username)
           .encryptRefreshToken(encryptRefreshToken).build();
     }
 

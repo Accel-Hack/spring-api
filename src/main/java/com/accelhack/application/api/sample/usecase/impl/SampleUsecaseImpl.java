@@ -1,9 +1,7 @@
 package com.accelhack.application.api.sample.usecase.impl;
 
-import com.accelhack.application.api.sample.domain.PageableSample;
-import com.accelhack.application.api.sample.domain.Sample;
+import com.accelhack.application.api.sample.domain.*;
 import com.accelhack.application.api.sample.domain.sample.*;
-import com.accelhack.application.api.sample.domain.SampleQuery;
 import com.accelhack.application.api.sample.model.SampleModel;
 import com.accelhack.application.api.sample.usecase.SampleUsecase;
 import lombok.RequiredArgsConstructor;

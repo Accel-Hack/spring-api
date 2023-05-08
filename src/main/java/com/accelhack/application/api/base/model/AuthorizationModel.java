@@ -1,12 +1,15 @@
 package com.accelhack.application.api.base.model;
 
 import com.accelhack.commons.model.Operand;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 
 public class AuthorizationModel {
   @Getter
   public static class Request implements Operand {
+    @NotEmpty
     private String accessToken;
+    @NotEmpty
     private String refreshToken;
   }
 
@@ -25,5 +28,6 @@ public class AuthorizationModel {
     }
   }
 
-  public record AccessToken(String token) {}
+  public record AccessToken(String token) {
+  }
 }

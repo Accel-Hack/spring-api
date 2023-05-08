@@ -8,12 +8,14 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SampleFactoryImpl implements SampleFactory {
   public Sample createFrom(String name, Instant birthday, Boolean isJapanese) {
-    return Sample.builder().name(name).birthday(birthday).isJapanese(isJapanese).build();
+    return Sample.builder().id(UUID.randomUUID()).name(name).birthday(birthday)
+        .isJapanese(isJapanese).build();
   }
 
   @Override

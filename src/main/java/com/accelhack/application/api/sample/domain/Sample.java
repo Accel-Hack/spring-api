@@ -1,13 +1,11 @@
 package com.accelhack.application.api.sample.domain;
 
-import com.accelhack.application.api.shared.config.MyContext;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
+import com.accelhack.application.api.shared.utils.BuilderUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.UUID;
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -22,22 +20,13 @@ public class Sample {
   @NotNull
   private final Boolean isJapanese;
 
-  public static class SampleBuilder {
-    public Sample build() {
-      // set default values
-      if (Objects.isNull(id))
-        id = UUID.randomUUID();
-      // return domain via validation
-      return validate(new Sample(id, name, birthday, isJapanese));
-    }
-
-    public Sample validate(final Sample sample) {
-      final Validator validator = MyContext.getBean(Validator.class);
-      final Set<ConstraintViolation<Sample>> errors = validator.validate(sample);
-      if (!errors.isEmpty()) {
-        throw new IllegalArgumentException(errors.toString());
+  public static SampleBuilder builder() {
+    return new SampleBuilder() {
+      @Override
+      public Sample build() {
+        // return domain via validation
+        return BuilderUtils.validate(super.build());
       }
-      return sample;
-    }
+    };
   }
 }

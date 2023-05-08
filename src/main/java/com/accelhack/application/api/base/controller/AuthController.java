@@ -11,10 +11,10 @@ public interface AuthController {
   @PutMapping("/auth/user")
   @ResponseBody
   ResponseSet<AuthenticationModel.Response> user(
-    @RequestBody Request<AuthenticationModel.Request> request);
+      @RequestBody Request<AuthenticationModel.Request> request);
 
   @PostMapping("/auth/token")
   @ResponseBody
   ResponseSet<AuthorizationModel.AccessToken> token(
-    @RequestBody Request<AuthorizationModel.Request> request);
+      @RequestBody Request<AuthorizationModel.Request> request);
 }

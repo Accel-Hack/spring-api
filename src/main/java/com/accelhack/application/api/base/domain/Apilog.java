@@ -1,16 +1,15 @@
 package com.accelhack.application.api.base.domain;
 
-import com.accelhack.application.api.shared.config.MyContext;
 import com.accelhack.application.api.shared.model.Operator;
+import com.accelhack.application.api.shared.utils.BuilderUtils;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.ConstraintViolation;
-import jakarta.validation.Validator;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.Instant;
-import java.util.*;
+import java.util.Optional;
+import java.util.UUID;
 
 import static java.lang.Math.round;
 
@@ -48,25 +47,13 @@ public class Apilog {
         .build();
   }
 
-  public static class ApilogBuilder {
-    public Apilog build() {
-      // set default values
-      if (Objects.isNull(id))
-        id = UUID.randomUUID();
-      if (Objects.isNull(operationTime))
-        operationTime = Instant.now();
-      // return domain via validation
-      return validate(new Apilog(id, operator, sessionId, remoteAddress, operationTime,
-          executionDurationMs, method, path, query, body, response, status, exception));
-    }
-
-    public Apilog validate(final Apilog apilog) {
-      final Validator validator = MyContext.getBean(Validator.class);
-      final Set<ConstraintViolation<Apilog>> errors = validator.validate(apilog);
-      if (!errors.isEmpty()) {
-        throw new IllegalArgumentException(errors.toString());
+  public static ApilogBuilder builder() {
+    return new ApilogBuilder() {
+      @Override
+      public Apilog build() {
+        // return domain via validation
+        return BuilderUtils.validate(super.build());
       }
-      return apilog;
-    }
+    };
   }
 }

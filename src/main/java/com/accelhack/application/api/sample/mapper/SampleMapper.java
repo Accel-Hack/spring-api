@@ -1,7 +1,8 @@
 package com.accelhack.application.api.sample.mapper;
 
 import com.accelhack.application.api.sample.domain.SampleQuery;
-import com.accelhack.application.api.sample.dto.*;
+import com.accelhack.application.api.sample.dto.SampleDto;
+import com.accelhack.application.api.sample.dto.SampleQueryDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.UUID;

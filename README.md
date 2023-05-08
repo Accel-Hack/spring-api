@@ -31,7 +31,7 @@ $ pwd
 run spring boot
 
 ```bash
-$ mvn spring-boot:run -D"spring-boot.run.profiles"=local
+$ ./mvnw spring-boot:run -D"spring-boot.run.profiles"=local
 ```
 
 - be sure Maven is installed.(If not install before)
@@ -90,9 +90,9 @@ Replace USERNAME with your github account and GITHUB_TOKEN with the NPM_TOKEN yo
 
 ```bash
 # formatの実行
-$ mvn formatter:format
+$ ./mvnw formatter:format
 # チェック
-$ mvn formatter:validate
+$ ./mvnw formatter:validate
 ```
 
 ### configure
@@ -120,12 +120,12 @@ $ pwd
 # ./ApiApplication
 
 # full test
-$ mvn -D"user.timezone"=UTC test
+$ ./mvnw -D"user.timezone"=UTC test
 
 # test for certain class
 # CLASS_PATH → for certain class       ex) com.accelhack.application.api.app.mapper.SampleMapperSTest
 # CLASS_PATH → for class under package ex) com.accelhack.application.api.app.mapper.**
-$ mvn -D"user.timezone"=UTC -D"test"="${CLASS_PATH}" test
+$ ./mvnw -D"user.timezone"=UTC -D"test"="${CLASS_PATH}" test
 ```
 
 when running a test witch uses the database. run the following command(be sure to have your .env file copied).
