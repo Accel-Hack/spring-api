@@ -2,8 +2,8 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.accelhack.application.api.base.mapper.ApilogMapper">
-    <resultMap id="apilogDtoResultMap" type="com.accelhack.application.api.base.dto.ApilogDto">
+<mapper namespace="com.accelhack.spring.api.base.log.mapper.ApilogMapper">
+    <resultMap id="apilogDtoResultMap" type="com.accelhack.spring.api.base.log.dto.ApilogDto">
         <id property="id" column="ID"/>
         <result property="operator" column="OPERATOR"/>
         <result property="sessionId" column="SESSION_ID"/>

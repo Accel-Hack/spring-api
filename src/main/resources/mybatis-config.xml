@@ -7,8 +7,8 @@
     </settings>
     <typeHandlers>
         <!--Add typeHandlers in this block-->
-        <typeHandler handler="com.accelhack.application.api.shared.handler.NumericEnumHandler"/>
-        <typeHandler handler="com.accelhack.application.api.shared.handler.UUIDHandler"/>
-        <typeHandler handler="com.accelhack.application.api.shared.handler.OperatorHandler"/>
+        <typeHandler handler="com.accelhack.spring.api.shared.handler.NumericEnumHandler"/>
+        <typeHandler handler="com.accelhack.spring.api.shared.handler.UUIDHandler"/>
+        <typeHandler handler="com.accelhack.spring.api.shared.handler.OperatorHandler"/>
     </typeHandlers>
 </configuration>

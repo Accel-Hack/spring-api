@@ -1,8 +1,8 @@
 <?xml version = "1.0" encoding = "UTF-8"?>
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.accelhack.application.api.base.mapper.UserMapper">
-    <resultMap id="userDtoResultMap" type="com.accelhack.application.api.base.dto.UserDto">
+<mapper namespace="com.accelhack.spring.api.base.auth.mapper.UserMapper">
+    <resultMap id="userDtoResultMap" type="com.accelhack.spring.api.base.auth.dto.UserDto">
         <!--values from user table-->
         <id property="id" column="USER_ID"/>
         <result property="username" column="USERNAME"/>
@@ -11,7 +11,7 @@
         <result property="resetCode" column="RESET_CODE"/>
         <result property="resetUntil" column="RESET_UNTIL"/>
         <!--values from user_token table-->
-        <collection property="tokens" ofType="com.accelhack.application.api.base.dto.UserDto$TokenDto">
+        <collection property="tokens" ofType="com.accelhack.spring.api.base.auth.dto.UserDto$TokenDto">
             <result property="id" column="USER_TOKEN_ID"/>
             <result property="accessToken" column="ACCESS_TOKEN"/>
             <result property="encryptRefreshToken" column="ENCRYPT_REFRESH_TOKEN"/>
