@@ -1,9 +1,10 @@
 package com.accelhack.spring.api.shared.handler;
 
-import com.accelhack.spring.api.shared.model.Operator;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+
+import com.accelhack.spring.api.domain.model.shared.Operator;
 
 import java.sql.*;
 

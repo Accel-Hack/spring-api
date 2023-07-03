@@ -1,12 +1,19 @@
 package com.accelhack.spring.api.shared.handler;
 
-import com.accelhack.spring.api.shared.enums.NumericEnum;
-import com.accelhack.spring.api.base.auth.enums.Actor;
-import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.type.*;
-
-import java.sql.*;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.function.Predicate;
+
+import org.apache.ibatis.type.BaseTypeHandler;
+import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedTypes;
+
+import com.accelhack.spring.api.domain.model.user.Actor;
+import com.accelhack.spring.api.domain.model.user.NumericEnum;
+
+import lombok.RequiredArgsConstructor;
 
 @MappedTypes({Actor.class})
 @RequiredArgsConstructor
