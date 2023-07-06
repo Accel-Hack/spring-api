@@ -77,8 +77,7 @@ jobs:
     strategy:
       matrix:
         test:
-          - "app.mapper.**"
-          - "app.operation.**"
+          - "**"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
