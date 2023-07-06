@@ -18,10 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up JDK (java18)
+      - name: Set up JDK (java20)
         uses: actions/setup-java@v3
         with:
-          java-version: 18
+          java-version: 20
           distribution: corretto
 
       - name: Cache local Maven repository
@@ -49,10 +49,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Set up JDK (java18)
+      - name: Set up JDK (java20)
         uses: actions/setup-java@v3
         with:
-          java-version: 18
+          java-version: 20
           distribution: corretto
 
       - name: Cache local Maven repository
@@ -88,10 +88,10 @@ jobs:
       - name: Build test database
         run: docker compose up test-db -d
 
-      - name: Set up JDK (java18)
+      - name: Set up JDK (java20)
         uses: actions/setup-java@v3
         with:
-          java-version: 18
+          java-version: 20
           distribution: corretto
 
       - name: Cache local Maven repository
