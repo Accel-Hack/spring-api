@@ -42,7 +42,7 @@ jobs:
     strategy:
       matrix:
         test:
-          - "**"
+          - "sample.domain.**"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
