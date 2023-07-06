@@ -42,9 +42,7 @@ jobs:
     strategy:
       matrix:
         test:
-          - "app.service.**"
-          - "app.transaction.**"
-          - "app.controller.**"
+          - "**"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -68,7 +66,7 @@ jobs:
         run: >
           ./mvnw -f pom.xml
           -Duser.timezone=UTC
-          -Dtest="com.accelhack.application.api.${{ matrix.test }}"
+          -Dtest="com.accelhack.spring.api.${{ matrix.test }}"
           -s settings.xml
           test
 
@@ -107,6 +105,6 @@ jobs:
         run: >
           ./mvnw -f pom.xml
           -Duser.timezone=UTC
-          -Dtest="com.accelhack.application.api.${{ matrix.test }}"
+          -Dtest="com.accelhack.spring.api.${{ matrix.test }}"
           -s settings.xml
           test
