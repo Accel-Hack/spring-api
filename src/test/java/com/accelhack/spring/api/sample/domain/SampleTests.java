@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 public class SampleTests {
 
-    @Test
-    public void testBuilder() {
-    }
+  @Test
+  public void testBuilder() {}
 }
