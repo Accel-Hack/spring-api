@@ -1,13 +1,11 @@
 package com.accelhack.spring.api.domain.model.log;
 
+import static java.lang.Math.round;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
-
-import com.accelhack.spring.api.domain.model.log.Apilog.ApilogBuilder;
 import com.accelhack.spring.api.domain.model.shared.Operator;
 import com.accelhack.spring.api.shared.utils.BuilderUtils;
-
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +13,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
 
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
