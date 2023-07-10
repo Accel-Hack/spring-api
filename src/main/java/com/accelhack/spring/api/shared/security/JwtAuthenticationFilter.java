@@ -1,13 +1,7 @@
 package com.accelhack.spring.api.shared.security;
 
-import com.accelhack.spring.api.base.auth.model.AuthenticationModel;
-import com.accelhack.spring.api.base.auth.model.AuthorizationModel;
-import com.accelhack.spring.api.base.auth.usecase.UserUsecase;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,7 +9,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.io.IOException;
+import com.accelhack.spring.api.application.usecase.UserUsecase;
+import com.accelhack.spring.api.presentation.model.AuthenticationModel;
+import com.accelhack.spring.api.presentation.model.AuthorizationModel;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {

@@ -1,6 +1,8 @@
 # ApiApplication
 
 api application composed by SpringBoot and React
+This code is Designed By DDD and Onion Architecture.
+
 
 ## How to run server.
 

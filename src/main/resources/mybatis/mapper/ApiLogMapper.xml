@@ -1,0 +1,64 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.accelhack.spring.api.infrastructure.mapper.ApilogMapper">
+    <resultMap id="apilogDtoResultMap" type="com.accelhack.spring.api.infrastructure.dto.ApilogDto">
+        <id property="id" column="ID"/>
+        <result property="operator" column="OPERATOR"/>
+        <result property="sessionId" column="SESSION_ID"/>
+        <result property="remoteAddress" column="REMOTE_ADDRESS"/>
+        <result property="operationTime" column="OPERATION_TIME"/>
+        <result property="executionDurationMs" column="EXECUTION_DURATION_MS"/>
+        <result property="method" column="METHOD"/>
+        <result property="path" column="PATH"/>
+        <result property="query" column="QUERY"/>
+        <result property="body" column="BODY"/>
+        <result property="status" column="STATUS"/>
+        <result property="response" column="RESPONSE"/>
+        <result property="exception" column="EXCEPTION"/>
+    </resultMap>
+
+    <select id="select" resultMap="apilogDtoResultMap">
+        SELECT `ID`,
+               `OPERATOR`,
+               `SESSION_ID`,
+               `REMOTE_ADDRESS`,
+               `OPERATION_TIME`,
+               `EXECUTION_DURATION_MS`,
+               `METHOD`,
+               `PATH`,
+               `QUERY`,
+               `BODY`,
+               `STATUS`,
+               `RESPONSE`,
+               `EXCEPTION`
+        FROM API_APPLICATION.`API_LOG`
+        WHERE `ID` = #{id}
+    </select>
+
+    <insert id="save">
+        INSERT INTO API_APPLICATION.`API_LOG`(`ID`,
+                                              `OPERATOR`,
+                                              `SESSION_ID`,
+                                              `REMOTE_ADDRESS`,
+                                              `OPERATION_TIME`,
+                                              `METHOD`,
+                                              `PATH`,
+                                              `QUERY`,
+                                              `BODY`)
+        VALUES (#{id},
+                #{operator},
+                #{sessionId},
+                #{remoteAddress},
+                #{operationTime},
+                #{method},
+                #{path},
+                #{query},
+                #{body})
+        ON DUPLICATE KEY UPDATE `EXECUTION_DURATION_MS` = #{executionDurationMs},
+                                `STATUS`                = #{status},
+                                `RESPONSE`              = #{response},
+                                `EXCEPTION`             = #{exception}
+    </insert>
+</mapper>

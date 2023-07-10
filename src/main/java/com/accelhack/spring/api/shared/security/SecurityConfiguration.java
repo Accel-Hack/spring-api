@@ -1,12 +1,5 @@
 package com.accelhack.spring.api.shared.security;
 
-import com.accelhack.spring.api.shared.config.AuthorizationConfiguration;
-import com.accelhack.spring.api.shared.controller.impl.ExternalController;
-import com.accelhack.spring.api.base.auth.usecase.UserUsecase;
-import com.accelhack.spring.api.shared.filter.HttpServletRequestFilter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.Filter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +12,15 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import com.accelhack.spring.api.application.usecase.UserUsecase;
+import com.accelhack.spring.api.presentation.controller.ExternalController;
+import com.accelhack.spring.api.shared.config.AuthorizationConfiguration;
+import com.accelhack.spring.api.shared.filter.HttpServletRequestFilter;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.servlet.Filter;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
