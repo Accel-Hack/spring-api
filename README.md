@@ -101,8 +101,8 @@ $ ./gradlew -D"user.timezone"=UTC test
 
 # test for certain class
 # CLASS_PATH → for certain class       ex) com.accelhack.application.api.app.mapper.SampleMapperSTest
-# CLASS_PATH → for class under package ex) com.accelhack.application.api.app.mapper.**
-$ ./gradlew -D"user.timezone"=UTC -D"test"="${CLASS_PATH}" test
+# CLASS_PATH → for class under package ex) com.accelhack.application.api.app.mapper.*
+$ ./gradlew -D"user.timezone"=UTC test --tests "${CLASS_PATH}"
 ```
 
 when running a test witch uses the database. run the following command(be sure to have your .env file copied).
