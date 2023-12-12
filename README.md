@@ -8,7 +8,7 @@ api application composed by SpringBoot and React
 
 check current directory
 
-```bash 
+```bash
 $ pwd
 # ./ApiApplication
 ```
@@ -31,7 +31,7 @@ $ pwd
 run spring boot
 
 ```bash
-$ ./mvnw spring-boot:run -D"spring-boot.run.profiles"=local
+$ ./gradlew bootRun -D"spring-boot.run.profiles"=local
 ```
 
 - be sure Maven is installed.(If not install before)
@@ -88,30 +88,7 @@ Replace USERNAME with your github account and GITHUB_TOKEN with the NPM_TOKEN yo
 
 ## Code formatting
 
-```bash
-# formatの実行
-$ ./mvnw formatter:format
-# チェック
-$ ./mvnw formatter:validate
-```
-
-### configure
-
-```xml
-<!--pom.xml-->
-<project>
-    <plugins>
-        <plugin>
-            <groupId>net.revelc.code.formatter</groupId>
-            <artifactId>formatter-maven-plugin</artifactId>
-            <version>2.11.0</version>
-        </plugin>
-        <configuration>
-            <configFile>${project.basedir}/eclipse-java-google-style.xml</configFile>
-        </configuration>
-    </plugins>
-</project>
-```
+TBD
 
 ## How to run tests.
 
@@ -120,16 +97,16 @@ $ pwd
 # ./ApiApplication
 
 # full test
-$ ./mvnw -D"user.timezone"=UTC test
+$ ./gradlew -D"user.timezone"=UTC test
 
 # test for certain class
 # CLASS_PATH → for certain class       ex) com.accelhack.application.api.app.mapper.SampleMapperSTest
-# CLASS_PATH → for class under package ex) com.accelhack.application.api.app.mapper.**
-$ ./mvnw -D"user.timezone"=UTC -D"test"="${CLASS_PATH}" test
+# CLASS_PATH → for class under package ex) com.accelhack.application.api.app.mapper.*
+$ ./gradlew -D"user.timezone"=UTC test --tests "${CLASS_PATH}"
 ```
 
 when running a test witch uses the database. run the following command(be sure to have your .env file copied).
 
 ```bash
-$ docker-compose up test-db -d
+$ docker compose up test-db -d
 ``````
