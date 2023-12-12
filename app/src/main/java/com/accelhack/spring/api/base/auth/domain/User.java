@@ -1,14 +1,17 @@
 package com.accelhack.spring.api.base.auth.domain;
 
+import com.accelhack.spring.api.base.auth.enums.Actor;
 import com.accelhack.spring.api.shared.config.AuthorizationConfiguration;
 import com.accelhack.spring.api.shared.utils.BuilderUtils;
-import com.accelhack.spring.api.base.auth.enums.Actor;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;

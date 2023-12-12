@@ -16,14 +16,6 @@ org-mybatis-dynamic-sql-mybatis-dynamic-sql = "1.3.0"
 org-mybatis-spring-boot-mybatis-spring-boot-starter = "3.0.1"
 org-powermock-powermock-reflect = "1.6.1"
 org-projectlombok-lombok = "1.18.26"
-org-springframework-boot-spring-boot-configuration-processor = "3.0.5"
-org-springframework-boot-spring-boot-devtools = "3.0.5"
-org-springframework-boot-spring-boot-starter-actuator = "3.0.5"
-org-springframework-boot-spring-boot-starter-oauth2-client = "3.0.5"
-org-springframework-boot-spring-boot-starter-security = "3.0.5"
-org-springframework-boot-spring-boot-starter-test = "3.0.5"
-org-springframework-boot-spring-boot-starter-validation = "3.0.5"
-org-springframework-boot-spring-boot-starter-web = "3.0.5"
 org-springframework-security-spring-security-crypto = "5.7.4"
 org-springframework-security-spring-security-test = "6.0.2"
 
@@ -42,13 +34,7 @@ org-mybatis-dynamic-sql-mybatis-dynamic-sql = { module = "org.mybatis.dynamic-sq
 org-mybatis-spring-boot-mybatis-spring-boot-starter = { module = "org.mybatis.spring.boot:mybatis-spring-boot-starter", version.ref = "org-mybatis-spring-boot-mybatis-spring-boot-starter" }
 org-powermock-powermock-reflect = { module = "org.powermock:powermock-reflect", version.ref = "org-powermock-powermock-reflect" }
 org-projectlombok-lombok = { module = "org.projectlombok:lombok", version.ref = "org-projectlombok-lombok" }
-org-springframework-boot-spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor", version.ref = "org-springframework-boot-spring-boot-configuration-processor" }
-org-springframework-boot-spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "org-springframework-boot-spring-boot-devtools" }
-org-springframework-boot-spring-boot-starter-actuator = { module = "org.springframework.boot:spring-boot-starter-actuator", version.ref = "org-springframework-boot-spring-boot-starter-actuator" }
-org-springframework-boot-spring-boot-starter-oauth2-client = { module = "org.springframework.boot:spring-boot-starter-oauth2-client", version.ref = "org-springframework-boot-spring-boot-starter-oauth2-client" }
-org-springframework-boot-spring-boot-starter-security = { module = "org.springframework.boot:spring-boot-starter-security", version.ref = "org-springframework-boot-spring-boot-starter-security" }
-org-springframework-boot-spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "org-springframework-boot-spring-boot-starter-test" }
-org-springframework-boot-spring-boot-starter-validation = { module = "org.springframework.boot:spring-boot-starter-validation", version.ref = "org-springframework-boot-spring-boot-starter-validation" }
-org-springframework-boot-spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "org-springframework-boot-spring-boot-starter-web" }
+org-springframework-boot-spring-boot-configuration-processor = { module = "org.springframework.boot:spring-boot-configuration-processor" }
+org-springframework-boot-spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools" }
 org-springframework-security-spring-security-crypto = { module = "org.springframework.security:spring-security-crypto", version.ref = "org-springframework-security-spring-security-crypto" }
 org-springframework-security-spring-security-test = { module = "org.springframework.security:spring-security-test", version.ref = "org-springframework-security-spring-security-test" }
