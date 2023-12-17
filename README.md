@@ -31,7 +31,7 @@ $ pwd
 run spring boot
 
 ```bash
-$ ./gradlew bootRun -D"spring-boot.run.profiles"=local
+$ ./gradlew bootRun --args='--spring.profiles.active=local'
 ```
 
 - be sure Maven is installed.(If not install before)

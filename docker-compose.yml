@@ -5,7 +5,7 @@ services:
     container_name: api-app-db
     image: mysql:8.0
     env_file:
-      - .env.local
+      - ./app/.env.local
     ports:
       - "3566:3306"
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
@@ -14,8 +14,8 @@ services:
     container_name: api-app-test-db
     image: mysql:8.0
     env_file:
-      - .env.local
-      - .env.test
+      - ./app/.env.local
+      - ./app/.env.test
     ports:
       - "3567:3306"
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
